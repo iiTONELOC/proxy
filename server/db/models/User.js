@@ -18,11 +18,17 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      minlength: 5
+      minlength: 8
     },
-
+    location: {
+      type: Schema.Types.ObjectId,
+      ref: 'Location'
+    },
+    friends: [{
+      type: Schema.Types.ObjectId,
+      required: false,
+    }],
   },
-
 );
 
 // set up pre-save middleware to create password
