@@ -1,10 +1,10 @@
+
+
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/proximo-chat', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/proxy-chat', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false
-});
+}).then(res => res.connection.getClient());
 
 module.exports = mongoose.connection;
