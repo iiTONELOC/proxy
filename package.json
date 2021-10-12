@@ -1,0 +1,26 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && node index.js",
+    "develop": "concurrently \"cd server && npm run watch \" \"cd client/my-app && npm run dev\"",
+    "install": "cd server && npm i && cd ../client/my-app && npm i ",
+    "build": "cd client && npm run build",
+    "seed": "cd server && npm run seed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iiTONELOC/proxy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iiTONELOC/proxy/issues"
+  },
+  "homepage": "https://github.com/iiTONELOC/proxy#readme",
+  "dependencies": {
+    "concurrently": "^6.3.0"
+  }
+}
