@@ -1,10 +1,11 @@
 const db = require('../config/connection');
-const { User, Location } = require('../models');
+const { User, Location, Profile } = require('../models');
 
 db.once('open', async () => {
   try {
     await User.deleteMany({});
     await Location.deleteMany({});
+    await Profile.deleteMany({})
     console.log(`db successfully deleted`)
   } catch (error) {
     throw new Error('Unable to delete Database');
@@ -18,9 +19,9 @@ db.once('open', async () => {
     }
 
 
-    // create server for global chat
+    // create user
     const user = await User.create({ ...userData })
-    console.log('User created!', user)
+
     const locationData = {
       username: user.username,
       latitude: 29.1733504,
@@ -28,12 +29,23 @@ db.once('open', async () => {
       city: 'Ocala',
       state: 'Florida'
     }
+    // create users location
     const location = await Location.create({ ...locationData });
     if (location !== null || location !== undefined) {
       // find our user and add the location ID to the user info.
       const id = location._id
+
+      // create users Profile
+      const profileData = {
+        username: user.username,
+        bio: "Hello, my name is blah blah blah.",
+        visible: true,
+        location: id,
+      }
+      const profile = await Profile.create({ ...profileData });
       const updatedUserData = await User.findByIdAndUpdate(user._id, {
-        location: id
+        location: id,
+        profile: profile._id
       }, { new: true }).select('-__v -password -email');
       console.log(`Updated user data`, updatedUserData);
     }

@@ -7,6 +7,4 @@ const locationQueries = {
     },
 }
 
-module.exports = {
-    locationQueries
-}
+module.exports = locationQueries

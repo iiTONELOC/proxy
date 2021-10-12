@@ -28,6 +28,10 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: false,
     }],
+    profile: {
+      type: Schema.Types.ObjectId,
+      ref: 'Profile'
+    },
   },
 );
 
