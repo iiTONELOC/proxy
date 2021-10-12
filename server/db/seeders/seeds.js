@@ -1,5 +1,5 @@
 const db = require('../config/connection');
-const { User, Location, Profile } = require('../models');
+const { User, Location, Profile, OnlineStatus } = require('../models');
 
 db.once('open', async () => {
   try {
@@ -42,10 +42,17 @@ db.once('open', async () => {
         visible: true,
         location: id,
       }
+      const statusData = {
+        username: user.username,
+        online: true,
+        status: 'active'
+      };
+      const status = await OnlineStatus.create({ ...statusData });
       const profile = await Profile.create({ ...profileData });
       const updatedUserData = await User.findByIdAndUpdate(user._id, {
         location: id,
-        profile: profile._id
+        profile: profile._id,
+        status: status._id
       }, { new: true }).select('-__v -password -email');
       console.log(`Updated user data`, updatedUserData);
     }

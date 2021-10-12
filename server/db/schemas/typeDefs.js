@@ -9,6 +9,12 @@ type Location{
     city: String
     state: String
 }
+type OnlineStatus{
+    _id: ID
+    username: String
+    online: Boolean
+    status: String
+}
 type Profile{
     _id: ID
     username: String
@@ -16,6 +22,7 @@ type Profile{
     visible: Boolean
     location: ID
     ProfilePicture: String
+    
 }
 type User {
     _id: ID
@@ -23,12 +30,12 @@ type User {
     email: String
     location: Location
     profile: Profile
+    status: OnlineStatus
 }
 
 
 type Query {
     users: [User]
-    location:[Location]
 }
 
 

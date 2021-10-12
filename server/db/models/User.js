@@ -32,6 +32,10 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Profile'
     },
+    status: {
+      type: Schema.Types.ObjectId,
+      ref: 'OnlineStatus'
+    }
   },
 );
 
