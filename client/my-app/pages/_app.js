@@ -1,13 +1,22 @@
-import { ChatProvider } from '../components/Chat/indes'
 import '../styles/globals.css'
+import { ApolloProvider } from '@apollo/client';
+import client from '../utilities/apollo/client.config';
+import { ChatProvider } from '../components/Providers/Chat';
+
+
+
 
 function MyApp({ Component, pageProps }) {
 
   return (
-    <ChatProvider>
-      <Component {...pageProps} />
-    </ChatProvider>
+    <ApolloProvider client={client}>
+      <ChatProvider>
+        <Component {...pageProps} />
+      </ChatProvider>
+    </ApolloProvider>
+
   )
+
 }
 
 export default MyApp
