@@ -18,7 +18,7 @@ async function startApolloServer() {
         return req
     }
     const apolloServer = new ApolloServer({
-        uri: "http://localhost:3000/graphql",
+        uri: "http://localhost:30001/graphql",
         typeDefs,
         resolvers,
         context:

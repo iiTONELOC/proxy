@@ -1,7 +1,16 @@
-import Link from 'next/link'
-import Head from 'next/head'
-import styles from '../../styles/Home.module.css'
+import Link from 'next/link';
+import Head from 'next/head';
+import styles from '../../styles/Home.module.css';
+import Client from '../../components/Providers/Client'
+import Test from '../../components/Test'
+const server = () => {
+
+    if (typeof window == undefined) {
+        return true
+    } else return false
+}
 export default function Playground() {
+    const onServer = server()
     return (
         <div>
             <Head>
@@ -30,9 +39,11 @@ export default function Playground() {
                     <a className={styles.card}
                     >
                         <h2>Fetch All Users &#128225;</h2>
-                        <p>
-                            Enter the Testing Grounds
-                        </p>
+                        {onServer ? (<p> This will be visible until connection loads</p>) : (
+                            <Client>
+                                <Test />
+                            </Client>
+                        )}
                     </a>
                     <a href="https://nextjs.org/learn" className={styles.card}>
                         <h2>Learn &rarr;</h2>
