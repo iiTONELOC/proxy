@@ -2,7 +2,8 @@ const { User } = require("../../models");
 
 const userQueries = {
 
-    async findAll(parent, args, context) {
+    async findAll(parent, args, { context, ip }) {
+        console.log(ip)
         const userData = await User.find({})
             .select('-__v -password -email')
             .populate('location')

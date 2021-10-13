@@ -2,19 +2,28 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const socketIo = require('socket.io');
+const { Chat } = require('./chat/index');
 const db = require('./db/config/connection');
-const { ApolloServer } = require('apollo-server-express');
 const { authMiddleware } = require('./utils/auth');
 const { typeDefs, resolvers } = require('./db/schemas');
-const { Chat } = require('./chat/index');
+const { ApolloServer } = require('apollo-server-express');
+const requestIp = require('request-ip');
+
+
 
 async function startApolloServer() {
+    const ipMiddleware = ({ req }) => {
+        const _IP = requestIp.getClientIp(req)
+        console.log('IP MIDDLEWARE', _IP)
+        return req
+    }
     const apolloServer = new ApolloServer({
         uri: "http://localhost:3000/graphql",
         typeDefs,
         resolvers,
         context:
             authMiddleware,
+        ip: ipMiddleware
     });
     const chatServer = require('http').createServer(app);
     const io = socketIo(chatServer, {
@@ -31,5 +40,5 @@ async function startApolloServer() {
 }
 
 db.once('open', () => {
-    startApolloServer()
+    startApolloServer();
 });
