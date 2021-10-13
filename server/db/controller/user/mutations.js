@@ -17,9 +17,17 @@ const {
 // 
 const userMutations = {
     async createNewUser(parent, args, { ip }) {
+        let data
+        if (args.longitude || args.longitude !== null || args.longitude !== 'null') {
+            data = { latitude, longitude, city, state } = args
+        }
+
         try {
+            if (!latitude || latitude === 'null') {
+                data = { latitude, longitude, city, state } = await IpLocation.user(args, ip);
+            }
             // grabs our location from the server or returns the users location
-            const data = { latitude, longitude, city, state } = await IpLocation.user(args, ip);
+
             // create a base user with location data, we need the users _id and
             // location_id for the next steps
             // user first
@@ -77,7 +85,7 @@ const userMutations = {
             const token = signToken(user);
             return {
                 token,
-                updatedUserData
+                user: updatedUserData
             }
         } catch (error) {
             console.error(`createNewUser`, error);

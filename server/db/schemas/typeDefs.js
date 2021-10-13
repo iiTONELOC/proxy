@@ -9,6 +9,7 @@ type Location{
     city: String
     state: String
 }
+
 type OnlineStatus{
     _id: ID
     username: String
@@ -67,7 +68,7 @@ type Query {
 }
 
 type Mutation{
-     addUser(username: String!, email: String!, password: String!, profilePicture: String, lat:String, long: String): Auth
+     addUser(username: String!, email: String!, password: String!, latitude: String, longitude: String, city: String, state: String): Auth
 }
 
 type Auth {
