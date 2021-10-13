@@ -8,7 +8,7 @@
     "develop": "concurrently \"cd server && npm run watch \" \"cd client/my-app && npm run dev\"",
     "install": "cd server && npm i && cd ../client/my-app && npm i ",
     "build": "cd client && npm run build",
-    "seed": "cd server && npm run seed"
+    "del-db": "cd server && npm run seed"
   },
   "repository": {
     "type": "git",

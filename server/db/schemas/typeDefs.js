@@ -66,6 +66,9 @@ type Query {
     users: [User]
 }
 
+type Mutation{
+     addUser(username: String!, email: String!, password: String!, profilePicture: String, lat:String, long: String): Auth
+}
 
 type Auth {
     token: ID!

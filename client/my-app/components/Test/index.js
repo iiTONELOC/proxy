@@ -12,14 +12,11 @@ export default function Test() {
     const { users } = data;
     return (
         users.map(user => (
-            <li key={user.username}>
+            <li key={user.username} style={{ listStyle: 'none' }}>
                 {user.username}
                 <ul >
-                    <li>
-                        {`${user.location.city}, ${user.location.state}`}
-                    </li>
-                    <li>
-                        {user.profile.bio}
+                    <li style={{ listStyle: 'none' }}>
+                        {user.location ? `${user.location.city}, ${user.location.state}` : null}
                     </li>
                 </ul>
             </li>

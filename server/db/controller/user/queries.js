@@ -1,11 +1,12 @@
 const { User } = require("../../models");
-const Location = require('../../../utils/Location');
+// remove this after testing
+const IpLocation = require('../../../utils/ipLoc');
+// 
+
 const userQueries = {
-
-    async findAll(parent, args, { context, ip }) {
-
-        const l = await Location.user(args, ip);
-        console.log('Users location captured on server', l)
+    async findAll(parent, args, { ip, user }) {
+        // const l = await IpLocation.user(args, ip);
+        // console.log('Users location captured on server', l)
         const userData = await User.find({})
             .select('-__v -password -email')
             .populate('location')
@@ -14,8 +15,6 @@ const userQueries = {
             .populate({ path: 'servers', populate: { path: 'channels' } });
         return userData;
     },
-
-
 }
 
 module.exports = userQueries

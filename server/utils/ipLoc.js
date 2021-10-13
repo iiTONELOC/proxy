@@ -21,11 +21,11 @@ const lookup = (userIP) => {
         return null;
     };
 };
-class Location {
-    // by ip
+class IpLocation {
+    // by ip or reqObj
     static async get(req) {
         const client = req.ip || req;
-        if (client === '::1' || client === '::ffff:127.0.0.1' /*|| client.match(/^([::ffff])$/)*/) {
+        if (client === '::1' || client === '::ffff:127.0.0.1') {
             const response = await extIP.get().then(ip => {
                 return lookup(ip);
             }, err => {
@@ -42,7 +42,7 @@ class Location {
         const { latitude, longitude, } = args;
         if (latitude == undefined || longitude == undefined) {
             try {
-                return Location.get(context);
+                return IpLocation.get(context);
             } catch (error) {
                 console.error("Error occurred while fetching location details", error);
             };
@@ -55,4 +55,4 @@ class Location {
 }
 
 
-module.exports = Location;
+module.exports = IpLocation;

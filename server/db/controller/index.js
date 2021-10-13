@@ -1,5 +1,6 @@
 const userQueries = require('./user/queries');
 const locationQueries = require('./location/queries');
+const userMutations = require('./user/mutations');
 
 
 const query = {
@@ -7,8 +8,11 @@ const query = {
     location: locationQueries
 }
 
-
+const mutate = {
+    user: userMutations
+}
 
 module.exports = {
-    query
+    query,
+    mutate
 }
