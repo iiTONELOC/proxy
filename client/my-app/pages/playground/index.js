@@ -3,14 +3,9 @@ import Head from 'next/head';
 import styles from '../../styles/Home.module.css';
 import Client from '../../components/Providers/Client'
 import Test from '../../components/Test'
-const server = () => {
 
-    if (typeof window == undefined) {
-        return true
-    } else return false
-}
 export default function Playground() {
-    const onServer = server()
+
     return (
         <div>
             <Head>
@@ -22,7 +17,6 @@ export default function Playground() {
                 <h1 className={styles.title}>
                     Welcome to the Playground!
                 </h1>
-
                 <p className={styles.description}>
                     Currently we are testing the servers ability to grab our IP address.
                 </p>
@@ -39,11 +33,9 @@ export default function Playground() {
                     <a className={styles.card}
                     >
                         <h2>Fetch All Users &#128225;</h2>
-                        {onServer ? (<p> This will be visible until connection loads</p>) : (
-                            <Client>
-                                <Test />
-                            </Client>
-                        )}
+                        <Client>
+                            <Test />
+                        </Client>
                     </a>
                     <a href="https://nextjs.org/learn" className={styles.card}>
                         <h2>Learn &rarr;</h2>

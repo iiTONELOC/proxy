@@ -9,8 +9,7 @@ export default function Test() {
         console.error(error);
         return null;
     }
-    const users = data.users;
-
+    const { users } = data;
     return (
         users.map(user => (
             <li key={user.username}>
