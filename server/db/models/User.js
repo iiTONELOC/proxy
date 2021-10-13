@@ -35,7 +35,11 @@ const userSchema = new Schema(
     status: {
       type: Schema.Types.ObjectId,
       ref: 'OnlineStatus'
-    }
+    },
+    servers: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Server'
+    }]
   },
 );
 

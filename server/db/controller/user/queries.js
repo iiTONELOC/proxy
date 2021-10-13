@@ -7,7 +7,8 @@ const userQueries = {
             .select('-__v -password -email')
             .populate('location')
             .populate('status')
-            .populate('profile');
+            .populate('profile')
+            .populate({ path: 'servers', populate: { path: 'channels' } });
         return userData;
     },
 

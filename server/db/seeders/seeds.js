@@ -1,5 +1,5 @@
 const db = require('../config/connection');
-const { User, Location, Profile, OnlineStatus } = require('../models');
+const { User, Location, Profile, OnlineStatus, Server, Channel } = require('../models');
 
 db.once('open', async () => {
   try {
@@ -21,9 +21,9 @@ db.once('open', async () => {
 
     // create user
     const user = await User.create({ ...userData })
-
+    const USERNAME = user.username
     const locationData = {
-      username: user.username,
+      username: USERNAME,
       latitude: 29.1733504,
       longitude: -82.116608,
       city: 'Ocala',
@@ -37,22 +37,46 @@ db.once('open', async () => {
 
       // create users Profile
       const profileData = {
-        username: user.username,
+        username: USERNAME,
         bio: "Hello, my name is blah blah blah.",
         visible: true,
         location: id,
       }
       const statusData = {
-        username: user.username,
+        username: USERNAME,
         online: true,
         status: 'active'
       };
       const status = await OnlineStatus.create({ ...statusData });
       const profile = await Profile.create({ ...profileData });
+      // create a server
+      const serverData = {
+        name: `default server`,
+        description: `${USERNAME}'s public server`,
+        private: false,
+        ownerName: USERNAME
+      }
+      const server = await Server.create({ ...serverData })
+      // create a channel
+      const channelData = {
+        name: `${USERNAME}'s public channel`,
+        description: `${USERNAME}'s public server`,
+        private: false,
+        ownerName: USERNAME,
+        location: id,
+        server: server._id
+      }
+      const channel = await Channel.create({ ...channelData })
+      //  update server with channel id,
+      const updatedServer = await Server.findByIdAndUpdate(server._id, {
+        $push: { channels: channel._id }
+      });
+      // update the user with location, profile, status, and updatedServer
       const updatedUserData = await User.findByIdAndUpdate(user._id, {
         location: id,
         profile: profile._id,
-        status: status._id
+        status: status._id,
+        $push: { servers: updatedServer._id }
       }, { new: true }).select('-__v -password -email');
       console.log(`Updated user data`, updatedUserData);
     }

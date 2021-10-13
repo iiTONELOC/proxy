@@ -24,6 +24,33 @@ type Profile{
     ProfilePicture: String
     
 }
+type Message{
+    _id: ID
+    channel: ID
+    text: String
+    time: String
+    sender: String
+}
+type Channel{
+    _id: ID
+    name: String
+    description: String
+    private: Boolean
+    ownerName: String
+    location: Location
+    messages: [Message]
+    members: [User]
+    active:[User]
+    server:ID
+}
+type Server{
+    _id: ID
+    name: String
+    description: String
+    private: Boolean
+    ownerName: String
+    channels: [Channel]
+}
 type User {
     _id: ID
     username: String
@@ -31,6 +58,7 @@ type User {
     location: Location
     profile: Profile
     status: OnlineStatus
+    servers:[Server]
 }
 
 

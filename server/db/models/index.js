@@ -1,6 +1,15 @@
 const User = require('./User');
-const Location = require('./Location')
-const Profile = require('./Profile')
-const OnlineStatus = require('./OnlineStatus')
+const Server = require('./Server');
+const Channel = require('./Channel');
+const Profile = require('./Profile');
+const Location = require('./Location');
+const OnlineStatus = require('./OnlineStatus');
 
-module.exports = { User, Location, Profile, OnlineStatus };
+module.exports = {
+    User,
+    Server,
+    Channel,
+    Profile,
+    Location,
+    OnlineStatus
+};
