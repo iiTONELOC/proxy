@@ -12,7 +12,9 @@ const userQueries = {
             .populate('location')
             .populate('status')
             .populate('profile')
-            .populate({ path: 'servers', populate: { path: 'channels' } });
+            .populate({ path: 'servers', populate: { path: 'channels' } })
+
+            ;
         return userData;
     },
 }

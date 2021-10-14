@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
-
+const { getDistances } = require('./virtuals/user')
 const userSchema = new Schema(
   {
     username: {
@@ -41,6 +41,11 @@ const userSchema = new Schema(
       ref: 'Server'
     }]
   },
+  {
+    toJSON: {
+      virtuals: true
+    }
+  }
 );
 
 // set up pre-save middleware to create password
@@ -57,7 +62,22 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
+userSchema.virtual('friendCount').get(function () {
+  return this.friends.length;
+});
 
+userSchema.virtual('usersInRange').get(async function () {
+
+  // query all active users return an array of users within 2 miles for now, change distance later
+  const Users = await User.find({})
+    .select('-__v -password -email')
+    .populate('location')
+    .populate('status')
+    .populate('profile')
+    .populate({ path: 'servers', populate: { path: 'channels' } });
+  const radius = 250;
+  return getDistances(this, Users, radius);
+});
 
 const User = model('User', userSchema);
 

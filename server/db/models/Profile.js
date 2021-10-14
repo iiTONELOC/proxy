@@ -8,8 +8,9 @@ const profileSchema = new Schema(
         },
         bio: {
             type: String,
-            required: true,
+            required: false,
             maxLength: 280,
+            default: null
         },
         visible: {
             type: Boolean,
@@ -20,7 +21,7 @@ const profileSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Location'
         },
-        ProfilePicture: {
+        profilePicture: {
             type: String,
             required: false,
             default: null

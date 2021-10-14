@@ -60,6 +60,9 @@ type User {
     profile: Profile
     status: OnlineStatus
     servers:[Server]
+    friends:[User]
+    friendCount: Int
+    usersInRange: [User]
 }
 
 
