@@ -54,12 +54,9 @@ userSchema.pre('save', async function (next) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
-
   next();
 });
-
-// compare the incoming password with the hashed password
-userSchema.methods.isCorrectPassword = async function (password) {
+userSchema.methods.isCorrectPassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 userSchema.virtual('friendCount').get(function () {
@@ -67,8 +64,6 @@ userSchema.virtual('friendCount').get(function () {
 });
 
 userSchema.virtual('usersInRange').get(async function () {
-
-  // query all active users return an array of users within 2 miles for now, change distance later
   const Users = await User.find({})
     .select('-__v -password -email')
     .populate('location')

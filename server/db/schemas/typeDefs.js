@@ -71,7 +71,17 @@ type Query {
 }
 
 type Mutation{
-     addUser(username: String!, email: String!, password: String!, latitude: String, longitude: String, city: String, state: String): Auth
+    addUser(
+        username: String!,
+        email: String!, 
+        password: String!, 
+        latitude: String, 
+        longitude: String, 
+        city: String, 
+        state: String
+        ): Auth
+    login( email: String!, password: String!): Auth
+
 }
 
 type Auth {

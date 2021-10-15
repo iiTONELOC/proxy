@@ -1,5 +1,5 @@
 const IpLocation = require('../../../utils/ipLoc');
-const { signToken } = require('../../../utils/auth');
+const { signToken } = require('../../../utils/middleware/auth');
 const {
     User,
     Server,
@@ -9,18 +9,24 @@ const {
     OnlineStatus,
 } = require("../../models");
 const {
-    updateServerWithNewChannel
-} = sharedMutations = require('../sharedMutations')
+    addChannelToServer, updateUserStatus, updateUserLocation
+} = require('../sharedMutations')
+
+async function returnLocation(args, ip) {
+    let data
+    if (args.latitude && args.latitude !== null || args.latitude !== undefined) {
+        data = { latitude, longitude, city, state } = args
+    } else {
+        data = { latitude, longitude, city, state } = await IpLocation.user(args, ip);
+    }
+    return data
+}
 
 const userMutations = {
     async createNewUser(parent, args, { ip }) {
-        let data, LOC_ID, STATUS_ID, SERVER_ID, PROFILE_ID, UPDATED_S_ID;
+        let LOC_ID, STATUS_ID, SERVER_ID, PROFILE_ID, UPDATED_S_ID;
+        const data = await returnLocation(args, ip)
         try {
-            if (args.latitude && args.latitude !== null || args.latitude !== undefined) {
-                data = { latitude, longitude, city, state } = args
-            } else {
-                data = { latitude, longitude, city, state } = await IpLocation.user(args, ip);
-            }
             const userData = {
                 username,
                 email,
@@ -36,7 +42,7 @@ const userMutations = {
                 // something failed, check logs
                 // either way we have to delete the user
                 User.findByIdAndDelete(user._id);
-                console.error(`createNewUser`, error);
+                console.error(`createNewUser- failed creating Location Model`, error);
                 return error
             }
             try {
@@ -51,7 +57,7 @@ const userMutations = {
             } catch (error) {
                 User.findByIdAndDelete(user._id);
                 Location.findByIdAndDelete(LOC_ID);
-                console.error(`createNewUser`, error);
+                console.error(`createNewUser- Status creation failed`, error);
                 return error
             }
             try {
@@ -65,8 +71,8 @@ const userMutations = {
             } catch (error) {
                 User.findByIdAndDelete(user._id);
                 Location.findByIdAndDelete(LOC_ID);
-                Status.findByIdAndDelete(STATUS_ID);
-                console.error(`createNewUser`, error);
+                OnlineStatus.findByIdAndDelete(STATUS_ID);
+                console.error(`createNewUser- Profile creating failed`, error);
                 return error
             }
             try {
@@ -82,9 +88,9 @@ const userMutations = {
             } catch (error) {
                 User.findByIdAndDelete(user._id);
                 Location.findByIdAndDelete(LOC_ID);
-                Status.findByIdAndDelete(STATUS_ID);
+                OnlineStatus.findByIdAndDelete(STATUS_ID);
                 Profile.findByIdAndDelete(PROFILE_ID);
-                console.error(`createNewUser`, error);
+                console.error(`createNewUser server creation failed`, error);
                 return error
             }
             try {
@@ -102,19 +108,17 @@ const userMutations = {
                     server: SERVER_ID,
                     channel: channel._id
                 };
-                const updatedServer = updateServerWithNewChannel({ ...servUp });
+                const updatedServer = addChannelToServer({ ...servUp });
                 UPDATED_S_ID = updatedServer._id;
                 //  update server with channel id,
             } catch (error) {
                 User.findByIdAndDelete(user._id);
                 Location.findByIdAndDelete(LOC_ID);
-                Status.findByIdAndDelete(STATUS_ID);
+                OnlineStatus.findByIdAndDelete(STATUS_ID);
                 Profile.findByIdAndDelete(PROFILE_ID);
-                console.error(`createNewUser`, error);
+                console.error(`createNewUser- channel creation failed`, error);
                 return error
             }
-
-
             // update the user with location, status, and updatedServer
             // and the server has the channels
             const updatedUserData = await User.findByIdAndUpdate(user._id, {
@@ -129,10 +133,45 @@ const userMutations = {
                 user: updatedUserData
             };
         } catch (error) {
-            console.error(`createNewUser`, error);
-            return error;
+            if (error.code === '11000') {
+                // noting was created, return a message to the user
+                return error
+            } else {
+                console.error(`createNewUser- previously unknown error caught`, error);
+                return error
+            }
         };
     },
+
+    async loginUser(parent, { email, username, password }, { ip }) {
+        // use sharedMutation to update the onlineStatus for the user when logging in
+        const params = email ? email : username ? username : null;
+        const user = await User.findOne({ params })
+            .populate('location')
+            .populate('status')
+            .populate('profile')
+            .populate({ path: 'servers', populate: { path: 'channels' } });
+        if (!user) {
+            throw new AuthenticationError('Incorrect credentials');
+        } else {
+            const correctPw = user.isCorrectPassword(password);
+            if (!correctPw) {
+                throw new AuthenticationError('Incorrect credentials');
+            };
+            try {
+                const locationData = await returnLocation({ args: undefined }, ip);
+                await updateUserStatus(user.status._id, { online: true });
+                await updateUserLocation(user.location._id, locationData);
+            } catch (error) {
+                console.error('Error updating data while logging in', error);
+                return error
+            };
+            // return user and token
+            const token = signToken(user);
+            return { token, user };
+        };
+    },
+
 }
 
 module.exports = userMutations

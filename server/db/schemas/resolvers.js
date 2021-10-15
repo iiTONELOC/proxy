@@ -1,5 +1,5 @@
 const { query } = require('../controller');
-const { createNewUser } = require('../controller/user/mutations');
+const { createNewUser, loginUser } = require('../controller/user/mutations');
 const { user } = query;
 const resolvers = {
     Query: {
@@ -7,7 +7,8 @@ const resolvers = {
         // location: location.findAll
     },
     Mutation: {
-        addUser: createNewUser
+        addUser: createNewUser,
+        login: loginUser,
     }
 };
 module.exports = resolvers;
