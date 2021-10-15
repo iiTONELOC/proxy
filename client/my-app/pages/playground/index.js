@@ -3,8 +3,10 @@ import Head from 'next/head';
 import styles from '../../styles/Home.module.css';
 import Client from '../../components/Providers/Client'
 import Test from '../../components/Test'
+import { ALL_USERS } from '../../utilities/graphql/queries';
 
-export default function Playground() {
+import serverClient from '../../utilities/apollo/server.config';
+export default function Playground({ users }) {
 
     return (
         <div>
@@ -34,7 +36,7 @@ export default function Playground() {
                     >
                         <h2>Fetch All Users &#128225;</h2>
                         <Client>
-                            <Test />
+                            <Test allUsers={users} />
                         </Client>
                     </a>
 
@@ -44,3 +46,15 @@ export default function Playground() {
     )
 }
 
+
+export async function getServerSideProps() {
+
+    const { data, error } = await serverClient.query({ query: ALL_USERS, fetchPolicy: "network-only" });
+    if (error) {
+        console.log("Error retrieving data in the Playground", error)
+    }
+
+    return {
+        props: { users: data.users }, // will be passed to the page component as props
+    }
+}

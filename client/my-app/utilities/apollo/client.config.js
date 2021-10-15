@@ -1,12 +1,11 @@
 import { setContext } from '@apollo/client/link/context';
 import {
     ApolloClient,
-    InMemoryCache,
     createHttpLink
 } from "@apollo/client";
+import cache from './cache';
 
 let clientData;
-const cache = new InMemoryCache();
 
 if (typeof window !== undefined) {
     const httpLink = createHttpLink({

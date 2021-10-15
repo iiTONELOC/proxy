@@ -108,7 +108,7 @@ const userMutations = {
                     server: SERVER_ID,
                     channel: channel._id
                 };
-                const updatedServer = addChannelToServer({ ...servUp });
+                const updatedServer = await addChannelToServer({ ...servUp });
                 UPDATED_S_ID = updatedServer._id;
                 //  update server with channel id,
             } catch (error) {
@@ -121,23 +121,27 @@ const userMutations = {
             }
             // update the user with location, status, and updatedServer
             // and the server has the channels
-            const updatedUserData = await User.findByIdAndUpdate(user._id, {
+            await User.findByIdAndUpdate(user._id, {
                 location: LOC_ID,
                 status: STATUS_ID,
                 profile: PROFILE_ID,
-                $push: { servers: UPDATED_S_ID }
+                $addToSet: { servers: UPDATED_S_ID }
             }, { new: true }).select('-__v -password -email');
             const token = signToken(user);
             return {
                 token,
-                user: updatedUserData
+                user: user
             };
         } catch (error) {
-            if (error.code === '11000') {
+            const data = { ...error };
+            const { keyValue } = data;
+            if (error.code === 11000) {
+                const { username, email } = keyValue
+                const duplicate = username ? 'user name' : email ? 'mail' : error;
                 // noting was created, return a message to the user
-                return error
+                throw new Error(`That ${duplicate} already exists!`)
             } else {
-                console.error(`createNewUser- previously unknown error caught`, error);
+                console.error(`createNewUser - previously unknown error caught`, error);
                 return error
             }
         };
