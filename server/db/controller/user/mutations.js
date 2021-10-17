@@ -1,5 +1,6 @@
 const IpLocation = require('../../../utils/ipLoc');
 const { signToken } = require('../../../utils/middleware/auth');
+const { AuthenticationError } = require('apollo-server-express');
 const {
     User,
     Server,
@@ -149,8 +150,7 @@ const userMutations = {
 
     async loginUser(parent, { email, username, password }, { ip }) {
         // use sharedMutation to update the onlineStatus for the user when logging in
-        const params = email ? email : username ? username : null;
-        const user = await User.findOne({ params })
+        const user = await User.findOne({ email })
             .populate('location')
             .populate('status')
             .populate('profile')
