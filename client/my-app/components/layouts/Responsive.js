@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Client from '../Providers/Client';
+import OnlyOnClient from '../Providers/Client';
 import DesktopLayout from "./Desktop";
 import MobileLayout from './Mobile';
 import Landing from '../Home';
@@ -35,7 +35,7 @@ export default function ResponsiveLayout({ viewData }) {
     }, [mounted]);
 
     return (
-        <Client>
+        <OnlyOnClient>
             <section className="bg-gray-700  w-full" style={{ height: height ? `${height}px` : '93vh', }}>
                 {
                     viewData.Landing ? <Landing /> :
@@ -43,7 +43,6 @@ export default function ResponsiveLayout({ viewData }) {
                             <DesktopLayout {...viewData} />
                 }
             </section>
-        </Client>
-
+        </OnlyOnClient>
     )
 }

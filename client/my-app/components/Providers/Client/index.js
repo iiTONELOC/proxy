@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Client({ children, ...delegated }) {
+export default function OnlyOnClient({ children, ...delegated }) {
     const [hasMounted, setHasMounted] = useState(false);
     useEffect(() => {
         setHasMounted(true);
