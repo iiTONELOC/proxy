@@ -1,10 +1,13 @@
 import Head from 'next/head';
+import { useEffect } from 'react';
 import Landing from '../components/Home';
-import ResponsiveLayout from '../components/layouts/Responsive';
+import ResponsiveLayout from '../components/responsive-layout/Responsive';
 
+export default function Home({ memory }) {
+  useEffect(() => {
+    console.log('State in Home', memory)
+  })
 
-
-export default function Home() {
   return (
     <>
       <Head>

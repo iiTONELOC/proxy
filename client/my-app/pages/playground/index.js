@@ -1,7 +1,7 @@
 
 import Head from 'next/head';
 import Test from '../../components/Test'
-import ResponsiveLayout from '../../components/layouts/Responsive';
+import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import { ALL_USERS } from '../../utilities/graphql/queries';
 
 import serverClient from '../../utilities/apollo/server.config';
