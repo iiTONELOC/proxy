@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
-import Landing from '../components/Home';
+import Landing from '../components/Landing';
 import ResponsiveLayout from '../components/responsive-layout/Responsive';
 
 export default function Home({ memory }) {

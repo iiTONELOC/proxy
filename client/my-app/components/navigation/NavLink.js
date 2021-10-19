@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 
 
-export default function NavLink({ name, location }) {
+export default function NavLink({ name, location, onClick }) {
     const [hover, setHover] = useState(false);
     function onHover() {
         return hoverHandler({ hover, setHover });
@@ -14,6 +14,7 @@ export default function NavLink({ name, location }) {
                 className={`p-3 mx-1 text-center rounded  bg-${hover ? 'gray-400' : ''}`}
                 onMouseEnter={onHover}
                 onMouseLeave={onHover}
+                onClick={onClick ? onClick : null}
                 style={{ cursor: 'pointer' }}
             >
                 {name}

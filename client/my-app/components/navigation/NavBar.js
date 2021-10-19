@@ -1,5 +1,11 @@
 import NavLink from "./NavLink"
 import { useEffect, useState } from 'react';
+import auth from "../../utilities/auth";
+
+export function logoutUser() {
+    return auth.logout();
+}
+
 export default function NavBar() {
     const [mounted, setMounted] = useState(false);
     const destinations = [
@@ -7,7 +13,7 @@ export default function NavBar() {
         { name: 'Playground', location: '/playground' },
         { name: 'Sign In', location: '/sign-in' },
         { name: 'Sign Up', location: '/sign-up' },
-        { name: 'Logout', },
+        { name: 'Logout', onClick: logoutUser, },
     ]
     useEffect(() => {
         console.log(`NavBar is mounting`);

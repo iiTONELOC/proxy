@@ -13,12 +13,14 @@ export default function DesktopLayout({ Information, Messaging, Test, Landing, d
                 </> :
                 <>
 
-                    {Landing && <Landing />}
-                    {SignUp &&
-                        <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: '65vh' }}>
-                            <SignUp.Element form={SignUp.props} />
-                        </div>
-                    }
+
+
+                    <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: '65vh' }}>
+                        {Landing && <Landing />}
+                        {SignUp ? (<SignUp.Element form={SignUp.props} />) : null}
+                        {Login ? (<Login.Element form={Login.props} />) : null}
+                    </div>
+
                 </>
             }
         </section>

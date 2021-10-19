@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import OnlyOnClient from '../Providers/Client';
 import DesktopLayout from "./Desktop";
 import MobileLayout from './Mobile';
-import Landing from '../Home';
 
 
 export default function ResponsiveLayout({ viewData }) {

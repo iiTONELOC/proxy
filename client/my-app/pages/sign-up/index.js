@@ -12,12 +12,11 @@ export default function SignUp() {
     useEffect(() => {
         const user = auth.getProfile();
         if (user) {
-            setLoggedIn(true)
-        }
-    }, [])
-    if (loggedIn) router.push('/playground')
+            setLoggedIn(true);
+        };
+    }, []);
+    if (loggedIn) router.push('/playground');
     return (
-
         !loggedIn && <ResponsiveLayout viewData={{ SignUp: { Element: MultiPass, props: 'signUp' }, display: 'single' }} />
     )
 }

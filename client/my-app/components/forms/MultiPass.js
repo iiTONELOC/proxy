@@ -17,9 +17,8 @@ export function MultiPass({ form }) {
     const [locationState, setLocation] = useState(false);
     const initialState = initial(form);
     const [formState, setFormState] = useState(initialState);
-    const [errorMessage, setErrorMessage] = useState({});
-    const [login, { error }] = useMutation(LOGIN_USER);
-    const [addUser] = useMutation(CREATE_USER);
+    const [errorMessage, setErrorMessage] = useState(false);
+    const [login] = useMutation(LOGIN_USER);
 
     useEffect(() => {
         setMounted(true);
@@ -37,7 +36,6 @@ export function MultiPass({ form }) {
         });
     };
     function getLocation() {
-        console.log("before location", formState)
         if (!navigator.geolocation) {
             return console.log('Geolocation is not supported by your browser');
         } else {
@@ -48,14 +46,6 @@ export function MultiPass({ form }) {
                     longitude: longitude
                 }
                 return setLocation({ ...locationData })
-                // const args = {
-                //     ...formState, ...locationData
-                // }
-                //  
-                // 
-
-
-
             }, (e) => {
                 return console.log('Unable to retrieve location', e);
             })
@@ -63,49 +53,56 @@ export function MultiPass({ form }) {
     }
     const handleFormSubmit = async event => {
         event.preventDefault();
+
+        // ask user for location;
+        getLocation()
+        // check args
+        const args = { ...formState, ...locationState };
         if (form === 'signUp') {
-            // ask user for location;
-            getLocation()
-            // check args
-            const args = { ...formState, ...locationState };
-            console.log('MUTATION ARGS', args);
             if (args.username !== null && args.email !== null && args.password !== null) {
-                console.log('HERE', args)
                 const { data, errors } = await client.mutate({ mutation: CREATE_USER, variables: { ...args } });
                 if (errors) {
-                    console.log("MUTATIONS ERROR", error);
-                    setErrorMessage(errors);
+                    console.log("MUTATIONS ERROR", errors);
+                    setErrorMessage();
                 }
                 if (data) {
-                    console.log(data);
                     const token = data.addUser.token;
                     auth.login(token)
                 }
             }
-
         } else if (form === 'login') {
-            try {
-                const { data } = await login({
-                    variables: { ...formState }
-                });
-                const userData = await { ...data };
-                // if we have a successful login
-                if (userData) {
-                    const data = userData;
-                    // destructure the token
-                    const { login } = await data;
-                    const { token } = await login;
-                    // handle with JWT
-                    Auth.login(token)
+            if (args.email !== null && args.password !== null) {
+                try {
+                    const { data, errors } = await login({
+                        variables: { ...args }
+                    });
+                    const userData = await { ...data };
+                    if (errors) {
+                        console.log("MUTATIONS ERROR", errors);
+                        setErrorMessage(errors);
+                    }
+                    // if we have a successful login
+                    if (userData) {
+                        const data = userData;
+                        // destructure the token
+                        const { login } = await data;
+                        const { token } = await login;
+                        // handle with JWT
+                        auth.login(token)
+                    }
+                } catch (e) {
+                    console.error(e);
                 }
-            } catch (e) {
-                console.error(e);
             }
         }
     };
 
     return (
         <form className='w-auto h-auto bg-gray-400 p-4 self-center'>
+            <div className='text-center text-white flex flex-row'>
+                <p>{errorMessage && errorMessage}</p>
+            </div>
+
             {form === 'signUp' &&
                 <>
                     <label className='block  mt-2'>

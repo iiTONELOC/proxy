@@ -77,10 +77,9 @@ type Mutation{
         password: String!, 
         latitude: String, 
         longitude: String, 
-        city: String, 
-        state: String
         ): Auth
-    login( email: String!, password: String!): Auth
+    login( email: String!, password: String! latitude: String,
+        longitude: String, ): Auth
 
 }
 
