@@ -1,19 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { LOGIN_USER } from '../../utilities/graphql/mutations'
+import { LOGIN_USER, CREATE_USER } from '../../utilities/graphql/mutations'
 import Button from '../Button';
+import auth from '../../utilities/auth';
+import client from '../../utilities/apollo/client.config';
 
 function initial(form) {
     if (form === 'signUp') {
-        return { username: '', email: '', password: '' }
-    } else {
-        return { email: '', password: '' }
+        return { username: null, email: null, password: null }
+    } else if (form === 'login') {
+        return { email: null, password: null }
     }
 }
 export function MultiPass({ form }) {
+    const [isMounted, setMounted] = useState(false);
+    const [locationState, setLocation] = useState(false);
     const initialState = initial(form);
     const [formState, setFormState] = useState(initialState);
+    const [errorMessage, setErrorMessage] = useState({});
     const [login, { error }] = useMutation(LOGIN_USER);
+    const [addUser] = useMutation(CREATE_USER);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false)
+    }, [])
+
+
+
+    if (!isMounted) return null
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormState({
@@ -21,38 +36,80 @@ export function MultiPass({ form }) {
             [name]: value,
         });
     };
+    function getLocation() {
+        console.log("before location", formState)
+        if (!navigator.geolocation) {
+            return console.log('Geolocation is not supported by your browser');
+        } else {
+            return navigator.geolocation.getCurrentPosition(async (position) => {
+                const { latitude, longitude } = position.coords;
+                const locationData = {
+                    latitude: latitude,
+                    longitude: longitude
+                }
+                return setLocation({ ...locationData })
+                // const args = {
+                //     ...formState, ...locationData
+                // }
+                //  
+                // 
 
+
+
+            }, (e) => {
+                return console.log('Unable to retrieve location', e);
+            })
+        }
+    }
     const handleFormSubmit = async event => {
         event.preventDefault();
-        try {
-            const { data } = await login({
-                variables: { ...formState }
-            });
-            const userData = await { ...data };
-            // if we have a successful login
-            if (userData) {
-                const data = userData;
-                // destructure the token
-                const { login } = await data;
-                const { token } = await login;
-                // handle with JWT
-                Auth.login(token)
+        if (form === 'signUp') {
+            // ask user for location;
+            getLocation()
+            // check args
+            const args = { ...formState, ...locationState };
+            console.log('MUTATION ARGS', args);
+            if (args.username !== null && args.email !== null && args.password !== null) {
+                console.log('HERE', args)
+                const { data, errors } = await client.mutate({ mutation: CREATE_USER, variables: { ...args } });
+                if (errors) {
+                    console.log("MUTATIONS ERROR", error);
+                    setErrorMessage(errors);
+                }
+                if (data) {
+                    console.log(data);
+                    const token = data.addUser.token;
+                    auth.login(token)
+                }
             }
-        } catch (e) {
-            console.error(e);
+
+        } else if (form === 'login') {
+            try {
+                const { data } = await login({
+                    variables: { ...formState }
+                });
+                const userData = await { ...data };
+                // if we have a successful login
+                if (userData) {
+                    const data = userData;
+                    // destructure the token
+                    const { login } = await data;
+                    const { token } = await login;
+                    // handle with JWT
+                    Auth.login(token)
+                }
+            } catch (e) {
+                console.error(e);
+            }
         }
     };
 
     return (
-
-
-
         <form className='w-auto h-auto bg-gray-400 p-4 self-center'>
             {form === 'signUp' &&
                 <>
                     <label className='block  mt-2'>
                         Enter a Username:
-
                     </label>
                     <input
                         type='text'
@@ -64,9 +121,11 @@ export function MultiPass({ form }) {
                     />
                 </>
             }
+
             <label className='block  mt-2'>
                 Email:
             </label>
+
             <input
                 type='text'
                 className=' my-1 text-black'
@@ -75,6 +134,7 @@ export function MultiPass({ form }) {
                 id="email"
                 onChange={handleChange}
             />
+
             <label className='block mt-2'>
                 Password:
             </label>
@@ -91,8 +151,8 @@ export function MultiPass({ form }) {
                 <Button
                     color={{ color: 'green-500', hover: 'green-700' }}
                     radius={'rounded-md'}
-                    onSubmit={handleFormSubmit}
                     class='text-white text-center p-2'
+                    action={{ onClick: handleFormSubmit }}
                 >
                     {form === 'signUp' ? 'Create Account' : 'Login'}
                 </Button>

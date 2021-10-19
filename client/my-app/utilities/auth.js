@@ -3,7 +3,13 @@ import decode from 'jwt-decode';
 class AuthService {
     // retrieve data saved in token
     getProfile() {
-        return decode(this.getToken());
+        try {
+            return decode(this.getToken());
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+
     }
 
     // check if the user is still logged in
@@ -38,7 +44,7 @@ class AuthService {
     async login(idToken) {
         // Saves user token to localStorage
         localStorage.setItem('proxy_id_token', idToken);
-        window.location.assign('/global-chat');
+        window.location.assign('/playground');
         return true
     }
 

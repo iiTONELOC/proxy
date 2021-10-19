@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 import auth from '../../../utilities/auth'
 import { Redirect } from "../../Redirect";
-export function loggedIn() {
-    const token = auth.getToken()
-    if (token) {
-        // check if expired
-        const notExpired = auth.isTokenExpired(token);
-        if (notExpired) {
-            return (true)
-        }
-    } else {
-        return (false)
-    }
-}
+
 
 export default function Authorization({ children, ...delegated }) {
     const [hasMounted, setHasMounted] = useState(false);
@@ -22,7 +11,7 @@ export default function Authorization({ children, ...delegated }) {
     }, []);
     useEffect(() => {
         if (hasMounted) {
-            const signedIn = loggedIn()
+            const signedIn = auth.getProfile()
             if (signedIn) {
                 setAuth(true)
             } else {
@@ -32,13 +21,11 @@ export default function Authorization({ children, ...delegated }) {
     }, [hasMounted])
     if (!hasMounted) {
         return null;
-    } else if (!isAuthorized) {
-
-        return (
-            <Redirect />
-        )
-    } else {
-        return <div {...delegated}>{children}</div>;
     }
+
+    return (
+        isAuthorized ? (<div {...delegated}>{children}</div>) : (<Redirect />)
+    )
+
 
 };

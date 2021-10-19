@@ -16,7 +16,14 @@ const {
 async function returnLocation(args, ip) {
     let data
     if (args.latitude && args.latitude !== null || args.latitude !== undefined) {
-        data = { latitude, longitude, city, state } = args
+        const { latitude, longitude } = args;
+        const { city, state } = await IpLocation.user(null, ip);
+        data = {
+            latitude,
+            longitude,
+            city,
+            state
+        }
     } else {
         data = { latitude, longitude, city, state } = await IpLocation.user(args, ip);
     }
@@ -25,6 +32,7 @@ async function returnLocation(args, ip) {
 
 const userMutations = {
     async createNewUser(parent, args, { ip }) {
+        console.log('MUTATION', args)
         let LOC_ID, STATUS_ID, SERVER_ID, PROFILE_ID, UPDATED_S_ID;
         const data = await returnLocation(args, ip)
         try {

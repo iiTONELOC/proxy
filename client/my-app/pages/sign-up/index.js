@@ -1,16 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'
 import { MultiPass } from '../../components/forms/MultiPass';
-import { loggedIn } from '../../components/Providers/Auth';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
+import auth from '../../utilities/auth';
+
+
 
 export default function SignUp() {
+    const [loggedIn, setLoggedIn] = useState(false);
+    const router = useRouter();
     useEffect(() => {
-        const signedIn = loggedIn();
-        if (signedIn) window.location.replace('/playground')
+        const user = auth.getProfile();
+        if (user) {
+            setLoggedIn(true)
+        }
     }, [])
-
+    if (loggedIn) router.push('/playground')
     return (
 
-        <ResponsiveLayout viewData={{ SignUp: { Element: MultiPass, props: 'signUp' }, display: 'single' }} />
+        !loggedIn && <ResponsiveLayout viewData={{ SignUp: { Element: MultiPass, props: 'signUp' }, display: 'single' }} />
     )
 }
