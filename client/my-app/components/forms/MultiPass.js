@@ -35,52 +35,53 @@ export function MultiPass({ form }) {
             [name]: value,
         });
     };
-    function getLocation() {
-        if (!navigator.geolocation) {
-            return console.log('Geolocation is not supported by your browser');
-        } else {
-            return navigator.geolocation.getCurrentPosition(async (position) => {
-                const { latitude, longitude } = position.coords;
-                const locationData = {
-                    latitude: latitude,
-                    longitude: longitude
-                }
-                return setLocation({ ...locationData })
-            }, (e) => {
-                return console.log('Unable to retrieve location', e);
-            })
-        }
+    function clearError() {
+        return setTimeout(() => {
+            setErrorMessage(false)
+        }, 3500);
     }
     const handleFormSubmit = async event => {
         event.preventDefault();
-
+        function getLocation() {
+            if (!navigator.geolocation) {
+                return console.log('Geolocation is not supported by your browser');
+            } else {
+                return navigator.geolocation.getCurrentPosition(async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const locationData = {
+                        latitude: `${latitude}`,
+                        longitude: `${longitude}`
+                    }
+                    return setLocation({ ...locationData })
+                }, (e) => {
+                    return console.log('Unable to retrieve location', e);
+                })
+            }
+        }
         // ask user for location;
         getLocation()
         // check args
         const args = { ...formState, ...locationState };
         if (form === 'signUp') {
-            if (args.username !== null && args.email !== null && args.password !== null) {
-                const { data, errors } = await client.mutate({ mutation: CREATE_USER, variables: { ...args } });
-                if (errors) {
-                    console.log("MUTATIONS ERROR", errors);
-                    setErrorMessage();
-                }
-                if (data) {
-                    const token = data.addUser.token;
-                    auth.login(token)
+            if (args.username !== null && args.email !== null && args.password !== null && locationState !== null) {
+                try {
+                    const { data } = await client.mutate({ mutation: CREATE_USER, variables: { ...args } });
+                    if (data) {
+                        const token = data.addUser.token;
+                        auth.login(token)
+                    }
+                } catch (e) {
+                    setErrorMessage(e.message)
+                    clearError()
                 }
             }
         } else if (form === 'login') {
-            if (args.email !== null && args.password !== null) {
+            if (args.email !== null && args.password !== null && locationState !== null) {
                 try {
-                    const { data, errors } = await login({
+                    const { data } = await login({
                         variables: { ...args }
                     });
                     const userData = await { ...data };
-                    if (errors) {
-                        console.log("MUTATIONS ERROR", errors);
-                        setErrorMessage(errors);
-                    }
                     // if we have a successful login
                     if (userData) {
                         const data = userData;
@@ -91,15 +92,18 @@ export function MultiPass({ form }) {
                         auth.login(token)
                     }
                 } catch (e) {
-                    console.error(e);
+                    setErrorMessage(e.message)
+                    clearError()
                 }
             }
         }
     };
 
+
+
     return (
         <form className='w-auto h-auto bg-gray-400 p-4 self-center'>
-            <div className='text-center text-white flex flex-row'>
+            <div className={`text-center ${errorMessage ? 'bg-red-500' : null} text-white flex flex-row`}>
                 <p>{errorMessage && errorMessage}</p>
             </div>
 

@@ -39,7 +39,7 @@ class IpLocation {
     };
     // if you want to check for location data first
     static async user(args, context) {
-        const { latitude, longitude, } = args;
+        const { latitude, longitude, } = args ? args : {};
         if (latitude == undefined || longitude == undefined) {
             try {
                 return IpLocation.get(context);

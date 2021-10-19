@@ -8,12 +8,16 @@ export function logoutUser() {
 
 export default function NavBar() {
     const [mounted, setMounted] = useState(false);
-    const destinations = [
+    const LoggedInDestinations = [
         { name: 'Home', location: '/' },
         { name: 'Playground', location: '/playground' },
+        { name: 'Logout', onClick: logoutUser, },
+    ]
+
+    const destinations = [
+        { name: 'Home', location: '/' },
         { name: 'Sign In', location: '/sign-in' },
         { name: 'Sign Up', location: '/sign-up' },
-        { name: 'Logout', onClick: logoutUser, },
     ]
     useEffect(() => {
         console.log(`NavBar is mounting`);
@@ -21,13 +25,18 @@ export default function NavBar() {
         return () => setMounted(false)
     }, [])
     if (!mounted) return null
+    const loggedIn = auth.getProfile();
     return (
         <>
             <header className="bg-gray-800 flex flex-row justify-between p-2 items-center border-t-2 border-green-400" style={{ height: '65px' }}>
                 <div className="bg-gray-400 rounded-full h-12 w-12 flex items-center justify-center">Proxy</div>
                 <nav className=" flex  flex-row w-4/5 justify-end text-white">
                     <ul className="flex flex-wrap justify-end w-full ">
-                        {destinations.map(dest => (<NavLink key={dest.name} {...dest} />))}
+
+                        {
+                            !loggedIn ? destinations.map(dest => (<NavLink key={dest.name} {...dest} />)) :
+                                LoggedInDestinations.map(dest => (<NavLink key={dest.name} {...dest} />))
+                        }
                     </ul>
                 </nav>
             </header>

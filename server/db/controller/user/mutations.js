@@ -14,10 +14,14 @@ const {
 } = require('../sharedMutations')
 
 async function returnLocation(args, ip) {
+
     let data
-    if (args.latitude && args.latitude !== null || args.latitude !== undefined) {
+    if (args.latitude && args.latitude !== null && args.latitude !== undefined) {
+
         const { latitude, longitude } = args;
+        console.log('returnLocation Fn', { latitude, longitude })
         const { city, state } = await IpLocation.user(null, ip);
+        console.log(city)
         data = {
             latitude,
             longitude,
@@ -32,7 +36,6 @@ async function returnLocation(args, ip) {
 
 const userMutations = {
     async createNewUser(parent, args, { ip }) {
-        console.log('MUTATION', args)
         let LOC_ID, STATUS_ID, SERVER_ID, PROFILE_ID, UPDATED_S_ID;
         const data = await returnLocation(args, ip)
         try {
@@ -130,7 +133,7 @@ const userMutations = {
             }
             // update the user with location, status, and updatedServer
             // and the server has the channels
-            await User.findByIdAndUpdate(user._id, {
+            const updatedUser = await User.findByIdAndUpdate(user._id, {
                 location: LOC_ID,
                 status: STATUS_ID,
                 profile: PROFILE_ID,
@@ -139,14 +142,14 @@ const userMutations = {
             const token = signToken(user);
             return {
                 token,
-                user: user
+                user: updatedUser
             };
         } catch (error) {
             const data = { ...error };
             const { keyValue } = data;
             if (error.code === 11000) {
                 const { username, email } = keyValue
-                const duplicate = username ? 'user name' : email ? 'mail' : error;
+                const duplicate = username ? 'username' : email ? 'email' : error;
                 // noting was created, return a message to the user
                 throw new Error(`That ${duplicate} already exists!`)
             } else {
