@@ -1,13 +1,11 @@
-
 import Head from 'next/head';
 import Test from '../../components/Test'
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import { ALL_USERS } from '../../utilities/graphql/queries';
-
 import serverClient from '../../utilities/apollo/server.config';
 import Authorization from '../../components/Providers/Auth';
-export default function Playground({ users }) {
 
+export default function Playground({ users }) {
     return (
         <Authorization>
             <div>
@@ -19,7 +17,6 @@ export default function Playground({ users }) {
                 <ResponsiveLayout viewData={{ Test: { Element: Test, props: users } }} />
             </div>
         </Authorization>
-
     )
 }
 

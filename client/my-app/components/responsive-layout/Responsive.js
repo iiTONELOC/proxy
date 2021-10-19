@@ -34,14 +34,21 @@ export default function ResponsiveLayout({ viewData }) {
         return () => setMounted(false)
     }, [mounted]);
 
+    const viewController = (view, viewData) => {
+        switch (view) {
+            case 'mobile':
+                return <MobileLayout {...viewData} />;
+            case 'desktop':
+                return <DesktopLayout {...viewData} />;
+            default:
+                return <DesktopLayout {...viewData} />
+        }
+    }
+
     return (
         <OnlyOnClient>
             <section className="bg-gray-700  w-full" style={{ height: height ? `${height}px` : '93vh', }}>
-                {
-                    viewData.Landing ? <Landing /> :
-                        view === 'mobile' ? <MobileLayout {...viewData} /> :
-                            <DesktopLayout {...viewData} />
-                }
+                {viewController(view, viewData)}
             </section>
         </OnlyOnClient>
     )

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { MultiPass } from '../../components/forms/signup-login';
+import { MultiPass } from '../../components/forms/MultiPass';
 import { loggedIn } from '../../components/Providers/Auth';
+import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 
 export default function SignUp() {
     useEffect(() => {
@@ -9,6 +10,7 @@ export default function SignUp() {
     }, [])
 
     return (
-        <MultiPass form={'signUp'} />
+
+        <ResponsiveLayout viewData={{ SignUp: { Element: MultiPass, props: 'signUp' }, display: 'single' }} />
     )
 }
