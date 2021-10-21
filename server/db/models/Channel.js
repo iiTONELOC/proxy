@@ -35,10 +35,10 @@ const channelSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User'
         }],
-        server: [{
+        server: {
             type: Schema.Types.ObjectId,
             ref: 'Server'
-        }],
+        },
     },
 );
 

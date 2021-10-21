@@ -22,12 +22,12 @@ if (typeof window !== undefined) {
     });
     clientData = {
         link: authLink.concat(httpLink),
-        cache: cache,
+        cache: cache(),
     };
 } else {
     clientData = {
         uri: `http://${window.location.hostname}:3001/graphql`,
-        cache: cache,
+        cache: cache(),
     };
 };
 

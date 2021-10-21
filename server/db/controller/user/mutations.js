@@ -17,11 +17,8 @@ async function returnLocation(args, ip) {
 
     let data
     if (args.latitude && args.latitude !== null && args.latitude !== undefined) {
-
         const { latitude, longitude } = args;
-        console.log('returnLocation Fn', { latitude, longitude })
         const { city, state } = await IpLocation.user(null, ip);
-        console.log(city)
         data = {
             latitude,
             longitude,
