@@ -67,7 +67,9 @@ type User {
 
 
 type Query {
+    me: User
     users: [User]
+    user(user:ID): User
 }
 
 type Mutation{
@@ -80,7 +82,6 @@ type Mutation{
         ): Auth
     login( email: String!, password: String! latitude: String,
         longitude: String, ): Auth
-
 }
 
 type Auth {

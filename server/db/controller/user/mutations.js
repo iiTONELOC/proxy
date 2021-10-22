@@ -11,7 +11,7 @@ const {
 } = require("../../models");
 const {
     addChannelToServer, updateUserStatus, updateUserLocation
-} = require('../sharedMutations')
+} = require('../shared/sharedMutations')
 
 async function returnLocation(args, ip) {
 

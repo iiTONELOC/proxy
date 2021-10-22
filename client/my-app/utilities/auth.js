@@ -6,7 +6,7 @@ class AuthService {
         try {
             return decode(this.getToken());
         } catch (error) {
-            
+
             return null
         }
 
@@ -44,7 +44,9 @@ class AuthService {
     async login(idToken) {
         // Saves user token to localStorage
         localStorage.setItem('proxy_id_token', idToken);
-        window.location.assign('/playground');
+        const uData = await this.getProfile();
+        console.log(uData)
+        window.location.assign(`/proxy-chat/${uData.data._id}`);
         return true
     }
 

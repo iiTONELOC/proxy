@@ -1,4 +1,4 @@
-const { Server, OnlineStatus, Location } = require('../../models')
+const { Server, OnlineStatus, Location } = require('../../../models')
 
 const sharedMutations = {
     updateUserStatus: (_id, status) => {

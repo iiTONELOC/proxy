@@ -10,7 +10,7 @@ export default function NavBar() {
     const [mounted, setMounted] = useState(false);
     const LoggedInDestinations = [
         { name: 'Home', location: '/' },
-        { name: 'Playground', location: '/playground' },
+        { name: 'Proxy-Chat', location: '/proxy-chat' },
         { name: 'Logout', onClick: logoutUser, },
     ]
 

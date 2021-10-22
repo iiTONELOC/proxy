@@ -51,3 +51,21 @@ query users {
   }
 }
 `;
+
+export const SERVER_SIDE_FETCH_USER = gql`
+query Query($user: ID) {
+  user(user: $user) {
+    _id
+    username
+     usersInRange {
+       _id
+       username
+       location {
+         _id
+         city
+         state
+       }
+     }
+  }
+}
+`;

@@ -22,10 +22,8 @@ export default function Authorization({ children, ...delegated }) {
     if (!hasMounted) {
         return null;
     }
-
     return (
         isAuthorized ? (<div {...delegated}>{children}</div>) : (<Redirect />)
     )
-
 
 };

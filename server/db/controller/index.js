@@ -1,4 +1,4 @@
-const userQueries = require('./user/queries');
+const { userQueries } = require('./user/queries');
 const locationQueries = require('./location/queries');
 const userMutations = require('./user/mutations');
 
