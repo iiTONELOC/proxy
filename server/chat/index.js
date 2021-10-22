@@ -1,16 +1,11 @@
-
+const { login } = require("./chatResolver")
+const { _socket_user_login } = require("./socketActions");
 
 class Connection {
     constructor(io, socket) {
         this.io = io,
             this.socket = socket,
-            socket.on('connected', (data) => {
-                const socketData = {
-                    socket_id: socket.id,
-                    data
-                }
-                console.log(`socket connected`, socketData)
-            })
+            this.socket.on(_socket_user_login, (data) => { login(data, this.socket, this.io) })
     }
 };
 

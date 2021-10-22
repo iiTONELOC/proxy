@@ -24,9 +24,16 @@ export const ChatProvider = ({ ...props }) => {
                 user: 'test',
                 id: 1234
             }
-            newSocket.emit('connected', socketData);
-            console.log('socket connecting...')
-            setSocket(newSocket)
+
+            console.log('socket connecting...');
+            const payload = {
+                request: 'login',
+                data: socketData
+            }
+            newSocket.emit('user requesting login', payload);
+            console.log('requesting login..')
+            setSocket(newSocket);
+            newSocket.on('logged', (data) => console.log(`authenticated`, data))
         }
     }, [mounted])
 
