@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-export default function Test({ inRange }) {
+export default function UsersInRange({ inRange }) {
     const [users, setUsers] = useState({});
     useEffect(() => {
         setUsers(inRange);
