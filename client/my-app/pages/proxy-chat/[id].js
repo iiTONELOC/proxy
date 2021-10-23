@@ -42,6 +42,7 @@ export default function Global_Chat({ userData }) {
 
 
 export async function getServerSideProps(req) {
+
     // const userID = req.socket.parser.incoming.url.split('/')[2];
     const { id } = req.params
 

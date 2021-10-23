@@ -15,6 +15,7 @@ const login = async ({ request, data }, socket, io) => {
             if (isUser !== null) {
                 // send to the user that they are authenticated with updated userInfo
                 // this will prompt the client to save the userData and socket information in REDUX
+                console.log(`USER INFO`, isUser)
                 return io.to(socket.id).emit(_authenticated, isUser)
             } else {
                 return null

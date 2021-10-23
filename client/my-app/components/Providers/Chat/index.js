@@ -65,7 +65,7 @@ export const ChatProvider = ({ ...props }) => {
             /*CALLBACKS FOR GLOBAL SOCKET ACTIONS */
             // after a successful connection to the chatServer
             // we need to set our user and socket
-            socket.on(_authenticated, (data) => setUsersInfo({ data, dispatch }))
+            socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }), console.log(`AUTHENTICATED`, data) })
         }
     }, [socket])
     if (!mounted) return null
