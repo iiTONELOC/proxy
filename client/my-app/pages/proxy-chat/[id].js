@@ -1,13 +1,21 @@
 import Head from 'next/head';
-import UsersInRange from '../../components/UsersInRange'
-import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import { SERVER_SIDE_FETCH_USER } from '../../utilities/graphql/queries';
-import serverClient from '../../utilities/apollo/server.config';
+import { useEffect, useState } from 'react';
+import UsersInRange from '../../components/UsersInRange';
 import Authorization from '../../components/Providers/Auth';
-
+import serverClient from '../../utilities/apollo/server.config';
+import { SERVER_SIDE_FETCH_USER } from '../../utilities/graphql/queries';
+import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 
 export default function Global_Chat({ userData }) {
-
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+        const { _id } = userData
+        return () => setMounted(false)
+    }, [])
+    if (!userData) {
+        return `Loading`
+    }
     return (
         <Authorization>
             <div>

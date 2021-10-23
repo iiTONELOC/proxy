@@ -1,5 +1,5 @@
 const db = require('../config/connection');
-const { addChannelToServer } = require('../controller/sharedMutations');
+const { addChannelToServer } = require('../controller/shared/sharedMutations');
 
 const { User, Server, Channel, Location, Profile, OnlineStatus, } = require('../models');
 

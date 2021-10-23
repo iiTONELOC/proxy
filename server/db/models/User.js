@@ -20,6 +20,11 @@ const userSchema = new Schema(
       required: true,
       minlength: 8
     },
+    socket: {
+      type: String,
+      required: false,
+      default: null
+    },
     location: {
       type: Schema.Types.ObjectId,
       ref: 'Location'
