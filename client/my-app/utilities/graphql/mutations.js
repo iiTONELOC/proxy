@@ -24,3 +24,12 @@ mutation AddUser($username: String!, $email: String!, $password: String!, $latit
 }
 }
 `;
+
+export const LOGOUT = gql`
+mutation Mutation {
+  logout {
+  _id
+  username
+  }
+}
+`;

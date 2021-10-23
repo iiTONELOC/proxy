@@ -1,6 +1,8 @@
 import NavLink from "./NavLink"
 import { useEffect, useState } from 'react';
 import auth from "../../utilities/auth";
+import client from "../../utilities/apollo/client.config";
+import { LOGOUT } from "../../utilities/graphql/mutations";
 export function logoutUser() {
     return auth.logout();
 }
@@ -9,10 +11,20 @@ export default function NavBar() {
     const [mounted, setMounted] = useState(false);
     const [userID, setID] = useState(null);
 
+    // need a logout handler, need to set the users status to offline
+    // we can handle the updates in the chat server using socket
+    async function handleLogout(e) {
+        e.preventDefault()
+        const loggedOutMutationResult = await client.mutate({ mutation: LOGOUT });
+        console.log(loggedOutMutationResult)
+        if (loggedOutMutationResult !== null) {
+            logoutUser()
+        }
+    }
     const LoggedInDestinations = [
         { name: 'Home', location: '/' },
         { name: 'Proxy-Chat', location: `/proxy-chat/${userID}` },
-        { name: 'Logout', onClick: logoutUser, },
+        { name: 'Logout', onClick: handleLogout, },
     ];
 
     const destinations = [
@@ -25,7 +37,7 @@ export default function NavBar() {
         setMounted(true);
         const loggedIn = auth.getProfile();
         const { data } = loggedIn ? loggedIn : {}
-        if (data._id) {
+        if (data?._id) {
             setID(data._id)
         }
         return () => setMounted(false)

@@ -15,6 +15,15 @@ const cache = () => new InMemoryCache({
                 }
             }
         },
+        User: {
+            fields: {
+                usersInRange: {
+                    merge(existing, incoming) {
+                        return incoming
+                    }
+                }
+            }
+        }
 
 
     }

@@ -45,7 +45,6 @@ class AuthService {
         // Saves user token to localStorage
         localStorage.setItem('proxy_id_token', idToken);
         const uData = await this.getProfile();
-        console.log(uData)
         window.location.assign(`/proxy-chat/${uData.data._id}`);
         return true
     }

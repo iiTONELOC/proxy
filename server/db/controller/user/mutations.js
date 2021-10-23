@@ -11,7 +11,8 @@ const {
 } = require("../../models");
 const {
     addChannelToServer, updateUserStatus, updateUserLocation
-} = require('../shared/sharedMutations')
+} = require('../shared/sharedMutations');
+
 
 async function returnLocation(args, ip) {
 
@@ -182,6 +183,19 @@ const userMutations = {
             const token = signToken(user);
             return { token, user };
         };
+    },
+
+    async userLogout(parent, args, context) {
+        const { _id, username } = context.user ? context.user : {};
+        if (_id) {
+            const updatedStatus = await OnlineStatus.findOneAndUpdate({ username: username },
+                { online: false }, { new: true }
+            )
+            return updatedStatus
+        } else {
+            console.log(false);
+            throw new AuthenticationError('You must be logged in!')
+        }
     },
 
 }

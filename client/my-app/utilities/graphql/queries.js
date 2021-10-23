@@ -60,12 +60,17 @@ query Query($user: ID) {
      usersInRange {
        _id
        username
+       status{
+         online
+         status
+       }
        location {
          _id
          city
          state
        }
      }
+
   }
 }
 `;
