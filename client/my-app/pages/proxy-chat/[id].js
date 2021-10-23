@@ -5,14 +5,24 @@ import Authorization from '../../components/Providers/Auth';
 import serverClient from '../../utilities/apollo/server.config';
 import { SERVER_SIDE_FETCH_USER } from '../../utilities/graphql/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-
+import { useSocketContext } from '../../components/Providers/Chat';
+import { useSelector } from 'react-redux';
 export default function Global_Chat({ userData }) {
+    const state = useSelector((state) => state);
     const [mounted, setMounted] = useState(false);
+    const socket = useSocketContext();
     useEffect(() => {
         setMounted(true);
-        const { _id } = userData
+        const { _id } = userData;
+        console.log(`SERVER DATA`, userData)
+        // emit to the chat server that we are joining the chat in, and send our userID
+        const payload = {
+            userID: _id
+        };
+        // socket.emit('')
         return () => setMounted(false)
     }, [])
+
     if (!userData) {
         return `Loading`
     }

@@ -63,6 +63,7 @@ type User {
     friends:[User]
     friendCount: Int
     usersInRange: [User]
+    socket: ID
 }
 
 

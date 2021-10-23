@@ -57,6 +57,7 @@ query Query($user: ID) {
   user(user: $user) {
     _id
     username
+     socket
      usersInRange {
        _id
        username
@@ -69,6 +70,7 @@ query Query($user: ID) {
          city
          state
        }
+      
      }
 
   }
