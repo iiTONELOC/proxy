@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 
 
-export default function NavLink({ name, location, onClick }) {
+export default function NavLink({ name, location, onClick, icon }) {
     const [hover, setHover] = useState(false);
     function onHover() {
         return hoverHandler({ hover, setHover });
@@ -11,13 +11,13 @@ export default function NavLink({ name, location, onClick }) {
     return (
         <Link href={location ? `${location}` : '#'}>
             <li
-                className={`p-3 mx-1 text-center rounded  bg-${hover ? 'gray-400' : ''}`}
+                className={`p-3 mx-1 text-center items-center rounded ${icon ? 'flex items-center' : null} bg-${hover ? 'gray-500' : ''}`}
                 onMouseEnter={onHover}
                 onMouseLeave={onHover}
                 onClick={onClick ? onClick : null}
                 style={{ cursor: 'pointer' }}
             >
-                {name}
+                {icon ? icon : name}
             </li>
         </Link>
     )
