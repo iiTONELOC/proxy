@@ -36,7 +36,7 @@ export const ChatProvider = ({ ...props }) => {
             newSocket.on('logged', (data) => console.log(`authenticated`, data))
         }
     }, [mounted])
-
+    if (!mounted) return null
     return (
         <Provider value={socket} {...props} />
     );
