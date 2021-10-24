@@ -8,6 +8,7 @@ import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import { useSocketContext } from '../../components/Providers/Chat';
 import { useSelector } from 'react-redux';
 import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
+import Messaging from '../../components/messaging';
 export default function Global_Chat({ userData }) {
     const state = useSelector((state) => state);
     // the useSelector is necessary to access our state
@@ -52,6 +53,7 @@ export default function Global_Chat({ userData }) {
                 </Head>
                 <ResponsiveLayout viewData={{
                     UsersInRange: { Element: UsersInRange, props: userData?.usersInRange },
+                    Messaging: { Element: Messaging },
                 }} />
             </div>
         </Authorization>

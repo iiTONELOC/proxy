@@ -2,7 +2,6 @@ import SideBar from '../navigation/SideBar';
 
 export default function DesktopLayout(
     {
-        Information,
         Messaging,
         UsersInRange,
         Landing,
@@ -16,8 +15,8 @@ export default function DesktopLayout(
             {display !== 'single' ?
                 <>
                     <div className="bg-gray-600 w-14  p-0"> <SideBar /> </div>
-                    <div className="bg-gray-600 w-5/12  md:w-4/12 lg:w-3/12 p-1">{Information ? <Information /> : UsersInRange ? <UsersInRange.Element inRange={UsersInRange.props} /> : null}</div>
-                    <div className="bg-gray-600 w-7/12  md:w-8/12 lg:w-9/12 p-1">{Messaging ? <Messaging /> : `In progress`}</div>
+                    <div className="bg-gray-600 w-5/12  md:w-4/12 lg:w-3/12 p-1">{UsersInRange ? <UsersInRange.Element inRange={UsersInRange.props} /> : null}</div>
+                    <div className="bg-gray-600 w-7/12  md:w-8/12 lg:w-9/12 p-1">{Messaging ? <Messaging.Element /> : `In progress`}</div>
                 </> :
                 <>
                     <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: '65vh' }}>
