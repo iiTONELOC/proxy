@@ -66,6 +66,7 @@ export const ChatProvider = ({ ...props }) => {
             // after a successful connection to the chatServer
             // we need to set our user and socket
             socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }); console.log('...Socket is Authorized') })
+            socket.on('updateUsersInRange', () => { console.log(`received notice to update`) })
         }
     }, [socket])
     if (!mounted) return null

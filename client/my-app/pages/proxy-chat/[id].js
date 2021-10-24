@@ -51,7 +51,7 @@ export default function Global_Chat({ userData }) {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <ResponsiveLayout viewData={{
-                    UsersInRange: { Element: UsersInRange },
+                    UsersInRange: { Element: UsersInRange, props: userData?.usersInRange },
                 }} />
             </div>
         </Authorization>

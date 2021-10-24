@@ -1,29 +1,25 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-export default function UsersInRange() {
+export default function UsersInRange({ inRange }) {
     const state = useSelector((state) => state);
     const { me } = state
     const [users, setUsers] = useState(false);
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
+
+        setUsers(inRange)
         return () => { setMounted(false); setUsers(false) }
     }, [])
 
-    useEffect(() => {
-        if (mounted) {
-            if (me.username) {
-                console.log(state)
-                setUsers(me.UsersInRange)
-            }
-        }
-    }, [me])
-    useEffect(() => {
-        if (mounted) {
-            console.log(`USERS CHANGED`)
-        }
 
-    }, [users])
+    // useEffect(() => {
+    //     if (mounted && state) {
+
+    //         // setUsers(state.me.UsersInRange)
+    //     }
+
+    // })
     return (
         users?.length > 0 ? (
             <section className='bg-gray-800 rounded p-2 flex-row justify-center text-white'>
