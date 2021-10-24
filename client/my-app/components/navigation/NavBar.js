@@ -4,6 +4,8 @@ import auth from "../../utilities/auth";
 import client from "../../utilities/apollo/client.config";
 import { LOGOUT } from "../../utilities/graphql/mutations";
 import Link from "next/link";
+import { GiSatelliteCommunication } from 'react-icons/gi';
+
 export function logoutUser() {
     return auth.logout();
 }
@@ -48,12 +50,9 @@ export default function NavBar() {
                 className="bg-gray-800 flex flex-row justify-between p-2 items-center border-t-2 border-green-400"
                 style={{ height: "65px" }}
             >
-                <div className="h-14 w-14 flex items-center justify-center">
+                <div className="h-12 w-12 flex items-center justify-center bg-gray-700 rounded-full">
                     <Link href="/">
-                        <img
-                            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2013%2F07%2F12%2F15%2F59%2Fproximity-150698_960_720.png&f=1&nofb=1"
-                            alt=""
-                        />
+                        <GiSatelliteCommunication size="45px" color="#02e009"/>
                     </Link>
                 </div>
                 <nav className=" flex  flex-row w-4/5 justify-end text-white">
