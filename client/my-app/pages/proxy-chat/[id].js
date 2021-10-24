@@ -7,25 +7,41 @@ import { SERVER_SIDE_FETCH_USER } from '../../utilities/graphql/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import { useSocketContext } from '../../components/Providers/Chat';
 import { useSelector } from 'react-redux';
+import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
 export default function Global_Chat({ userData }) {
     const state = useSelector((state) => state);
+    // the useSelector is necessary to access our state
     const [mounted, setMounted] = useState(false);
-    const socket = useSocketContext();
+    const [thisSocket, setThisSocket] = useState(false)
+    const { me } = state
+    const socket = useSocketContext()
     useEffect(() => {
         setMounted(true);
-        const { _id } = userData;
-        console.log(`SERVER DATA`, userData)
-        // emit to the chat server that we are joining the chat in, and send our userID
-        const payload = {
-            userID: _id
-        };
-        // socket.emit('')
         return () => setMounted(false)
     }, [])
+
+    if (socket.connected === true) {
+        if (thisSocket === false) {
+            setThisSocket(socket)
+        }
+    }
+    useEffect(() => {
+        if (mounted && thisSocket !== false) {
+            console.log(`TRYING TO JOIN CHAT`)
+
+            // emit to the chat server that we are joining the chat in, and send our usersInRange List so we can notify the users
+            const payload = {
+                usersInRange: userData.usersInRange
+            }
+
+            thisSocket.emit(JOIN_GLOBAL_CHAT, payload)
+        }
+    }, [thisSocket])
 
     if (!userData) {
         return `Loading`
     }
+
     return (
         <Authorization>
             <div>
@@ -34,7 +50,9 @@ export default function Global_Chat({ userData }) {
                     <meta name="Proxy's texting ground" content="Testing container for app" />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
-                <ResponsiveLayout viewData={{ UsersInRange: { Element: UsersInRange, props: userData?.usersInRange } }} />
+                <ResponsiveLayout viewData={{
+                    UsersInRange: { Element: UsersInRange },
+                }} />
             </div>
         </Authorization>
     );

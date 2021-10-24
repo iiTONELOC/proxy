@@ -27,7 +27,6 @@ export default function NavBar() {
     ];
 
     const destinations = [
-        { icon: "", name: "Home", location: "/" },
         { name: "Sign In", location: "/sign-in" },
         { name: "Sign Up", location: "/sign-up" },
     ];
