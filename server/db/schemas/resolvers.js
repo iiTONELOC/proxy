@@ -4,7 +4,8 @@ const { user } = query;
 const resolvers = {
     Query: {
         users: user.findAll,
-        user: user.serverUser
+        user: user.serverUser,
+        inRange: user.inRange,
         // location: location.findAll
     },
     Mutation: {

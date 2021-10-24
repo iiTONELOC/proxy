@@ -51,7 +51,21 @@ query users {
   }
 }
 `;
-
+export const QUERY_IN_RANGE = gql`
+query Query {
+  inRange {
+    usersInRange {
+      _id
+      username
+      location {
+        city
+        state
+        _id
+      }
+    }
+  }
+}
+`;
 export const SERVER_SIDE_FETCH_USER = gql`
 query Query($user: ID) {
   user(user: $user) {
@@ -70,9 +84,7 @@ query Query($user: ID) {
          city
          state
        }
-      
      }
-
   }
 }
 `;

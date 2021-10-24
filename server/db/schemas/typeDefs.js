@@ -71,6 +71,7 @@ type Query {
     me: User
     users: [User]
     user(user:ID): User
+     inRange: User
 }
 
 type Mutation{

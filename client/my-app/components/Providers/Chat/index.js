@@ -8,7 +8,9 @@ import { io } from "socket.io-client";
 import auth from "../../../utilities/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
-import { setUsersInfo } from "../../../utilities/redux/helpers";
+import { setUsersInfo, SetUsersInRage } from "../../../utilities/redux/helpers";
+import client from "../../../utilities/apollo/client.config";
+import { QUERY_IN_RANGE } from "../../../utilities/graphql/queries";
 const SocketContext = createContext();
 const { Provider } = SocketContext;
 
@@ -43,7 +45,7 @@ export const ChatProvider = ({ ...props }) => {
     }, [mounted])
 
     useEffect(() => {
-        if (socket) {
+        if (socket && mounted === true) {
             const loggedInData = auth.getProfile();
             const { _authenticated } = reactions;
             const { _socket_user_login } = actions;
@@ -66,7 +68,11 @@ export const ChatProvider = ({ ...props }) => {
             // after a successful connection to the chatServer
             // we need to set our user and socket
             socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }); console.log('...Socket is Authorized') })
-            socket.on('updateUsersInRange', () => { console.log(`received notice to update`) })
+            socket.on('updateUsersInRange', async () => {
+                console.log(`received notice to update`)
+                const { data } = await client.query({ query: QUERY_IN_RANGE });
+                SetUsersInRage({ data, dispatch });
+            });
         }
     }, [socket])
     if (!mounted) return null

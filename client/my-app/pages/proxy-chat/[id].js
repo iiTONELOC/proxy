@@ -26,7 +26,7 @@ export default function Global_Chat({ userData }) {
         }
     }
     useEffect(() => {
-        if (mounted && thisSocket !== false) {
+        if (mounted === true && thisSocket !== false) {
             console.log(`TRYING TO JOIN CHAT`)
 
             // emit to the chat server that we are joining the chat in, and send our usersInRange List so we can notify the users

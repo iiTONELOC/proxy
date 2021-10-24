@@ -1,5 +1,7 @@
 const { User } = require("../../models");
 const { sharedQueries } = require('../shared/sharedQueries');
+const { AuthenticationError } = require('apollo-server-express');
+
 const { findUserByID } = sharedQueries;
 async function isOurServer(context) {
     const { origin, host, } = context.socket.parser.incoming.headers
@@ -44,6 +46,17 @@ const userQueries = {
                 return userData;
             }
         }
+    },
+    async inRange(parent, args, context) {
+        if (!context.user) {
+            throw new AuthenticationError('Not logged in');
+        } else {
+            const d = await findUserByID(context.user._id)
+
+            console.log(`UPDATED IN RANGE DATA, INRANGE FUNCTION`, d)
+            return d
+        }
+
     }
 }
 

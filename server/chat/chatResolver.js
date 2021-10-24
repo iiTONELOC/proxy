@@ -46,31 +46,29 @@ const login = async ({ request, data }, socket, io) => {
 };
 
 const joinGlobal = async (usersInRange, socket, io) => {
-    console.log('TRYING TO JOIN GLOBAL CHAT')
     // grab user id, add user to the global chat's active array
     const inChat = alreadyJoined(globalChatArray, socket)
     if (inChat === false) {
         const user = { ...socket.USER }
         globalChatArray.push({ user: user });
-        console.log(`online array`, globalChatArray);
-        io.to('GlobalChat', 'updateUsersInRange');
+        io.to('GlobalChat').emit('updateUsersInRange');
         socket.join('GlobalChat');
+
         // create a reuseable mutation to add a user to a chat's `active` array
+    } else {
+        console.log(`WHY`, socket.USER)
+        io.to('GlobalChat').emit('updateUsersInRange');
     }
     // they need to update their users in range
     // we need to add this field to REDUX as it is currently all one field
     // we need to adjust the current redux operation to load the user data presented into the separate objects
 }
 const handleGlobalDisconnect = (socket, io) => {
-    console.log('trying to disconnect', socket.USER?.username)
     if (socket.USER !== undefined && socket.USER.username !== undefined) {
-
         const inChat = alreadyJoined(globalChatArray, socket);
         // filter current user out of the array
         if (inChat === true && globalChatArray.length > 0) {
             globalChatArray = globalChatArray.filter(el => el.user.username.toString() !== socket.USER.username.toString());
-
-            console.log(`disconnected from global chat`, globalChatArray,)
             return io.to(`GlobalChat`).emit('updateUsersInRange')
         }
     }
