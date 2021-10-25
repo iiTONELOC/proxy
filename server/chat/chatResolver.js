@@ -2,25 +2,29 @@ const { actions, reactions } = require("./actions");
 const { _socket_user_login } = actions;
 const { _authenticated } = reactions;
 const sharedMutations = require('../db/controller/shared/sharedMutations');
-const { updateUserSocket } = sharedMutations
+const { sharedQueries } = require('../db/controller/shared/sharedQueries');
+const { updateUserSocket } = sharedMutations;
+const { findUserByID } = sharedQueries;
 let globalChatArray = [];
 
 
 function alreadyJoined(array, socket) {
     const alreadyJoined = array.filter(user => (user.user.username === socket.USER.username));
     if (alreadyJoined.length > 0) {
-        return true
+        return true;
     } else {
-        return false
-    }
-}
-
+        return false;
+    };
+};
+function filterUserFromArray(socket) {
+    globalChatArray = globalChatArray.filter(el => el.user.username.toString() !== socket.USER.username.toString());
+};
 const login = async ({ request, data }, socket, io) => {
     // eventually want to include an auth middleware on the socket
     if (request == _socket_user_login) {
-        const { id } = data
+        const { id } = data;
         try {
-            const socketData = socket.id
+            const socketData = socket.id;
             // update our User's Socket
             // we also need to tell our friends we are now online - this updates their Friends Lists only
             const isUser = await updateUserSocket(id, socketData);
@@ -34,44 +38,51 @@ const login = async ({ request, data }, socket, io) => {
                 // send to the user that they are authenticated with updated userInfo
                 // this will prompt the client to save the userData and socket information in REDUX
                 // grab our inRange
-                return io.to(socket.id).emit(_authenticated, isUser)
+                return io.to(socket.id).emit(_authenticated, isUser);
             } else {
-                return null
+                return null;
             }
         } catch (error) {
-            console.log("login chatResolver", error)
-            return null
-        }
-    }
+            console.log("login chatResolver", error);
+            return null;
+        };
+    };
 };
 
 const joinGlobal = async (usersInRange, socket, io) => {
     // grab user id, add user to the global chat's active array
-    const inChat = alreadyJoined(globalChatArray, socket)
-    if (inChat === false) {
-        const user = { ...socket.USER }
+    const user = { ...socket.USER };
+    const inChat = alreadyJoined(globalChatArray, socket);
+
+    if (inChat === false && socket.CURRENT !== 'Global') {
         globalChatArray.push({ user: user });
+        socket.CURRENT = 'Global';
         io.to('GlobalChat').emit('updateUsersInRange');
         socket.join('GlobalChat');
-
-        // create a reuseable mutation to add a user to a chat's `active` array
     } else {
-        console.log(`WHY`, socket.USER)
-        io.to('GlobalChat').emit('updateUsersInRange');
-    }
-    // they need to update their users in range
-    // we need to add this field to REDUX as it is currently all one field
-    // we need to adjust the current redux operation to load the user data presented into the separate objects
-}
-const handleGlobalDisconnect = (socket, io) => {
+        console.log(`WHY`, socket.USER);
+        filterUserFromArray(socket);
+        globalChatArray.push({ user: user });
+        socket.join('GlobalChat');
+        socket.CURRENT = 'Global';
+    };
+};
+const handleGlobalDisconnect = async (socket, io,) => {
     if (socket.USER !== undefined && socket.USER.username !== undefined) {
         const inChat = alreadyJoined(globalChatArray, socket);
-        // filter current user out of the array
-        if (inChat === true && globalChatArray.length > 0) {
-            globalChatArray = globalChatArray.filter(el => el.user.username.toString() !== socket.USER.username.toString());
-            return io.to(`GlobalChat`).emit('updateUsersInRange')
-        }
-    }
+        const uData = await findUserByID(socket.USER._id);
+        const online = uData?.status?.online;
+        // if we are in the GlobalChat, we are set to offline status and there are members in the chat
+        // and the users socket is currently set to globalChat we can go ahead and alert everyone in the 
+        // chat to update their users in range
+        if (inChat === true && online === false && globalChatArray.length > 0 && socket.CURRENT === 'Global') {
+            filterUserFromArray(socket);
+            return io.to(`GlobalChat`).emit('updateUsersInRange');
+        } else {
+            //    do nothing, this is prob due to a user refreshing or a socket disconnect but
+            // not from a user tying to log out of the app
+        };
+    };
+};
 
-}
 module.exports = { login, joinGlobal, handleGlobalDisconnect }

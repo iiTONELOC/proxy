@@ -7,48 +7,29 @@ import { QUERY_IN_RANGE } from "../../utilities/graphql/queries";
 export default function UsersInRange({ inRange }) {
     const state = useSelector((state) => state);
     const socketConn = useSocketContext();
-    const { me, usersInRange } = state
     const [users, setUsers] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [socket, setSocket] = useState(null);
     useEffect(() => {
         setMounted(true);
-        setUsers(inRange)
-        return () => { setMounted(false); setUsers(false) }
-    }, [])
-
-
+        setUsers(inRange);
+        return () => { setMounted(false); setUsers(false) };
+    }, []);
     useEffect(() => {
         if (mounted == true) {
-            setSocket(socketConn)
+            setSocket(socketConn);
         }
-        // socket.on('updateUsersInRange', async () => {
-        //     console.log(`received notice to update`)
-        //     const { data } = await client.query({ query: QUERY_IN_RANGE });
-        //     SetUsersInRage({ data, dispatch });
-        // });
-        // if (mounted === true && state) {
-
-        //     console.log(`triggered`, state.usersInRange)
-        //     if (usersInRange !== undefined && usersInRange !== null) {
-        //         setUsers(usersInRange)
-        //     } else {
-        //         setUsers(false)
-        //     }
-        // }
-
-
-    }, [mounted])
-
+    }, [mounted]);
     useEffect(() => {
         if (socket) {
             socket.on('updateUsersInRange', async () => {
                 console.log(`received notice to update`)
-                const { data } = await client.query({ query: QUERY_IN_RANGE });
-                setUsers(data.inRange.usersInRange)
+                const { data } = await client.query({ query: QUERY_IN_RANGE, fetchPolicy: 'network-only' });
+                setUsers(data.inRange.usersInRange);
             });
         }
-    })
+    }, [socket]);
+
     return (
         users?.length > 0 ? (
             <section className='bg-gray-800 rounded p-2 flex-row justify-center text-white'>

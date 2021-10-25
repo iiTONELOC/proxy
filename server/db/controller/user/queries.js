@@ -51,12 +51,8 @@ const userQueries = {
         if (!context.user) {
             throw new AuthenticationError('Not logged in');
         } else {
-            const d = await findUserByID(context.user._id)
-
-            console.log(`UPDATED IN RANGE DATA, INRANGE FUNCTION`, d)
-            return d
+            return await findUserByID(context.user._id)
         }
-
     }
 }
 

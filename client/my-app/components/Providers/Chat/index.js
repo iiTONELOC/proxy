@@ -9,8 +9,7 @@ import auth from "../../../utilities/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
 import { setUsersInfo, SetUsersInRage } from "../../../utilities/redux/helpers";
-import client from "../../../utilities/apollo/client.config";
-import { QUERY_IN_RANGE } from "../../../utilities/graphql/queries";
+
 const SocketContext = createContext();
 const { Provider } = SocketContext;
 
@@ -19,30 +18,16 @@ const { Provider } = SocketContext;
 export const ChatProvider = ({ ...props }) => {
     const [mounted, setMounted] = useState(false);
     const [socket, setSocket] = useState(null);
+    const [joined, setJoined] = useState(false);
     const dispatch = useDispatch();
     useEffect(() => {
-        setMounted(true)
+        setMounted(true);
         if (mounted) {
             const nS = io(`http://${window.location.hostname}:3001`);
             const newSocket = nS;
             setSocket(newSocket);
-
-
-            // `GLOBAL` callbacks if you will
-            //  like updating a friends list
-            // or notifications can be put here and then added to our Redux
-            // component or page specific socket actions should be handled on the page/component
-
-            // WILL NEED LISTENERS FOR
-            // LOGIN/LOGOUT
-            // updating usersInRange
-            // updating FriendsLists
-            // friend requests
-            // missed Messages
-
-
         }
-    }, [mounted])
+    }, [mounted]);
 
     useEffect(() => {
         if (socket && mounted === true) {
@@ -59,23 +44,25 @@ export const ChatProvider = ({ ...props }) => {
                 console.log('socket connecting...');
                 const payload = {
                     request: _socket_user_login,
-                    data: socketData
-                }
-                socket.emit(_socket_user_login, payload);
-                console.log('requesting login..')
-            }
+                    data: socketData,
+                    emitUpdate: joined === true ? false : true
+                };
+                if (joined !== true) {
+                    socket.emit(_socket_user_login, payload);
+                    console.log('requesting login..');
+                    setJoined(true);
+                };
+
+            };
             /*CALLBACKS FOR GLOBAL SOCKET ACTIONS */
             // after a successful connection to the chatServer
             // we need to set our user and socket
-            socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }); console.log('...Socket is Authorized') })
-            socket.on('updateUsersInRange', async () => {
-                console.log(`received notice to update`)
-                const { data } = await client.query({ query: QUERY_IN_RANGE });
-                SetUsersInRage({ data, dispatch });
-            });
-        }
-    }, [socket])
-    if (!mounted) return null
+            socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }); console.log('...Socket is Authorized') });
+
+        };
+        return () => setJoined(false);
+    }, [socket]);
+    if (!mounted) return null;
 
 
     return (

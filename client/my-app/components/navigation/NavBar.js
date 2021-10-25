@@ -51,9 +51,9 @@ export default function NavBar() {
                 style={{ height: "65px" }}
             >
                 <div className="h-12 w-12 flex items-center justify-center bg-gray-700 rounded-full">
-                    <Link href="/">
-                        <GiSatelliteCommunication size="45px" color="#02e009"/>
-                    </Link>
+
+                    <GiSatelliteCommunication size="45px" color="#02e009" />
+
                 </div>
                 <nav className=" flex  flex-row w-4/5 justify-end text-white">
                     <ul className="flex flex-wrap justify-end w-full ">

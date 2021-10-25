@@ -6,36 +6,48 @@ import serverClient from '../../utilities/apollo/server.config';
 import { SERVER_SIDE_FETCH_USER } from '../../utilities/graphql/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import { useSocketContext } from '../../components/Providers/Chat';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
 import Messaging from '../../components/messaging';
+import { _REDUX_SET_CHAT } from '../../utilities/redux/actions';
+import { setChat } from '../../utilities/redux/helpers';
 export default function Global_Chat({ userData }) {
     const state = useSelector((state) => state);
+    const dispatch = useDispatch();
     // the useSelector is necessary to access our state
     const [mounted, setMounted] = useState(false);
     const [thisSocket, setThisSocket] = useState(false)
-    const { me } = state
+    const { me, currentChat } = state
     const socket = useSocketContext()
     useEffect(() => {
         setMounted(true);
         return () => setMounted(false)
     }, [])
 
-    if (socket.connected === true) {
-        if (thisSocket === false) {
-            setThisSocket(socket)
+    useEffect(() => {
+        if (socket.connected === true) {
+            if (thisSocket === false) {
+                setThisSocket(socket)
+            }
         }
-    }
+    })
     useEffect(() => {
         if (mounted === true && thisSocket !== false) {
             console.log(`TRYING TO JOIN CHAT`)
 
             // emit to the chat server that we are joining the chat in, and send our usersInRange List so we can notify the users
-            const payload = {
-                usersInRange: userData.usersInRange
+
+            if (currentChat !== null) {
+                console.log(`HERE`, state.currentChat)
+                if (currentChat !== 'Global') {
+                    thisSocket.emit(JOIN_GLOBAL_CHAT)
+                    setChat({ data: 'Global', dispatch })
+                } return
+            } else {
+                thisSocket.emit(JOIN_GLOBAL_CHAT)
+                setChat({ data: 'Global', dispatch })
             }
 
-            thisSocket.emit(JOIN_GLOBAL_CHAT, payload)
         }
     }, [thisSocket])
 
