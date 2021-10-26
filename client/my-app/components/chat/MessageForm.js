@@ -37,14 +37,14 @@ export default function MessageForm({ socket }) {
         // msg Data obj
         // gets sent to chat server
         const messageData = {
-            value: value,
+            value: value.trim(),
             username: userName,
             id: Date.now(),
             chat: 'Global',
         }
         if (socket && characterCount > 0) {
             const regEx = /([a - zA - Z0 - 9])$/
-            const cantSend = regEx.test(value);
+            const cantSend = regEx.test(value.trimEnd());
             if (!cantSend) {
                 socket.emit('globalChatMessage', messageData);
                 setText('');

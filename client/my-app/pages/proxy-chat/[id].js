@@ -62,7 +62,7 @@ export default function Global_Chat({ userData }) {
                 </Head>
                 <ResponsiveLayout viewData={{
                     UsersInRange: { Element: UsersInRange, props: userData?.usersInRange },
-                    Messaging: { Element: Messaging },
+                    Messaging: { Element: Messaging, props: { chatName: 'Global Chat' } },
                 }} />
             </div>
         </Authorization>
