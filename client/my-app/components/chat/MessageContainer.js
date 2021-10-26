@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { FaUserSecret } from 'react-icons/fa'
+
+
 import { SCROLL } from ".";
+import MessageItem from "./MessageItem";
 export function saveMessage(message, setMessage) {
     setMessage((prevMessages) => {
         const newMessages = { ...prevMessages };
@@ -12,6 +14,7 @@ export function saveMessage(message, setMessage) {
 export default function MessageContainer({ socket, chatName, globalMessages }) {
     const [mounted, setMounted] = useState(false);
     const [messages, setMessage] = useState([]);
+
     useEffect(() => {
         setMounted(true);
         SCROLL()
@@ -47,20 +50,26 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
                 </h1>
             </div>
             <div className=" h-full mt-3 text-gray-300 p-2 overflow-y-auto">
-                {[...Object.values(messages)].map((message, idx) => (
-                    <section key={message._id} className='w-full h-auto mb-2 bg-indigo-500 p-2 flex flex-row items-center justify-items-start'>
-                        <span className='bg-gray-800' >
-                            <FaUserSecret size='35px' />
-                        </span>
-                        <div className='ml-3 flex flex-col'>
-                            <p className='text-sm text-gray-400'> {new Date(parseFloat(message.time)).toLocaleTimeString()}</p>
-                            <p className='text-md ml-1'> {message.text}</p>
-                        </div>
-                    </section>
+                {[...Object.values(messages)].map((message,) => (
+                    <MessageItem message={message} key={message._id} />
                 ))}
 
-                <div style={{ minHeight: '10px', background: 'black' }} id='messageContainerEnd'></div>
+                <div style={{ minHeight: '10px' }} id='messageContainerEnd'></div>
             </div>
         </div>
     )
 }
+
+
+{/* <article
+    key={message._id}
+
+    className={`w-full h-auto mb-2  p-2 flex flex-row items-center justify-items-start`}>
+    <span className='bg-gray-800' >
+        <FaUserSecret size='35px' />
+    </span>
+    <div className='ml-3 flex flex-col'>
+        <p className='text-sm text-gray-400'> {new Date(parseFloat(message.time)).toLocaleTimeString()}</p>
+        <p className='text-md ml-1'> {message.text}</p>
+    </div>
+</article> */}

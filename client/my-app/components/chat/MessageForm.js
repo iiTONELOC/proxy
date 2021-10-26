@@ -69,7 +69,7 @@ export default function MessageForm({ socket }) {
             </div>
             <form className="flex flex-row justify-between  h-5/6" onSubmit={handleFormSubmit}>
 
-                <div className="flex p-1 w-4/5 ">
+                <div className="flex p-1 w-4/5 text-gray-400">
                     <input
                         type="text"
                         value={value}

@@ -8,7 +8,7 @@ const messageSchema = new Schema(
             maxLength: 280
         },
         time: {
-            type: Date,
+            type: Number,
             default: Date.now,
         },
         sender: {

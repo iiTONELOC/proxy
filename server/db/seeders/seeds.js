@@ -1,7 +1,7 @@
 const db = require('../config/connection');
 const { addChannelToServer } = require('../controller/shared/sharedMutations');
 
-const { User, Server, Channel, Location, Profile, OnlineStatus, } = require('../models');
+const { User, Server, Channel, Location, Profile, OnlineStatus, Message } = require('../models');
 
 db.once('open', async () => {
   if (process.env.NODE_ENV !== 'production') {
@@ -10,8 +10,10 @@ db.once('open', async () => {
       await Server.deleteMany({});
       await Channel.deleteMany({});
       await Profile.deleteMany({});
+      await Message.deleteMany({});
       await Location.deleteMany({});
       await OnlineStatus.deleteMany({});
+
       console.log(`db successfully deleted\ncreating users please wait...`);
 
       const server = await Server.create({
