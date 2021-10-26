@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useSocketContext } from '../Providers/Chat';
 import client from "../../utilities/apollo/client.config";
 import { QUERY_IN_RANGE } from "../../utilities/graphql/queries";
+import UserItem from '../userItem/UserItem';
 
 export default function UsersInRange({ inRange }) {
     const state = useSelector((state) => state);
@@ -36,14 +37,7 @@ export default function UsersInRange({ inRange }) {
                 <h1 className='text-center mb-2'>Users In Range</h1>
                 <div className='max-h-40 p-1 overflow-x-hidden overflow-y-auto'>
                     {users.map(user => (
-                        <li key={user.username} className="px-2" style={{ listStyle: 'none' }}>
-                            {user.username}
-                            <ul >
-                                <li className="ml-2" style={{ listStyle: 'none' }}>
-                                    {user.location ? `${user.location.city}, ${user.location.state}` : null}
-                                </li>
-                            </ul>
-                        </li>
+                        <UserItem key={user._id} user={user} />
                     )
                     )}
                 </div>
