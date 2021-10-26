@@ -16,7 +16,7 @@ export default function MessageItem({ message }) {
         <article
             onMouseEnter={onHover}
             onMouseLeave={onHover}
-            className={`w-full h-auto mb-2   p-2 flex flex-row items-center justify-items-start ${hover ? 'bg-gray bg-gray-500' : ''}`}>
+            className={`w-full h-auto mb-2   p-2 flex flex-row items-center justify-items-start ${hover ? 'bg-gray bg-gray-600' : ''}`}>
             <span className='bg-gray-800' >
                 <FaUserSecret size='35px' />
             </span>
