@@ -6,9 +6,9 @@ export default function MessageForm() {
             <div className="tracking-wider p-1 h-1/6">
                 <p style={{ margin: "-3px" }} className="pl-1">0/200</p>
             </div>
-            <div className="flex flex-row justify-between bg-gray-600 h-5/6">
+            <div className="flex flex-row justify-between  h-5/6">
                 <div className="flex p-1 w-4/5 ">
-                    <input type="text" className="bg-gray-500 w-full p-1 h-1/2 self-center rounded-xl">
+                    <input type="text" className="bg-gray-600 w-full p-1 h-1/2 self-center rounded-xl">
 
                     </input>
                 </div>

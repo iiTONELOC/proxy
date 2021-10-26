@@ -57,6 +57,7 @@ query Query {
     usersInRange {
       _id
       username
+      socket
       location {
         city
         state
@@ -75,6 +76,7 @@ query Query($user: ID) {
      usersInRange {
        _id
        username
+       socket
        status{
          online
          status

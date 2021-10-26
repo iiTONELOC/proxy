@@ -57,7 +57,8 @@ const joinGlobal = async (usersInRange, socket, io) => {
     if (inChat === false && socket.CURRENT !== 'Global') {
         globalChatArray.push({ user: user });
         socket.CURRENT = 'Global';
-        io.to('GlobalChat').emit('updateUsersInRange');
+        // emit to our users inRange instead
+        usersInRange.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
         socket.join('GlobalChat');
     } else {
         console.log(`WHY`, socket.USER);

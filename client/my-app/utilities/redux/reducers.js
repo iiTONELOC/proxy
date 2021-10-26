@@ -18,15 +18,15 @@ export const reducers = (state = initialState, action) => {
             // refactor the cases later
             // currently sets the entire user object in state
             case _REDUX_SET_USER_DATA:
-
+                console.log(`REDUX REDUCER`, action.me)
                 return {
                     ...state,
                     me: { ...state.me, ...action.me },
-                    usersInRange: action.me.usersInRange.length > 0 ? [...action.me.usersInRange] : [],
+                    usersInRange: action.me.usersInRange.length > 0 ? [...action.me.usersInRange] : [state.users],
                     socket: action.me.socket
                 }
             case _REDUX_UPDATE_USERS_IN_RANGE:
-                console.log(`Updating Range- Reducer`)
+
                 let d = action.usersInRange.inRange.usersInRange
 
                 return {

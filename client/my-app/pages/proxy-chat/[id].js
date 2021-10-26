@@ -1,23 +1,25 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import Messaging from '../../components/chat';
+import { useSelector, useDispatch } from 'react-redux';
+import { setChat } from '../../utilities/redux/helpers';
 import UsersInRange from '../../components/UsersInRange';
 import Authorization from '../../components/Providers/Auth';
 import serverClient from '../../utilities/apollo/server.config';
+import { _REDUX_SET_CHAT } from '../../utilities/redux/actions';
+import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
+import { useSocketContext } from '../../components/Providers/Chat';
 import { SERVER_SIDE_FETCH_USER } from '../../utilities/graphql/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import { useSocketContext } from '../../components/Providers/Chat';
-import { useSelector, useDispatch } from 'react-redux';
-import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
-import Messaging from '../../components/messaging';
-import { _REDUX_SET_CHAT } from '../../utilities/redux/actions';
-import { setChat } from '../../utilities/redux/helpers';
+
+
 export default function Global_Chat({ userData }) {
-    const state = useSelector((state) => state);
     const dispatch = useDispatch();
     // the useSelector is necessary to access our state
+    const state = useSelector((state) => state);
+    const { me, currentChat } = state
     const [mounted, setMounted] = useState(false);
     const [thisSocket, setThisSocket] = useState(false)
-    const { me, currentChat } = state
     const socket = useSocketContext()
     useEffect(() => {
         setMounted(true);
@@ -33,27 +35,22 @@ export default function Global_Chat({ userData }) {
     })
     useEffect(() => {
         if (mounted === true && thisSocket !== false) {
-            console.log(`TRYING TO JOIN CHAT`)
-
-            // emit to the chat server that we are joining the chat in, and send our usersInRange List so we can notify the users
-
+            const payload = userData.usersInRange
             if (currentChat !== null) {
-                console.log(`HERE`, state.currentChat)
                 if (currentChat !== 'Global') {
-                    thisSocket.emit(JOIN_GLOBAL_CHAT)
-                    setChat({ data: 'Global', dispatch })
+                    thisSocket.emit(JOIN_GLOBAL_CHAT, payload);
+                    setChat({ data: 'Global', dispatch });
                 } return
             } else {
-                thisSocket.emit(JOIN_GLOBAL_CHAT)
-                setChat({ data: 'Global', dispatch })
-            }
-
-        }
-    }, [thisSocket])
+                thisSocket.emit(JOIN_GLOBAL_CHAT, payload);
+                setChat({ data: 'Global', dispatch });
+            };
+        };
+    }, [thisSocket]);
 
     if (!userData) {
         return `Loading`
-    }
+    };
 
     return (
         <Authorization>
@@ -72,12 +69,9 @@ export default function Global_Chat({ userData }) {
     );
 };
 
-
+// ssr
 export async function getServerSideProps(req) {
-
-    // const userID = req.socket.parser.incoming.url.split('/')[2];
     const { id } = req.params
-
     const { data, error } = await serverClient
         .query(
             {
@@ -91,7 +85,7 @@ export async function getServerSideProps(req) {
     };
 
     return {
-        props: { userData: data.user }, // will be passed to the page component as props
+        props: { userData: data.user }
     };
 };
 
