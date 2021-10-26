@@ -90,9 +90,7 @@ const handleGlobalDisconnect = async (socket, io,) => {
         };
     };
 };
-
 const handleGlobalMessage = async (message, socket, io) => {
-
     const user = { ...socket.USER };
     // create the message before sending; it successful then we will send 
     try {
@@ -105,9 +103,9 @@ const handleGlobalMessage = async (message, socket, io) => {
     } catch (error) {
         console.error("Chat server- handleGlobalMessage", error)
     }
-
     return
 };
+
 module.exports = {
     login,
     joinGlobal,
