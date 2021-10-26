@@ -20,12 +20,14 @@ export default function UserItem({ user }) {
             onMouseLeave={onHover}
             className=''
         >
-            <div className='p-1 flex justify-between items-center'>
+            <div className='p-1 flex justify-between items-center' style={{ height: '50px ' }}>
                 {user.username}
-                <p className='flex-shrink'>{user.location ? `${user.location.city}, ${user.location.state}` : null}</p>
-                {hover ? <span>
-                    <AddFriend />
-                </span> : null}
+                <p className=''>{user.location ? `${user.location.city}, ${user.location.state}` : null}</p>
+                {hover ?
+                    <span>
+                        <AddFriend />
+                    </span> :
+                    null}
 
             </div>
 

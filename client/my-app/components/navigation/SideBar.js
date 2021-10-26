@@ -13,8 +13,8 @@ export default function SideBar() {
     const [mounted, setMounted] = useState(false);
     const [userID, setID] = useState(null);
     const LoggedInSideBar = [
-        { name: "Home", location: "/", icon: <FaHome size="32px" color="lightGrey" /> },
-        { name: "Proxy-Chat", location: `/proxy-chat/${userID}`, icon: <FaComments size="32px" color="lightGrey" /> },
+        { name: "Home", location: `/user-home/${encodeURIComponent(userID)}`, icon: <FaHome size="32px" color="lightGrey" /> },
+        { name: "Proxy-Chat", location: `/proxy-chat/${encodeURIComponent(userID)}`, icon: <FaComments size="32px" color="lightGrey" /> },
         { name: "Logout", onClick: handleLogout, icon: <FiLogOut size="32px" color="lightGrey" /> },
     ];
     async function handleLogout(e) {

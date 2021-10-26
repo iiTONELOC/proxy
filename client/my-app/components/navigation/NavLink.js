@@ -11,7 +11,7 @@ export default function NavLink({ name, location, onClick, icon }) {
     return (
         <Link href={location ? `${location}` : '#'}>
             <li
-                className={`p-3 mx-1 text-center items-center rounded ${icon ? 'flex items-center' : null} bg-${hover ? 'gray-500' : ''}`}
+                className={`p-3 mx-1 text-center items-center rounded ${icon ? 'flex items-center' : null} ${hover ? 'bg-gray-500' : ''}`}
                 onMouseEnter={onHover}
                 onMouseLeave={onHover}
                 onClick={onClick ? onClick : null}
