@@ -1,4 +1,8 @@
 import Head from 'next/head';
+import {
+    SERVER_SIDE_FETCH_USER,
+    SERVER_SIDE_FETCH_GLOBAL_MESSAGES
+} from '../../utilities/graphql/queries';
 import { useEffect, useState } from 'react';
 import Messaging from '../../components/chat';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,11 +13,10 @@ import serverClient from '../../utilities/apollo/server.config';
 import { _REDUX_SET_CHAT } from '../../utilities/redux/actions';
 import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
 import { useSocketContext } from '../../components/Providers/Chat';
-import { SERVER_SIDE_FETCH_USER } from '../../utilities/graphql/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 
 
-export default function Global_Chat({ userData }) {
+export default function Global_Chat({ userData, globalMessages }) {
     const dispatch = useDispatch();
     // the useSelector is necessary to access our state
     const state = useSelector((state) => state);
@@ -48,10 +51,9 @@ export default function Global_Chat({ userData }) {
         };
     }, [thisSocket]);
 
-    if (!userData) {
+    if (!userData && !globalMessages) {
         return `Loading`
     };
-
     return (
         <Authorization>
             <div>
@@ -61,8 +63,8 @@ export default function Global_Chat({ userData }) {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <ResponsiveLayout viewData={{
-                    UsersInRange: { Element: UsersInRange, props: userData?.usersInRange },
-                    Messaging: { Element: Messaging, props: { chatName: 'Global Chat' } },
+                    UsersInRange: { Element: UsersInRange, props: { inRange: userData.usersInRange } },
+                    Messaging: { Element: Messaging, props: { chatName: 'Global Chat', globalMessages: globalMessages } },
                 }} />
             </div>
         </Authorization>
@@ -80,12 +82,17 @@ export async function getServerSideProps(req) {
                 fetchPolicy: "network-only"
             }
         );
-    if (error) {
-        console.log("Error retrieving data in the Global-Chat", error)
+    const globalMessages = await serverClient.query({
+        query: SERVER_SIDE_FETCH_GLOBAL_MESSAGES, fetchPolicy: "network-only"
+    });
+    const msgError = globalMessages.errors;
+    const msgData = globalMessages.data;
+    if (error || msgError) {
+        console.log("Error retrieving data in the Global-Chat", error ? error : msgError);
     };
 
     return {
-        props: { userData: data.user }
+        props: { userData: data.user, globalMessages: msgData }
     };
 };
 

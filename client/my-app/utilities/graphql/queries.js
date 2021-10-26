@@ -90,3 +90,15 @@ query Query($user: ID) {
   }
 }
 `;
+
+export const SERVER_SIDE_FETCH_GLOBAL_MESSAGES = gql`
+query Query {
+  globalMessages {
+    _id
+    channel
+    text
+    time
+    sender
+  }
+}
+`;

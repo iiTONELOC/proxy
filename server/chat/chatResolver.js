@@ -3,6 +3,7 @@ const { _socket_user_login } = actions;
 const { _authenticated } = reactions;
 const sharedMutations = require('../db/controller/shared/sharedMutations');
 const { sharedQueries } = require('../db/controller/shared/sharedQueries');
+const { createMessage } = require("../db/controller/messages/mutations");
 const { updateUserSocket } = sharedMutations;
 const { findUserByID } = sharedQueries;
 let globalChatArray = [];
@@ -62,7 +63,7 @@ const joinGlobal = async (usersInRange, socket, io) => {
         globalChatArray.push({ user: user });
         socket.CURRENT = 'Global';
         // emit to our users inRange instead
-        usersInRange.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
+        usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
         socket.join('GlobalChat');
     } else {
         console.log(`WHY`, socket.USER);
@@ -91,11 +92,21 @@ const handleGlobalDisconnect = async (socket, io,) => {
 };
 
 const handleGlobalMessage = async (message, socket, io) => {
-    const payload = {
-        message: message,
-        chat: 'GlobalChat'
-    };
-    return sendMessage(payload, null, io)
+
+    const user = { ...socket.USER };
+    // create the message before sending; it successful then we will send 
+    try {
+        const createdMessage = await createMessage(null, message, user);
+        const payload = {
+            message: createdMessage,
+            chat: 'GlobalChat'
+        };
+        if (createdMessage) sendMessage(payload, null, io);
+    } catch (error) {
+        console.error("Chat server- handleGlobalMessage", error)
+    }
+
+    return
 };
 module.exports = {
     login,

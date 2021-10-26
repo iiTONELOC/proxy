@@ -5,13 +5,14 @@ import { useSocketContext } from "../Providers/Chat";
 
 
 
+
 export const SCROLL = () => {
     const messageContainerEnd = document.getElementById('messageContainerEnd');
     if (messageContainerEnd) messageContainerEnd.scrollIntoView();
 }
 
 
-export default function Messaging({ chatName }) {
+export default function Messaging({ chatName, globalMessages }) {
     const thisSocket = useSocketContext();
     const [socket, setSocket] = useState(null);
     const [mounted, setMounted] = useState(false);
@@ -31,7 +32,7 @@ export default function Messaging({ chatName }) {
     return (
         <div className="flex flex-col h-full bg-gray-700">
             <div className="h-5/6">
-                <MessageContainer socket={socket} chatName={chatName} />
+                <MessageContainer socket={socket} chatName={chatName} globalMessages={globalMessages} />
             </div>
             <div className="h-1/6 p-2">
                 <MessageForm socket={socket} />

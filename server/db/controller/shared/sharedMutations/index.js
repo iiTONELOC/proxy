@@ -1,4 +1,4 @@
-const { Server, OnlineStatus, Location, User } = require('../../../models')
+const { Server, OnlineStatus, Location, User, Channel } = require('../../../models')
 
 const sharedMutations = {
     updateUserStatus: (_id, status) => {
@@ -24,6 +24,12 @@ const sharedMutations = {
             $push: { channels: channel }
         });
     },
+    // add message to channel
+    addMessageToChannel: ({ channel, message }) => {
+        return Channel.findOneAndUpdate({ name: channel }, {
+            $push: { messages: message }
+        });
+    }
 }
 
 module.exports =

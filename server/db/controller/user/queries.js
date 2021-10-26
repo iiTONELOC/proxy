@@ -56,4 +56,4 @@ const userQueries = {
     }
 }
 
-module.exports = { userQueries }
+module.exports = { userQueries, }
