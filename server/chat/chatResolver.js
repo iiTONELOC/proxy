@@ -19,6 +19,11 @@ function alreadyJoined(array, socket) {
 function filterUserFromArray(socket) {
     globalChatArray = globalChatArray.filter(el => el.user.username.toString() !== socket.USER.username.toString());
 };
+function sendMessage({ message, chat }, socket, io) {
+    if (!socket) {
+        return io.to(chat).emit('incomingChatMessage', message);
+    };
+};
 const login = async ({ request, data }, socket, io) => {
     // eventually want to include an auth middleware on the socket
     if (request == _socket_user_login) {
@@ -53,7 +58,6 @@ const joinGlobal = async (usersInRange, socket, io) => {
     // grab user id, add user to the global chat's active array
     const user = { ...socket.USER };
     const inChat = alreadyJoined(globalChatArray, socket);
-
     if (inChat === false && socket.CURRENT !== 'Global') {
         globalChatArray.push({ user: user });
         socket.CURRENT = 'Global';
@@ -78,7 +82,7 @@ const handleGlobalDisconnect = async (socket, io,) => {
         // chat to update their users in range
         if (inChat === true && online === false && globalChatArray.length > 0 && socket.CURRENT === 'Global') {
             filterUserFromArray(socket);
-            return io.to(`GlobalChat`).emit('updateUsersInRange');
+            return io.to(`GlobalChat`).emit('updateUsersInRange')
         } else {
             //    do nothing, this is prob due to a user refreshing or a socket disconnect but
             // not from a user tying to log out of the app
@@ -86,4 +90,16 @@ const handleGlobalDisconnect = async (socket, io,) => {
     };
 };
 
-module.exports = { login, joinGlobal, handleGlobalDisconnect }
+const handleGlobalMessage = async (message, socket, io) => {
+    const payload = {
+        message: message,
+        chat: 'GlobalChat'
+    };
+    return sendMessage(payload, null, io)
+};
+module.exports = {
+    login,
+    joinGlobal,
+    handleGlobalMessage,
+    handleGlobalDisconnect,
+}

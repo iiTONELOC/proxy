@@ -37,7 +37,7 @@ export function MultiPass({ form }) {
     };
     function clearError() {
         return setTimeout(() => {
-            setErrorMessage(false)
+            setErrorMessage(false);
         }, 3500);
     }
     const handleFormSubmit = async event => {
@@ -55,11 +55,11 @@ export function MultiPass({ form }) {
                     return setLocation({ ...locationData })
                 }, (e) => {
                     return console.log('Unable to retrieve location', e);
-                })
-            }
-        }
+                });
+            };
+        };
         // ask user for location;
-        getLocation()
+        getLocation();
         // check args
         const args = { ...formState, ...locationState };
         if (form === 'signUp') {
@@ -68,13 +68,13 @@ export function MultiPass({ form }) {
                     const { data } = await client.mutate({ mutation: CREATE_USER, variables: { ...args } });
                     if (data) {
                         const token = data.addUser.token;
-                        auth.login(token)
+                        auth.login(token);
                     }
                 } catch (e) {
-                    setErrorMessage(e.message)
-                    clearError()
-                }
-            }
+                    setErrorMessage(e.message);
+                    clearError();
+                };
+            };
         } else if (form === 'login') {
             if (args.email !== null && args.password !== null && locationState !== null) {
                 try {
@@ -89,14 +89,14 @@ export function MultiPass({ form }) {
                         const { login } = await data;
                         const { token } = await login;
                         // handle with JWT
-                        auth.login(token)
-                    }
+                        auth.login(token);
+                    };
                 } catch (e) {
-                    setErrorMessage(e.message)
-                    clearError()
-                }
-            }
-        }
+                    setErrorMessage(e.message);
+                    clearError();
+                };
+            };
+        };
     };
 
 

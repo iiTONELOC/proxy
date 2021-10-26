@@ -18,7 +18,6 @@ export const reducers = (state = initialState, action) => {
             // refactor the cases later
             // currently sets the entire user object in state
             case _REDUX_SET_USER_DATA:
-                console.log(`REDUX REDUCER`, action.me)
                 return {
                     ...state,
                     me: { ...state.me, ...action.me },
