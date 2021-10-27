@@ -1,6 +1,8 @@
 import { SCROLL } from ".";
 import MessageItem from "./MessageItem";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
 
 export function saveMessage(message, setMessage) {
     setMessage((prevMessages) => {
@@ -13,6 +15,9 @@ export function saveMessage(message, setMessage) {
 export default function MessageContainer({ socket, chatName, globalMessages }) {
     const [mounted, setMounted] = useState(false);
     const [messages, setMessage] = useState([]);
+
+    const state = useSelector(state => state)
+    const { me } = state;
 
     useEffect(() => {
         setMounted(true);
@@ -47,7 +52,7 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
             </div>
             <div className=" h-full mt-3 text-gray-300 p-2 overflow-y-auto">
                 {[...Object.values(messages)].map((message,) => (
-                    <MessageItem message={message} key={message._id} />
+                    <MessageItem message={message} key={message._id} user={ message.sender === me.username ? true : null }/>
                 ))}
                 <div style={{ minHeight: '10px' }} id='messageContainerEnd'></div>
             </div>
