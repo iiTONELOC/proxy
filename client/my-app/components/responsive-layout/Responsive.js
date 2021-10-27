@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import OnlyOnClient from '../Providers/Client';
 import DesktopLayout from "./Desktop";
 import MobileLayout from './Mobile';
@@ -7,8 +8,11 @@ import MobileLayout from './Mobile';
 export default function ResponsiveLayout({ viewData }) {
     const [mounted, setMounted] = useState(false)
     const [height, setHeight] = useState(false);
+    const state = useSelector(state => state);
     const [view, setView] = useState(false);
+    const { modal } = state
     const navHeight = 65;
+
     function handleView(width, setView) {
         if (width <= 781) {
             setView('mobile');
@@ -36,11 +40,11 @@ export default function ResponsiveLayout({ viewData }) {
     const viewController = (view, viewData) => {
         switch (view) {
             case 'mobile':
-                return <MobileLayout {...viewData} />;
+                return <MobileLayout modal={modal} {...viewData} />;
             case 'desktop':
-                return <DesktopLayout {...viewData} />;
+                return <DesktopLayout modal={modal} {...viewData} />;
             default:
-                return <DesktopLayout {...viewData} />
+                return <DesktopLayout modal={modal} {...viewData} />
         }
     }
 
@@ -48,7 +52,9 @@ export default function ResponsiveLayout({ viewData }) {
         <OnlyOnClient>
             <section className="bg-gray-700  w-full" style={{ height: height ? `${height}px` : '93vh', }}>
                 {viewController(view, viewData)}
+
             </section>
         </OnlyOnClient>
     )
 }
+

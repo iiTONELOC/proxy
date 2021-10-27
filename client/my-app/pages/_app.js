@@ -28,6 +28,7 @@ function MyApp({ Component, pageProps }) {
         <ChatProvider>
           <NavBar />
           <Component /*memory={memory}*/ {...pageProps} />
+
         </ChatProvider>
       </Redux>
     </ApolloProvider>
@@ -35,3 +36,4 @@ function MyApp({ Component, pageProps }) {
 };
 
 export default MyApp
+

@@ -44,7 +44,19 @@ const userSchema = new Schema(
     servers: [{
       type: Schema.Types.ObjectId,
       ref: 'Server'
-    }]
+    }],
+    incomingRequests: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      },
+    ],
+    pendingRequests: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      },
+    ],
   },
   {
     toJSON: {

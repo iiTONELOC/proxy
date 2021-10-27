@@ -1,7 +1,7 @@
-import { CgOptions } from 'react-icons/cg'
+
 import { useState, useEffect } from 'react'
 import { hoverHandler } from "../navigation/NavLink";
-import AddFriend from '../userActions/AddFriend';
+import UserOptions from '../userActions/UserOptions';
 export default function UserItem({ user }) {
     const [isMounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
@@ -25,7 +25,7 @@ export default function UserItem({ user }) {
                 <p className=''>{user.location ? `${user.location.city}, ${user.location.state}` : null}</p>
                 {hover ?
                     <span>
-                        <AddFriend />
+                        <UserOptions {...user} />
                     </span> :
                     null}
 

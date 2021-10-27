@@ -1,5 +1,5 @@
 import SideBar from '../navigation/SideBar';
-
+import { Modal } from '../modal';
 export default function DesktopLayout(
     {
         Messaging,
@@ -7,11 +7,16 @@ export default function DesktopLayout(
         Landing,
         display,
         SignUp,
-        Login
+        Login,
+        modal
     }
 ) {
+
     return (
+
         <section className="flex flex-row gap-2 justify-start h-full w-full">
+            {modal ? <Modal /> : null}
+
             {display !== 'single' ?
                 <>
                     <div className="bg-gray-600 w-14  p-0"> <SideBar /> </div>
@@ -26,6 +31,9 @@ export default function DesktopLayout(
                     </div>
                 </>
             }
+
         </section>
+
     )
 }
+

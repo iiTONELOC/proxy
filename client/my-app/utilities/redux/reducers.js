@@ -8,7 +8,8 @@ const initialState = {
     usersInRange: [],
     socket: false,
     currentChat: null,
-
+    modal: false,
+    modalView: null
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
@@ -30,12 +31,20 @@ export const reducers = (state = initialState, action) => {
 
                 return {
                     ...state,
-                    usersInRange: d.length > 0 ? [...d] : [],
+                    usersInRange: d.length > 0 ? [...d] : [state.users],
                 }
             case _REDUX_SET_CHAT:
                 return {
                     ...state,
                     currentChat: action.currentChat,
+                }
+            case 'toggle modal':
+                console.log('toggle modal reducer')
+                return {
+                    ...state,
+                    modal: !state.modal,
+                    modalView: action.modalView
+
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })
