@@ -1,7 +1,8 @@
+import Avatar from "../userAvatar/Avatar";
 import { useEffect, useState } from "react";
 import { hoverHandler } from "../navigation/NavLink";
-import { FaUserSecret } from 'react-icons/fa'
-import Avatar from "../userAvatar/Avatar";
+import { formatTime_hh_mm_ss } from "../../utilities/utils";
+
 export default function MessageItem({ message, user }) {
     const [mounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
@@ -12,6 +13,7 @@ export default function MessageItem({ message, user }) {
         setMounted(true);
         return () => setMounted(false);
     }, []);
+
     if (!mounted) return null;
     return (
         <article
@@ -21,11 +23,11 @@ export default function MessageItem({ message, user }) {
 
             {!user ? <> <Avatar size={'35px'} />
                 <div className='ml-3 flex flex-col w-full'>
-                    <p className='text-sm text-gray-400'> {new Date(parseFloat(message.time)).toLocaleTimeString()}</p>
+                    <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
                     <p className='text-md ml-1'> {message.text}</p>
                 </div> </> : <>
                 <div className='mr-3 flex flex-col w-full text-right'>
-                    <p className='text-sm text-gray-400'> {new Date(parseFloat(message.time)).toLocaleTimeString()}</p>
+                    <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
                     <p className='text-md ml-1'> {message.text}</p>
                 </div>
                 <Avatar size={'35px'} />  </>

@@ -30,11 +30,11 @@ export default function Messaging({ chatName, globalMessages }) {
 
     if (mounted === false || socket === null) return null
     return (
-        <div className="flex flex-col h-full bg-gray-700">
-            <div className="h-5/6">
+        <div className="flex flex-col gap-2 h-full w-full justify-between bg-gray-700 overflow-y-auto" >
+            <div className="flex w-full">
                 <MessageContainer socket={socket} chatName={chatName} globalMessages={globalMessages} />
             </div>
-            <div className="h-1/6 p-2">
+            <div className="p-2  w-full h-auto">
                 <MessageForm socket={socket} />
             </div>
         </div>

@@ -12,12 +12,12 @@ export default function Home({ memory }) {
     if (loggedIn) {
       console.log(loggedIn);
       setUserID(loggedIn.data._id);
-    }
-    console.log(userID)
-  })
 
+    }
+  }, []);
 
   if (userID) router.push(`/proxy-chat/${userID}`);
+
 
   return (
     <>

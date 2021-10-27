@@ -63,8 +63,8 @@ export default function MessageForm({ socket }) {
     }
 
     return (
-        <section className="w-full h-full">
-            <div className="tracking-wider p-1 h-1/6">
+        <section className="w-full  flex flex-col">
+            <div className="tracking-wider p-1 h-6">
                 <p style={{ margin: "-3px", color: color() }} className="pl-1">{characterCount}/200</p>
             </div>
             <form className="flex flex-row justify-between  h-5/6" onSubmit={handleFormSubmit}>
@@ -77,15 +77,15 @@ export default function MessageForm({ socket }) {
                         placeholder='  Message . . .'
                         onChange={handleChange}
                         onKeyDownCapture={handleKeyDown}
-                        className="bg-gray-600 w-full p-1 h-1/2 self-center rounded-xl"
+                        className="bg-gray-600 w-full p-1 h-14 self-center rounded-xl"
 
                     />
                 </div>
-                <div className="flex items-center p-1 w-1/6">
+                <div className="flex items-center justify-end bp-1 w-1/6">
                     <Button
                         color={{ color: 'green-500', hover: 'green-700' }}
                         radius={'rounded-md'}
-                        class='text-white text-center p-2 h-1/2 w-full'
+                        class='text-white text-center p-2 h-14 w-28'
                         onSubmit={(e) => handleFormSubmit(e)}
                     >
                         Send

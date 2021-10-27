@@ -31,6 +31,7 @@ export default function UsersInRange({ inRange }) {
         }
     }, [socket]);
     if (mounted == false) return null;
+
     return (
         users?.length > 0 ? (
             <section className='bg-gray-800 rounded p-2 flex-row justify-center text-white'>
