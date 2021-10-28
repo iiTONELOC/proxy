@@ -33,19 +33,16 @@ export function Modal() {
             className='bg-gray-900 bg-opacity-80 z-40 w-full h-full absolute flex flex-row justify-center items-center'
             onDoubleClick={toggleModal}
         >
-
-            {/* wrapper insert desired modal here */}
             <div className="w-1/2 bg-gray-600 h-auto rounded-lg p-2 z-50">
                 <header className='flex justify-end'>
                     <span onClick={toggleModal}>
                         <Button className="mr-2 p-2" color={{ color: 'gray-600', hover: 'green-700' }} >
                             <AiOutlineClose size='25px' color='white' />
                         </Button></span>
-
                 </header>
+                {/* wrapper insert desired modal here */}
                 {handleModalView(modalView)}
             </div>
-
         </section>
     )
 }

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { GiSatelliteCommunication } from 'react-icons/gi';
 import { FaUserSecret } from 'react-icons/fa';
 import AlertIcon from "../alertIcon/AlertIcon";
+
 export function logoutUser() {
     return auth.logout();
 }
@@ -14,6 +15,7 @@ export function logoutUser() {
 export default function NavBar() {
     const [mounted, setMounted] = useState(false);
     const [userID, setID] = useState(null);
+
 
     // need a logout handler, need to set the users status to offline
     // we can handle the updates in the chat server using socket
@@ -59,7 +61,9 @@ export default function NavBar() {
 
                 </div>
                 <nav className=" flex  flex-row w-4/5 justify-end text-white">
+
                     <ul className="flex flex-wrap justify-end w-full ">
+
                         {!userID
                             ? destinations.map((dest) => (
                                 <NavLink key={dest.name} {...dest} />

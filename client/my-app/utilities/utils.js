@@ -20,4 +20,18 @@ export function calculateHeight(winHeight, navHeight, desktop) {
     const height = winHeight - navHeight;
     // if (desktop && height < 490) return 490;
     return height;
+};
+export function genTailWindColorEquiv(style) {
+    switch (style) {
+        case 'danger':
+            return 'rgba(220, 38, 38, 1)';
+        case 'success':
+            return 'rgba(52, 211, 153, 1)'
+        case 'warning':
+            return 'rgba(245, 158, 11, 1)'
+        case 'info':
+            return 'rgba(96, 165, 250, 1)'
+        default:
+            break;
+    }
 }

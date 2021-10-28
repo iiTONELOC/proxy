@@ -9,7 +9,7 @@ import auth from "../../../utilities/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
 import { setUsersInfo, SetUsersInRage } from "../../../utilities/redux/helpers";
-import { _REDUX_SET_FR } from "../../../utilities/redux/actions";
+import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
 
 const SocketContext = createContext();
 const { Provider } = SocketContext;
@@ -60,9 +60,21 @@ export const ChatProvider = ({ ...props }) => {
             // we need to set our user and socket
             socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }); console.log('...Socket is Authorized') });
             socket.on('newFriendRequest', (data) => {
-                console.log('new friend request', data); dispatch({
+                console.log('new friend request', data);
+                dispatch({
                     type: _REDUX_SET_FR,
                     incomingRequests: [data.from]
+                });
+                dispatch({
+                    type: _REDUX_SET_TOAST,
+                    toast: {
+                        type: {
+                            type: 'info',
+                            notification: 'New Friend Request'
+                        },
+                        message: `${data.from.username} sent you a friend request!`,
+                        data: data.from
+                    }
                 })
             });
         };

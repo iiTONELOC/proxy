@@ -18,7 +18,7 @@ function alreadyJoined(array, socket) {
     };
 };
 function filterUserFromArray(socket) {
-    globalChatArray = globalChatArray.filter(el => el.user.username.toString() !== socket.USER.username.toString());
+    globalChatArray = globalChatArray.filter(el => el.user.username !== socket.USER.username);
 };
 function sendMessage({ message, chat }, socket, io) {
     if (!socket) {
@@ -72,7 +72,7 @@ const joinGlobal = async (usersInRange, socket, io) => {
         // we also need to tell our friends we are now online - this updates their Friends Lists only
         const isUser = await updateUserSocket(socket.USER._id, socketData);
         socket.USER = isUser;
-        console.log(`WHY`, socket.USER);
+        // console.log(`WHY`, socket.USER);
         filterUserFromArray(socket);
         globalChatArray.push({ user: isUser });
         usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
@@ -113,7 +113,6 @@ const handleGlobalMessage = async (message, socket, io) => {
     return
 };
 async function addFriend({ data, sendTo }, socket, io) {
-    console.log(`ADD FRIEND SOCKET`, { sendTo, data })
     return io.to(sendTo).emit('newFriendRequest', data);
 };
 module.exports = {

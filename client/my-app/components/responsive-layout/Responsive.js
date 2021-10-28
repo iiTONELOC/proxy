@@ -11,7 +11,8 @@ export default function ResponsiveLayout({ viewData }) {
     const [height, setHeight] = useState(false);
     const state = useSelector(state => state);
     const [view, setView] = useState(false);
-    const { modal } = state;
+    const { modal, toast } = state;
+
     const navHeight = 65;
 
     function handleView(width, setView) {
@@ -42,17 +43,18 @@ export default function ResponsiveLayout({ viewData }) {
     const viewController = (view, viewData) => {
         switch (view) {
             case 'mobile':
-                return <MobileLayout modal={modal} {...viewData} />;
+                return <MobileLayout modal={modal} toast={toast} {...viewData} />;
             case 'desktop':
-                return <DesktopLayout modal={modal} {...viewData} />;
+                return <DesktopLayout modal={modal} toast={toast} {...viewData} />;
             default:
-                return <DesktopLayout modal={modal} {...viewData} />
+                return <DesktopLayout modal={modal} toast={toast} {...viewData} />
         };
     };
 
     return (
         <OnlyOnClient>
             <section className="bg-gray-700  w-full" style={{ height: height ? `${height}px` : '93vh', }} >
+
                 {viewController(view, viewData)}
             </section>
         </OnlyOnClient>

@@ -3,7 +3,8 @@ import {
     _REDUX_UPDATE_USERS_IN_RANGE,
     _REDUX_SET_CHAT,
     _REDUX_SET_FR,
-    _REDUX_SET_MODAL
+    _REDUX_SET_MODAL,
+    _REDUX_SET_TOAST
 } from './actions';
 const initialState = {
     me: {},
@@ -12,7 +13,8 @@ const initialState = {
     currentChat: null,
     modal: false,
     modalView: null,
-    incomingFriendRequests: []
+    incomingFriendRequests: [],
+    toast: null,
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
@@ -50,6 +52,11 @@ export const reducers = (state = initialState, action) => {
                 return {
                     ...state,
                     incomingFriendRequests: action.incomingRequests.length > 0 ? [...action.incomingRequests] : [state.incomingFriendRequests.filter(el => el.userID !== action.incomingRequests._id)]
+                }
+            case _REDUX_SET_TOAST:
+                return {
+                    ...state,
+                    toast: action.clear ? initialState.toast : { message: action.toast.message, type: action.toast.type }
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })
