@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { sharedQueries } = require('../shared/sharedQueries');
+const sharedQueries = require('../shared/sharedQueries');
 const { AuthenticationError } = require('apollo-server-express');
 
 const { findUserByID } = sharedQueries;
@@ -35,7 +35,7 @@ const userQueries = {
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
-            return userData;
+            return { userData };
         }
     },
     async serverUser(parent, args, context) {

@@ -72,21 +72,59 @@ query Query($user: ID) {
   user(user: $user) {
     _id
     username
-     socket
-     usersInRange {
-       _id
-       username
-       socket
-       status{
-         online
-         status
-       }
-       location {
-         _id
-         city
-         state
-       }
-     }
+    socket
+    usersInRange {
+      _id
+      username
+      socket
+      status {
+        online
+        status
+      }
+      location {
+        _id
+        latitude
+        longitude
+        city
+        state
+      }
+    }
+    incomingRequests {
+      _id
+      username
+      profile {
+        _id
+        bio
+        visible
+        ProfilePicture
+      }
+      location {
+        latitude
+        longitude
+        city
+        state
+      }
+    }
+    pendingRequests {
+      _id
+      username
+    }
+    location{
+      city,
+      state
+    }
+    friends{
+      _id
+      username
+    }
+    profile{
+      _id
+      bio
+    }
+    status{
+      online
+      status
+    }
   }
 }
 `;

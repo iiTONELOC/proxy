@@ -11,6 +11,9 @@ const sharedMutations = {
                 .populate('location')
                 .populate('status')
                 .populate('profile')
+                .populate('friends')
+                .populate('incomingRequests')
+                .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
         } else {
             return null

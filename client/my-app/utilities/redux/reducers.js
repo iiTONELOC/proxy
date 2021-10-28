@@ -1,10 +1,11 @@
 import {
-    _REDUX_SET_USER_DATA,
+    _REDUX_SET_NOTIFICATION_LIST_VISIBILITY,
     _REDUX_UPDATE_USERS_IN_RANGE,
+    _REDUX_SET_USER_DATA,
+    _REDUX_SET_TOAST,
+    _REDUX_SET_MODAL,
     _REDUX_SET_CHAT,
     _REDUX_SET_FR,
-    _REDUX_SET_MODAL,
-    _REDUX_SET_TOAST
 } from './actions';
 const initialState = {
     me: {},
@@ -15,6 +16,7 @@ const initialState = {
     modalView: null,
     incomingFriendRequests: [],
     toast: null,
+    notificationList: false
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
@@ -51,12 +53,17 @@ export const reducers = (state = initialState, action) => {
             case _REDUX_SET_FR:
                 return {
                     ...state,
-                    incomingFriendRequests: action.incomingRequests.length > 0 ? [...action.incomingRequests] : [state.incomingFriendRequests.filter(el => el.userID !== action.incomingRequests._id)]
+                    incomingFriendRequests: [...action.incomingRequests]
                 }
             case _REDUX_SET_TOAST:
                 return {
                     ...state,
                     toast: action.clear ? initialState.toast : { message: action.toast.message, type: action.toast.type }
+                }
+            case _REDUX_SET_NOTIFICATION_LIST_VISIBILITY:
+                return {
+                    ...state,
+                    notificationList: action.toggle
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })

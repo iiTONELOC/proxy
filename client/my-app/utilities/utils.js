@@ -1,3 +1,7 @@
+import { RiErrorWarningFill } from 'react-icons/ri';
+import { BsFillCheckCircleFill } from 'react-icons/bs';
+import { TiWarning } from 'react-icons/ti';
+import { MdDangerous } from 'react-icons/md';
 const colors = [
     'bg-gray-900',
     'bg-red-500',
@@ -34,4 +38,41 @@ export function genTailWindColorEquiv(style) {
         default:
             break;
     }
+};
+export function variantColor(type) {
+
+    switch (type) {
+        case 'danger':
+            return `red-500`
+        case 'success':
+            return `green-400`
+        case 'warning':
+            return `yellow-400`
+        case 'info':
+            return `blue-400`
+        case 'custom':
+            return `${type.customBg}`
+        default:
+            return generateRandomTwBgColor()
+    }
+};
+const iconStyle = (variant) => {
+    return { color: genTailWindColorEquiv(variant) }
 }
+export function variantIcon(Type, iconSize) {
+    const variant = Type.type
+    switch (variant) {
+        case 'danger':
+            return <MdDangerous style={iconStyle(variant)} size={iconSize} />
+        case 'success':
+            return <BsFillCheckCircleFill style={iconStyle(variant)} size={iconSize} />
+        case 'warning':
+            return <TiWarning style={iconStyle(variant)} size={iconSize} />
+        case 'info':
+            return <RiErrorWarningFill style={iconStyle(variant)} size={iconSize} />
+        case 'custom':
+            return <Type.CustomIcon />
+        default:
+            break;
+    }
+};

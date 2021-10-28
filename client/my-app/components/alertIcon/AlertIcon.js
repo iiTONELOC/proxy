@@ -1,12 +1,22 @@
+import { _REDUX_SET_NOTIFICATION_LIST_VISIBILITY } from '../../utilities/redux/actions';
 import { MdNotifications } from 'react-icons/md';
-import { useSelector } from 'react-redux';
-export default function AlertIcon() {
-    const state = useSelector(state => state);
-    const { incomingFriendRequests } = state;
+import { useSelector, useDispatch } from 'react-redux';
 
+
+export function toggleNotificationList(state, dispatch) {
+    return dispatch({
+        type: _REDUX_SET_NOTIFICATION_LIST_VISIBILITY,
+        toggle: state
+    });
+};
+
+export default function AlertIcon() {
+    const dispatch = useDispatch();
+    const state = useSelector(state => state);
+    const { incomingFriendRequests, notificationList } = state;
     return (
 
-        <span className='static'>
+        <span className='static' onClick={() => { toggleNotificationList(!notificationList, dispatch) }}>
             {
                 incomingFriendRequests.length > 0 ?
                     <span className='icon absolute p-1 animate-pulse'>

@@ -2,10 +2,9 @@ const { actions, reactions } = require("./actions");
 const { _socket_user_login } = actions;
 const { _authenticated } = reactions;
 const sharedMutations = require('../db/controller/shared/sharedMutations');
-const { sharedQueries } = require('../db/controller/shared/sharedQueries');
+const sharedQueries = require('../db/controller/shared/sharedQueries')
 const { createMessage } = require("../db/controller/messages/mutations");
 const { updateUserSocket } = sharedMutations;
-const { findUserByID } = sharedQueries;
 let globalChatArray = [];
 
 
@@ -83,7 +82,7 @@ const joinGlobal = async (usersInRange, socket, io) => {
 const handleGlobalDisconnect = async (socket, io,) => {
     if (socket.USER !== undefined && socket.USER.username !== undefined) {
         const inChat = alreadyJoined(globalChatArray, socket);
-        const uData = await findUserByID(socket.USER._id);
+        const uData = await sharedQueries.findUserByID(socket.USER._id);
         const online = uData?.status?.online;
         // if we are in the GlobalChat, we are set to offline status and there are members in the chat
         // and the users socket is currently set to globalChat we can go ahead and alert everyone in the 

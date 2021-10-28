@@ -1,6 +1,7 @@
 import SideBar from '../navigation/SideBar';
 import Toast from '../toasts/toast';
 import { Modal } from '../modal';
+import { NotificationList } from '../notificationList/NotificationList';
 export default function DesktopLayout(
     {
         Messaging,
@@ -17,11 +18,13 @@ export default function DesktopLayout(
     return (
         <>
             {toast &&
-                <span className='absolute w-full flex flex-row justify-end'>
+                <span className='absolute w-full flex flex-row justify-end p-3' aria-hidden='true'>
                     <Toast />
+
                 </span>
 
             }
+            <NotificationList />
             <section className="static flex flex-row gap-2 justify-start h-full w-full" >
                 {modal ? <Modal /> : null}
 

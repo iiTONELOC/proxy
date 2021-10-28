@@ -31,6 +31,6 @@ if (typeof window !== undefined) {
     };
 };
 
-const client = new ApolloClient({ ...clientData });
+const client = new ApolloClient(clientData);
 
 export default client;

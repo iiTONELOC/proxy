@@ -10,11 +10,11 @@ import { setChat } from '../../utilities/redux/helpers';
 import UsersInRange from '../../components/UsersInRange';
 import Authorization from '../../components/Providers/Auth';
 import serverClient from '../../utilities/apollo/server.config';
-import { _REDUX_SET_CHAT } from '../../utilities/redux/actions';
+import { _REDUX_SET_CHAT, _REDUX_SET_FR } from '../../utilities/redux/actions';
 import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
 import { useSocketContext } from '../../components/Providers/Chat';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-
+import { setUsersInfo } from '../../utilities/redux/helpers';
 
 export default function Global_Chat({ userData, globalMessages }) {
     const dispatch = useDispatch();
@@ -26,6 +26,11 @@ export default function Global_Chat({ userData, globalMessages }) {
     const socket = useSocketContext()
     useEffect(() => {
         setMounted(true);
+        setUsersInfo({ userData, dispatch })
+        dispatch({
+            type: _REDUX_SET_FR,
+            incomingRequests: userData.incomingRequests,
+        });
         return () => setMounted(false)
     }, [])
 
@@ -33,12 +38,12 @@ export default function Global_Chat({ userData, globalMessages }) {
         if (socket.connected === true) {
             if (thisSocket === false) {
                 setThisSocket(socket)
-            }
-        }
-    })
+            };
+        };
+    });
     useEffect(() => {
         if (mounted === true && thisSocket !== false) {
-            const payload = userData.usersInRange
+            const payload = userData.usersInRange;
             if (currentChat !== null) {
                 if (currentChat !== 'Global') {
                     thisSocket.emit(JOIN_GLOBAL_CHAT, payload);

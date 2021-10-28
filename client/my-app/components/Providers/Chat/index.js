@@ -58,12 +58,12 @@ export const ChatProvider = ({ ...props }) => {
             /*CALLBACKS FOR GLOBAL SOCKET ACTIONS */
             // after a successful connection to the chatServer
             // we need to set our user and socket
-            socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }); console.log('...Socket is Authorized') });
+            socket.on(_authenticated, (data) => { console.log('...Socket is Authorized') });
             socket.on('newFriendRequest', (data) => {
                 console.log('new friend request', data);
                 dispatch({
                     type: _REDUX_SET_FR,
-                    incomingRequests: [data.from]
+                    incomingRequests: data.from
                 });
                 dispatch({
                     type: _REDUX_SET_TOAST,

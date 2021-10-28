@@ -79,6 +79,8 @@ export default function UsersInRangeOptionsModal(props) {
                     expects current userInfo and the
                     userID of the friend to add
                  */
+
+
                 const emitData = {
                     data: {
                         type: 'Friend Request',
