@@ -43,8 +43,7 @@ export const reducers = (state = initialState, action) => {
                 return {
                     ...state,
                     modal: !state.modal,
-                    modalView: action.modalView
-
+                    modalView: action.modalView === 'null' ? initialState.modalView : action.modalView
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })

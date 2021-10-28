@@ -1,41 +1,131 @@
+import { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { MdAccountBox } from 'react-icons/md';
-import { useState } from 'react';
 import { AiOutlineUserAdd } from 'react-icons/ai';
+import { useSocketContext } from '../Providers/Chat';
+import { useSelector, useDispatch } from 'react-redux';
+import { ADD_FRIEND } from '../../utilities/graphql/mutations';
+
 export default function UsersInRangeOptionsModal(props) {
-    const [hover, setHover] = useState(false);
+    const { username, _id, socket, status, location } = props;
+    const [thisSocket, setThisSocket] = useState(null);
+    const [isMounted, setMounted] = useState(false);
+    const [addFriend] = useMutation(ADD_FRIEND);
     const [active, setActive] = useState(false);
-    function hoverHandler(e) {
+    const state = useSelector(state => state);
+    const [hover, setHover] = useState(false);
+    const mySocket = useSocketContext();
+    const dispatch = useDispatch();
+    const { me } = state;
+    const mID = me._id;
+
+    const pageIcons = [
+        {
+            icon: MdAccountBox,
+            props: {
+                onMouseEnter: hoverHandler,
+                onMouseLeave: hoverHandler
+            },
+            toolTip: "View Profile",
+            state: hover
+        },
+        {
+            icon: AiOutlineUserAdd,
+            props: {
+                onMouseEnter: activeHandler,
+                onMouseLeave: activeHandler,
+            },
+            toolTip: "AddFriend",
+            state: active,
+            onClick: handleAddFriend
+        },
+    ];
+    useEffect(() => {
+        setMounted(true);
+        return () => {
+            setMounted(false);
+        }
+    }, [])
+    useEffect(() => {
+        if (isMounted) {
+            if (mySocket.connected && !thisSocket) {
+                setThisSocket(mySocket);
+            }
+        }
+    }, [isMounted])
+    function hoverHandler() {
         setHover(!hover);
-    }
-    function activeHandler(e) {
+    };
+    function activeHandler() {
         setActive(!active);
+    };
+    function toggleModal(e) {
+        e.preventDefault();
+        dispatch({
+            type: 'toggle modal',
+            modalView: 'null'
+        });
+    }
+    async function handleAddFriend(e) {
+        e.preventDefault();
+        console.log(`you clicked add friend!`);
+        try {
+            const addNewFriend = await addFriend({
+                variables: { friendId: _id }
+            });
+            if (addNewFriend !== undefined || addNewFriend !== null) {
+                /*
+                    need to pkg data for socket server,
+                    expects current userInfo and the
+                    userID of the friend to add
+                 */
+                const emitData = {
+                    data: {
+                        type: 'Friend Request',
+                        from: {
+                            username: me.username,
+                            userID: me._id,
+                            location: { city: me.location.city, state: me.location.state },
+                            status: { online: me.status.online, status: me.status.status },
+                            friends: me.friends.length,
+                            bio: me.profile.bio,
+                        }
+                    },
+                    sendTo: socket,
+                };
+                /*
+                emit the request to the socket server where it will add it to
+                the current users pending array 
+                to the 'friend' it goes to their requests array
+                socket emits an event to update userInfo when this request is sent
+                which will trigger the notification and alerts
+                */
+                if (thisSocket) { thisSocket.emit("sendFriendRequest", emitData); console.log('SENDING FRIEND REQUEST') }
+                toggleModal(e);
+            } else {
+                // log the issue incase request wasn't successful for whatever reason
+                console.log(addNewFriend);
+            };
+        } catch (error) {
+            console.log(error);
+        };
     }
 
-    const { username, _id, socket, status, location } = props
+
     return (
         <section className=' text-white p-2' style={{ height: '170x' }}>
             <div className="modal-header">
                 <h3 className="text-center text-xl">{username}</h3>
             </div>
             <div className=" my-2 flex flex-row justify-around h-20">
-                <div className="flex flex-col items-center w-2/6">
-                    <MdAccountBox
-                        onMouseEnter={hoverHandler}
-                        onMouseLeave={hoverHandler}
-                        size='35px' />
-                    {hover === true && <span className={`text-sm text-center bg-black rounded-lg p-1  `}>View Profile</span>}
-                </div>
-                <div className="flex flex-col items-center w-2/6">
-                    <AiOutlineUserAdd
-                        onMouseEnter={activeHandler}
-                        onMouseLeave={activeHandler}
-                        size='35px' />
-                    {active === true && <span className="text-sm text-center bg-black rounded-lg p-1 ">Add Friend</span>}
-                </div>
-
+                {pageIcons.map((icon, index) => (
+                    <div className="flex flex-col items-center w-2/6" key={index}>
+                        <icon.icon size={'35px'} onMouseEnter={icon.props.onMouseEnter} onMouseLeave={icon.props.onMouseLeave} onClick={icon.onClick} />
+                        {icon.state === true ? <span className={`text-sm text-center bg-black rounded-lg p-1  `}>{icon.toolTip}</span> : null}
+                    </div>
+                ))}
             </div>
-
         </section>
+    );
+};
 
-    )
-}

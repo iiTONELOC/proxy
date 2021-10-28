@@ -58,7 +58,7 @@ export const ChatProvider = ({ ...props }) => {
             // after a successful connection to the chatServer
             // we need to set our user and socket
             socket.on(_authenticated, (data) => { setUsersInfo({ data, dispatch }); console.log('...Socket is Authorized') });
-
+            socket.on('newFriendRequest', (data) => { console.log('new friend request', data) });
         };
         return () => setJoined(false);
     }, [socket]);

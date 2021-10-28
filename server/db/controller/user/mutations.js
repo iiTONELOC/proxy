@@ -197,7 +197,31 @@ const userMutations = {
             throw new AuthenticationError('You must be logged in!')
         }
     },
-
+    addNewFriend: async (parent, { friendId }, context) => {
+        if (context.user) {
+            // add the friendID to the pending array
+            const userData = await User.findOneAndUpdate(
+                { _id: context.user._id },
+                { $addToSet: { pending: friendId } },
+                { new: true }
+            ).select('-__v -password -email')
+                .populate('location')
+                .populate('status')
+                .populate('profile')
+                .populate({ path: 'servers', populate: { path: 'channels' } });
+            // update the 'friend' 
+            // add userID to the friends request array
+            const didAdd = await User.findOneAndUpdate(
+                { _id: friendId },
+                { $addToSet: { requests: context.user._id } },
+                { new: true }
+            ).select('-__v -password -email')
+            if (didAdd !== undefined || didAdd !== null) {
+                return userData
+            }
+        }
+        throw new AuthenticationError('You need to be logged in!');
+    },
 }
 
 module.exports = userMutations

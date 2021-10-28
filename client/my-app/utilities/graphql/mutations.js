@@ -33,3 +33,11 @@ mutation Mutation {
   }
 }
 `;
+export const ADD_FRIEND = gql`
+mutation addFriend($friendId: ID!) {
+    addFriend(friendId: $friendId) {
+        _id
+    username
+  }
+}
+`;

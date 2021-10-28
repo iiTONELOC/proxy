@@ -1,5 +1,5 @@
-
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import Avatar from '../userAvatar/Avatar'
 import { hoverHandler } from "../navigation/NavLink";
 import UserOptions from '../userActions/UserOptions';
 export default function UserItem({ user }) {
@@ -21,6 +21,7 @@ export default function UserItem({ user }) {
             className=''
         >
             <div className='p-1 flex justify-between items-center' style={{ height: '50px ' }}>
+                <Avatar size='20px' />
                 {user.username}
                 <p className=''>{user.location ? `${user.location.city}, ${user.location.state}` : null}</p>
                 {hover ?
