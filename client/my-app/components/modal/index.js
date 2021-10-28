@@ -3,6 +3,7 @@ import UsersInRangeOptionsModal from './usersInRangeOptions';
 import { AiOutlineClose } from 'react-icons/ai';
 import Button from '../Button';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
+import SuccessModal from './success';
 
 export function Modal() {
     const dispatch = useDispatch();
@@ -20,7 +21,8 @@ export function Modal() {
         switch (view.view) {
             case 'usersInRangeOptions':
                 return <UsersInRangeOptionsModal {...modalView.data} />;
-
+            case 'success':
+                return <SuccessModal timeout={modalView.data} />;
             default:
                 break;
         }

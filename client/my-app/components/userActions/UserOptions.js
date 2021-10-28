@@ -5,19 +5,13 @@ import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 export default function UserOptions(props) {
     const dispatch = useDispatch();
     function toggleModal(e) {
-        console.log(`Toggle Modal click`)
+
         e.preventDefault();
         dispatch({
             type: _REDUX_SET_MODAL,
             modalView: { view: 'usersInRangeOptions', data: props }
         });
-    }
-
-
-
-
-
-
+    };
 
     return (
         <>
@@ -30,6 +24,6 @@ export default function UserOptions(props) {
                 <CgOptions />
             </Button>
         </>
-    )
-}
+    );
+};
 

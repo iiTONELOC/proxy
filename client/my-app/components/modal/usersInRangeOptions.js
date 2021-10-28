@@ -5,7 +5,7 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import { useSocketContext } from '../Providers/Chat';
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_FRIEND } from '../../utilities/graphql/mutations';
-
+import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 export default function UsersInRangeOptionsModal(props) {
     const { username, _id, socket, status, location } = props;
     const [thisSocket, setThisSocket] = useState(null);
@@ -17,7 +17,7 @@ export default function UsersInRangeOptionsModal(props) {
     const mySocket = useSocketContext();
     const dispatch = useDispatch();
     const { me } = state;
-    const mID = me._id;
+
 
     const pageIcons = [
         {
@@ -62,7 +62,7 @@ export default function UsersInRangeOptionsModal(props) {
     function toggleModal(e) {
         e.preventDefault();
         dispatch({
-            type: 'toggle modal',
+            type: _REDUX_SET_MODAL,
             modalView: 'null'
         });
     }
@@ -93,15 +93,14 @@ export default function UsersInRangeOptionsModal(props) {
                     },
                     sendTo: socket,
                 };
-                /*
-                emit the request to the socket server where it will add it to
-                the current users pending array 
-                to the 'friend' it goes to their requests array
-                socket emits an event to update userInfo when this request is sent
-                which will trigger the notification and alerts
-                */
-                if (thisSocket) { thisSocket.emit("sendFriendRequest", emitData); console.log('SENDING FRIEND REQUEST') }
-                toggleModal(e);
+
+                if (thisSocket) { thisSocket.emit("sendFriendRequest", emitData) };
+
+                dispatch({
+                    type: _REDUX_SET_MODAL,
+                    modalView: { view: 'success', data: 1500 },
+                    toggle: 'false'
+                });
             } else {
                 // log the issue incase request wasn't successful for whatever reason
                 console.log(addNewFriend);

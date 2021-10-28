@@ -43,8 +43,13 @@ export const reducers = (state = initialState, action) => {
             case _REDUX_SET_MODAL:
                 return {
                     ...state,
-                    modal: !state.modal,
+                    modal: action.toggle === 'false' ? true : !state.modal,
                     modalView: action.modalView === 'null' ? initialState.modalView : action.modalView
+                }
+            case _REDUX_SET_FR:
+                return {
+                    ...state,
+                    incomingFriendRequests: action.incomingRequests.length > 0 ? [...action.incomingRequests] : [state.incomingFriendRequests.filter(el => el.userID !== action.incomingRequests._id)]
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })
