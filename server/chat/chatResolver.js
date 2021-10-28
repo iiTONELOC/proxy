@@ -66,9 +66,16 @@ const joinGlobal = async (usersInRange, socket, io) => {
         usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
         socket.join('GlobalChat');
     } else {
+        // we need to update our users socket o
+        const socketData = socket.id;
+        // update our User's Socket
+        // we also need to tell our friends we are now online - this updates their Friends Lists only
+        const isUser = await updateUserSocket(socket.USER._id, socketData);
+        socket.USER = isUser;
         console.log(`WHY`, socket.USER);
         filterUserFromArray(socket);
-        globalChatArray.push({ user: user });
+        globalChatArray.push({ user: isUser });
+        usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
         socket.join('GlobalChat');
         socket.CURRENT = 'Global';
     };
@@ -105,10 +112,14 @@ const handleGlobalMessage = async (message, socket, io) => {
     }
     return
 };
-
+async function addFriend({ data, sendTo }, socket, io) {
+    console.log(`ADD FRIEND SOCKET`, { sendTo, data })
+    return io.to(sendTo).emit('newFriendRequest', data);
+};
 module.exports = {
     login,
     joinGlobal,
     handleGlobalMessage,
     handleGlobalDisconnect,
+    addFriend,
 }

@@ -29,7 +29,7 @@ export default function Avatar(props) {
                         <img src={profilePicture} style={{ objectFit: 'contain' }} />
                     </span>)
                     :
-                    (<span className={color ? `${color}` : `${randomColor}`}>
+                    (<span className={`${color ? `${color}` : `${randomColor}`} p-1  rounded-2xl flex justify-center`}>
                         <FaUserSecret size={size} />
                     </span>)
             }
