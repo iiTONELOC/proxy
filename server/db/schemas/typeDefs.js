@@ -64,6 +64,8 @@ type User {
     friendCount: Int
     usersInRange: [User]
     socket: ID
+    incomingRequests: [User]
+    pendingRequests: [User]
 }
 
 

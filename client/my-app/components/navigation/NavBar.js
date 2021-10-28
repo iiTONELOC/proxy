@@ -5,8 +5,8 @@ import client from "../../utilities/apollo/client.config";
 import { LOGOUT } from "../../utilities/graphql/mutations";
 import Link from "next/link";
 import { GiSatelliteCommunication } from 'react-icons/gi';
-import { MdNotifications } from 'react-icons/md';
 import { FaUserSecret } from 'react-icons/fa';
+import AlertIcon from "../alertIcon/AlertIcon";
 export function logoutUser() {
     return auth.logout();
 }
@@ -26,7 +26,7 @@ export default function NavBar() {
         }
     }
     const LoggedInDestinations = [
-        { name: "Notification Icon", icon: <MdNotifications size='32px' /> },
+        { name: "Notification Icon", icon: <AlertIcon /> },
         { name: "User Settings", icon: <FaUserSecret size='30px' /> },
 
     ];

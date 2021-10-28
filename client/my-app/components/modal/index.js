@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import UsersInRangeOptionsModal from './usersInRangeOptions';
 import { AiOutlineClose } from 'react-icons/ai';
 import Button from '../Button';
-
+import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 
 export function Modal() {
     const dispatch = useDispatch();
@@ -11,7 +11,7 @@ export function Modal() {
     function toggleModal(e) {
         e.preventDefault();
         dispatch({
-            type: 'toggle modal',
+            type: _REDUX_SET_MODAL,
         });
     }
 

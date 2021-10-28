@@ -1,7 +1,9 @@
 import {
     _REDUX_SET_USER_DATA,
     _REDUX_UPDATE_USERS_IN_RANGE,
-    _REDUX_SET_CHAT
+    _REDUX_SET_CHAT,
+    _REDUX_SET_FR,
+    _REDUX_SET_MODAL
 } from './actions';
 const initialState = {
     me: {},
@@ -9,7 +11,8 @@ const initialState = {
     socket: false,
     currentChat: null,
     modal: false,
-    modalView: null
+    modalView: null,
+    incomingFriendRequests: []
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
@@ -22,24 +25,22 @@ export const reducers = (state = initialState, action) => {
                 return {
                     ...state,
                     me: { ...state.me, ...action.me },
-                    usersInRange: action.me.usersInRange.length > 0 ? [...action.me.usersInRange] : [state.users],
-                    socket: action.me.socket
+                    usersInRange: action.me.usersInRange.length > 0 ? [...action.me.usersInRange] : [],
+                    socket: action.me.socket,
+                    incomingFriendRequests: action.me.incomingRequests.length > 0 ? [...action.me.incomingRequests] : [],
                 }
             case _REDUX_UPDATE_USERS_IN_RANGE:
-
                 let d = action.usersInRange.inRange.usersInRange
-
                 return {
                     ...state,
-                    usersInRange: d.length > 0 ? [...d] : [state.users],
+                    usersInRange: d.length > 0 ? [...d] : [],
                 }
             case _REDUX_SET_CHAT:
                 return {
                     ...state,
                     currentChat: action.currentChat,
                 }
-            case 'toggle modal':
-                console.log('toggle modal reducer')
+            case _REDUX_SET_MODAL:
                 return {
                     ...state,
                     modal: !state.modal,
