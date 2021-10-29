@@ -31,13 +31,13 @@ export const reducers = (state = initialState, action) => {
                     me: { ...state.me, ...action.me },
                     usersInRange: action.me.usersInRange.length > 0 ? [...action.me.usersInRange] : [],
                     socket: action.me.socket,
-                    incomingFriendRequests: action.me.incomingRequests.length > 0 ? [...action.me.incomingRequests] : [],
+                    incomingFriendRequests: action.me.incomingRequests.length > 0 ? [...action.me.incomingRequests] : initialState.incomingFriendRequests,
                 }
             case _REDUX_UPDATE_USERS_IN_RANGE:
                 let d = action.usersInRange.inRange.usersInRange
                 return {
                     ...state,
-                    usersInRange: d.length > 0 ? [...d] : [],
+                    usersInRange: d.length > 0 ? [...d] : initialState.incomingFriendRequests,
                 }
             case _REDUX_SET_CHAT:
                 return {
@@ -51,9 +51,10 @@ export const reducers = (state = initialState, action) => {
                     modalView: action.modalView === 'null' ? initialState.modalView : action.modalView
                 }
             case _REDUX_SET_FR:
+                console.log(action.incomingFriendRequests)
                 return {
                     ...state,
-                    incomingFriendRequests: [...action.incomingRequests]
+                    incomingFriendRequests: action.incomingRequests === 0 ? initialState.incomingFriendRequests : [...action.incomingRequests]
                 }
             case _REDUX_SET_TOAST:
                 return {

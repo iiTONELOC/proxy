@@ -1,5 +1,5 @@
 const { query } = require('../controller');
-const { createNewUser, loginUser, userLogout, addNewFriend } = require('../controller/user/mutations');
+const { createNewUser, loginUser, userLogout, addNewFriend, acceptFriendRequest } = require('../controller/user/mutations');
 const { user, message } = query;
 const resolvers = {
     Query: {
@@ -13,7 +13,8 @@ const resolvers = {
         addUser: createNewUser,
         login: loginUser,
         logout: userLogout,
-        addFriend: addNewFriend
+        addFriend: addNewFriend,
+        acceptFriend: acceptFriendRequest
     }
 };
 module.exports = resolvers;

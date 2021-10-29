@@ -89,6 +89,7 @@ type Mutation{
         longitude: String, ): Auth
     logout:User
     addFriend(friendId: ID!): User
+    acceptFriend(friendId: ID!): User
 }
 
 type Auth {

@@ -9,8 +9,8 @@ class Connection {
             this.socket.on(_socket_user_login, (data) => { login(data, this.socket, this.io) }),
             this.socket.on(JOIN_GLOBAL_CHAT, (data) => { joinGlobal(data, this.socket, this.io) }),
             this.socket.on('globalChatMessage', (message) => { handleGlobalMessage(message, this.socket, this.io) }),
-            this.socket.on('sendFriendRequest', (data) => { addFriend(data, this.socket, io) })
-
+            this.socket.on('sendFriendRequest', (data) => { addFriend(data, this.socket, io) }),
+            this.socket.on('acceptedFriendRequest', (data) => { io.to(data.userData.socket).emit('Request Accepted', data) })
     }
 };
 

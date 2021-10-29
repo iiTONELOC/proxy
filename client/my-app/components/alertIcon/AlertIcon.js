@@ -14,6 +14,7 @@ export default function AlertIcon() {
     const dispatch = useDispatch();
     const state = useSelector(state => state);
     const { incomingFriendRequests, notificationList } = state;
+
     return (
 
         <span className='static' onClick={() => { toggleNotificationList(!notificationList, dispatch) }}>

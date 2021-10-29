@@ -91,6 +91,7 @@ const handleGlobalDisconnect = async (socket, io,) => {
             filterUserFromArray(socket);
             return io.to(`GlobalChat`).emit('updateUsersInRange')
         } else {
+            io.to(`GlobalChat`).emit('updateUsersInRange')
             //    do nothing, this is prob due to a user refreshing or a socket disconnect but
             // not from a user tying to log out of the app
         };

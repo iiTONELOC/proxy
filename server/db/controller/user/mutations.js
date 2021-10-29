@@ -222,6 +222,46 @@ const userMutations = {
         }
         throw new AuthenticationError('You need to be logged in!');
     },
+
+    acceptFriendRequest: async (parent, { friendId }, context) => {
+        if (context.user) {
+
+            // add the friendID to the pending array
+            const userData = await User.findOneAndUpdate(
+                { _id: context.user._id },
+                {
+                    $addToSet: { friends: friendId },
+                    $pull: { incomingRequests: friendId }
+                },
+                { new: true }
+            )
+                .select('-__v -password -email')
+                .populate('location')
+                .populate('status')
+                .populate('profile')
+                .populate('friends')
+                .populate('incomingRequests')
+                .populate('pendingRequests')
+                .populate({ path: 'servers', populate: { path: 'channels' } })
+            // update the 'friend' 
+            // add userID to the friends request array
+            const didAdd = await User.findOneAndUpdate(
+                { _id: friendId },
+                {
+                    $addToSet: { friends: context.user._id },
+                    $pull: { pendingRequests: context.user._id }
+                },
+                { new: true }
+            ).select('-__v -password -email')
+            if (didAdd !== undefined || didAdd !== null) {
+                return userData
+            } else {
+                throw new Error('Something went wrong!')
+            }
+        }
+        throw new AuthenticationError('You need to be logged in!');
+    },
+
 }
 
 module.exports = userMutations
