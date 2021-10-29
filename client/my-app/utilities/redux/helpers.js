@@ -3,12 +3,19 @@ import {
     _REDUX_SET_TOAST,
     _REDUX_SET_USER_DATA,
     _REDUX_UPDATE_USERS_IN_RANGE,
+    _REDUX_SET_SOCKET,
     _REDUX_SET_FR,
 
 } from "./actions"
 
-export function setUsersInfo({ userData, dispatch }) {
+export function set_ReduxSocket({ socketData, dispatch }) {
+    dispatch({
+        type: _REDUX_SET_SOCKET,
+        socket: { ...socketData }
+    })
+};
 
+export function setUsersInfo({ userData, dispatch }) {
     dispatch({
         type: _REDUX_SET_USER_DATA,
         me: userData
@@ -42,7 +49,7 @@ export function makeToast({ bread, dispatch }) {
 export function updateIncomingRequests({ data, dispatch }) {
     dispatch({
         type: _REDUX_SET_FR,
-        incomingFriendRequests: data
+        incomingRequests: data
     })
 };
 

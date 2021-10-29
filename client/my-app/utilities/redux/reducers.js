@@ -16,7 +16,8 @@ const initialState = {
     modalView: null,
     incomingFriendRequests: [],
     toast: null,
-    notificationList: false
+    notificationList: false,
+
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
@@ -25,6 +26,8 @@ export const reducers = (state = initialState, action) => {
             // this is for testing will 
             // refactor the cases later
             // currently sets the entire user object in state
+
+
             case _REDUX_SET_USER_DATA:
                 return {
                     ...state,
@@ -34,7 +37,7 @@ export const reducers = (state = initialState, action) => {
                     incomingFriendRequests: action.me.incomingRequests.length > 0 ? [...action.me.incomingRequests] : initialState.incomingFriendRequests,
                 }
             case _REDUX_UPDATE_USERS_IN_RANGE:
-                let d = action.usersInRange.inRange.usersInRange
+                let d = action.usersInRange
                 return {
                     ...state,
                     usersInRange: d.length > 0 ? [...d] : initialState.incomingFriendRequests,
@@ -51,10 +54,10 @@ export const reducers = (state = initialState, action) => {
                     modalView: action.modalView === 'null' ? initialState.modalView : action.modalView
                 }
             case _REDUX_SET_FR:
-                console.log(action.incomingFriendRequests)
+                console.log("UPDATING FRIEND REQUEST ARRAY", action.incomingRequests)
                 return {
                     ...state,
-                    incomingFriendRequests: action.incomingRequests === 0 ? initialState.incomingFriendRequests : [...action.incomingRequests]
+                    incomingFriendRequests: action.incomingRequests.length === 0 ? initialState.incomingFriendRequests : [...action.incomingRequests]
                 }
             case _REDUX_SET_TOAST:
                 return {

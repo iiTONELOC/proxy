@@ -18,12 +18,12 @@ export default function Authorization({ children, ...delegated }) {
                 setAuth(false)
             }
         }
-    }, [hasMounted])
+    })
     if (!hasMounted) {
         return null;
     }
     return (
-        isAuthorized ? (<div {...delegated}>{children}</div>) : (<Redirect />)
+        isAuthorized === true ? (<div {...delegated}>{children}</div>) : (<Redirect />)
     )
 
 };

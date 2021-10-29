@@ -6,7 +6,7 @@ import {
 import { useEffect, useState } from 'react';
 import Messaging from '../../components/chat';
 import { useSelector, useDispatch } from 'react-redux';
-import { setChat } from '../../utilities/redux/helpers';
+import { setChat, updateIncomingRequests, SetUsersInRage } from '../../utilities/redux/helpers';
 import UsersInRange from '../../components/UsersInRange';
 import Authorization from '../../components/Providers/Auth';
 import serverClient from '../../utilities/apollo/server.config';
@@ -16,49 +16,69 @@ import { useSocketContext } from '../../components/Providers/Chat';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import { setUsersInfo } from '../../utilities/redux/helpers';
 
+
 export default function Global_Chat({ userData, globalMessages }) {
     const dispatch = useDispatch();
     // the useSelector is necessary to access our state
     const state = useSelector((state) => state);
-    const { me, currentChat } = state
+    const { me, currentChat } = { ...state }
     const [mounted, setMounted] = useState(false);
-    const [thisSocket, setThisSocket] = useState(false)
-    const socket = useSocketContext()
+    const [thisSocket, setThisSocket] = useState(null)
+    const [joined, setJoined] = useState(false)
+    const socket = useSocketContext();
+
+    function ss() {
+        if (socket.connected === true && !thisSocket) {
+            console.log(`socket global`, socket)
+            return setThisSocket(socket)
+        } else if (thisSocket) {
+            return
+        }
+        else if (socket.connected === false) {
+            setTimeout(() => {
+                console.log('Socket Connection lagging, reattempting a connection...')
+                ss()
+            }, 550)
+        }
+    }
     useEffect(() => {
-        setMounted(true);
-        setUsersInfo({ userData, dispatch })
-        dispatch({
-            type: _REDUX_SET_FR,
-            incomingRequests: userData.incomingRequests,
-        });
-        return () => setMounted(false)
+        setMounted(true)
+
+        return () => { setMounted(false); setJoined(false); setThisSocket(null) }
     }, [])
 
     useEffect(() => {
-        if (socket.connected === true) {
-            if (thisSocket === false) {
-                setThisSocket(socket)
-            };
-        };
-    });
-    useEffect(() => {
-        if (mounted === true && thisSocket !== false) {
-            const payload = userData.usersInRange;
-            if (currentChat !== null) {
-                if (currentChat !== 'Global') {
-                    thisSocket.emit(JOIN_GLOBAL_CHAT, payload);
-                    setChat({ data: 'Global', dispatch });
-                } return
-            } else {
-                thisSocket.emit(JOIN_GLOBAL_CHAT, payload);
-                setChat({ data: 'Global', dispatch });
-            };
-        };
-    }, [thisSocket]);
+        if (userData !== undefined && mounted === true && me) {
+            // REDUX HANDLERS
+            console.log(`Global-Chat mounted updating user's data:\nbegin setUsersInfo..\nbegin updateIncomingRequests`)
+            setUsersInfo({ userData, dispatch });
+            SetUsersInRage({ data: userData, dispatch });
+            updateIncomingRequests({ data: userData.incomingRequests, dispatch });
+            ss()
+        }
+    }, [mounted])
 
+
+
+
+    useEffect(() => {
+        if (thisSocket && joined === false) {
+
+
+            console.log(`JOINING GLOBAL CHAT`)
+            const payload = userData.usersInRange;
+            thisSocket.emit(JOIN_GLOBAL_CHAT, payload);
+            setChat({ data: 'Global', dispatch });
+            setJoined(true)
+        };
+    }, [thisSocket])
+
+
+    if (mounted === false) return null
     if (!userData && !globalMessages) {
         return `Loading`
     };
+
     return (
         <Authorization>
             <div>
