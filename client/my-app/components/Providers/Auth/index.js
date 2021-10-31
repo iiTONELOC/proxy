@@ -15,9 +15,7 @@ export default function Authorization({ children, ...delegated }) {
             const userLoggedIn = auth.loggedIn()
             if (userLoggedIn) {
                 const signedIn = auth.getProfile()
-                console.log(`AUTH`, signedIn)
                 if (signedIn) {
-
                     setAuth(true)
                 } else {
                     localStorage.removeItem('proxy_id_token')
@@ -27,7 +25,6 @@ export default function Authorization({ children, ...delegated }) {
                 localStorage.removeItem('proxy_id_token')
                 setAuth(false)
             }
-
         }
     })
     if (!hasMounted) {

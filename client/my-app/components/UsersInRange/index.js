@@ -35,6 +35,7 @@ export default function UsersInRange({ inRange }) {
     useEffect(() => {
         if (socket) {
             socket.on('updateUsersInRange', async () => {
+                console.log(`UPDATING USERS IN RANGE`)
                 updateUsersInRange()
             });
         }

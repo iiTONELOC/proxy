@@ -29,7 +29,7 @@ export default function Global_Chat({ userData, globalMessages }) {
 
     function handleSocketConnection() {
         if (socket.connected === true && !thisSocket) {
-            console.log(`socket global`, socket)
+            console.log(`socket global`, userData)
             return setThisSocket(socket)
         } else if (thisSocket) {
             return

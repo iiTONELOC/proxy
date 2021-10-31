@@ -28,22 +28,24 @@ export const ChatProvider = ({ ...props }) => {
         const nS = io(`http://${window.location.hostname}:3001`);
         const newSocket = nS;
         setSocket(newSocket);
-
         console.log('Socket connection establishing...');
         return () => { setMounted(false); setLoggedIn(false); setJoined(false) }
     }, []);
     useEffect(() => {
-        const loggedInData = auth.getProfile();
-        if (loggedInData && !loggedIn) {
-            setLoggedIn(loggedInData);
+        const isLoggedIn = auth.loggedIn();
+        if (isLoggedIn) {
+            const loggedInData = auth.getProfile()
+            if (loggedInData && !loggedIn) {
+                setLoggedIn(loggedInData);
+            }
+        } else {
+            setLoggedIn(null)
         }
-
     }, [loggedIn]);
     useEffect(() => {
         if (socket && mounted && loggedIn) {
             const { _authenticated } = reactions;
             const { _socket_user_login } = actions;
-
             // grab our data and package it for ChatServer
             const { _id, username } = loggedIn.data;
             const socketData = {
@@ -57,11 +59,8 @@ export const ChatProvider = ({ ...props }) => {
                 emitUpdate: joined === true ? false : true
             };
             if (joined !== true) {
-
-                console.log('socket connecting...', payload);
                 socket.emit(_socket_user_login, payload);
                 console.log('requesting login..');
-
             };
 
 

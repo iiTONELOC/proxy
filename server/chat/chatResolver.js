@@ -25,15 +25,14 @@ function sendMessage({ message, chat }, socket, io) {
         return io.to(chat).emit('incomingChatMessage', message);
     };
 };
+
+
 const login = async ({ request, data }, socket, io) => {
     // eventually want to include an auth middleware on the socket
     if (request == _socket_user_login) {
         const { id } = data;
         try {
-            console.log(`CHAT SERVER- socket logging in:\n`)
             const socketData = socket.id;
-            // update our User's Socket
-            // we also need to tell our friends we are now online - this updates their Friends Lists only
             const isUser = await updateUserSocket(id, socketData);
             if (isUser !== null) {
                 socket.USER = {
@@ -42,11 +41,6 @@ const login = async ({ request, data }, socket, io) => {
                     socket: isUser.socket,
                 }
                 socket.CURRENT = 'landing';
-                // send to the user that they are authenticated with updated userInfo
-                // this will prompt the client to save the userData and socket information in REDUX
-                // grab our inRange
-
-                console.log(`CHAT SERVER- emit to client they are logged in line 48\n`)
                 return io.to(socket.id).emit(_authenticated, isUser);
             } else {
                 return null;
@@ -60,26 +54,16 @@ const login = async ({ request, data }, socket, io) => {
 
 const joinGlobal = async (usersInRange, socket, io) => {
     // grab user id, add user to the global chat's active array
-
     const user = { ...socket.USER };
-    console.log(`CHAT SERVER- joining global,`, user)
     if (globalChatArray.length > 0 && socket.USER) {
         const inChat = alreadyJoined(globalChatArray, socket);
-
         if (inChat === false && socket.CURRENT !== 'Global') {
-            console.log(`CHAT SERVER- joining global\n`)
             globalChatArray.push({ user: user });
             socket.CURRENT = 'Global';
-            // emit to our users inRange instead
-            usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
+            usersInRange.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
             socket.join('GlobalChat');
-
         } else {
-            console.log(`CHAT SERVER- joining global, RECONNECTION\n`)
-            // we need to update our users socket o
             const socketData = socket.id;
-            // update our User's Socket
-            // we also need to tell our friends we are now online - this updates their Friends Lists only
             const isUser = await updateUserSocket(socket.USER._id, socketData);
             const updatedUserData = {
                 _id: isUser._id,
@@ -87,7 +71,6 @@ const joinGlobal = async (usersInRange, socket, io) => {
                 socket: isUser.socket,
             }
             socket.USER = updatedUserData;
-            // console.log(`WHY`, socket.USER);
             filterUserFromArray(socket);
             globalChatArray.push({ user: updatedUserData });
             usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
@@ -97,8 +80,7 @@ const joinGlobal = async (usersInRange, socket, io) => {
     } else {
         globalChatArray.push(user);
         socket.CURRENT = 'Global';
-        // emit to our users inRange instead
-        usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
+        usersInRange.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
         socket.join('GlobalChat');
     }
 
@@ -111,11 +93,13 @@ const handleGlobalDisconnect = async (socket, io,) => {
         // if we are in the GlobalChat, we are set to offline status and there are members in the chat
         // and the users socket is currently set to globalChat we can go ahead and alert everyone in the 
         // chat to update their users in range
+        console.log(`USER DISCONNECT`, socket.USER)
         if (inChat === true && online === false && globalChatArray.length > 0 && socket.CURRENT === 'Global') {
             filterUserFromArray(socket);
+            console.log(`USER DISCONNECT`, uData)
             return io.to(`GlobalChat`).emit('updateUsersInRange')
         } else {
-            // io.to(`GlobalChat`).emit('updateUsersInRange')
+            io.to(`GlobalChat`).emit('updateUsersInRange')
             //    do nothing, this is prob due to a user refreshing or a socket disconnect but
             // not from a user tying to log out of the app
         };
