@@ -203,7 +203,7 @@ const userMutations = {
         if (context.user) {
             // add the friendID to the pending array
             const userData = await User.findByIdAndUpdate(context.user._id,
-                { $push: { pendingRequests: friendId } },
+                { $addToSet: { pendingRequests: friendId } },
                 { new: true }
             ).select('-__v -password -email')
                 .populate('location')
@@ -216,7 +216,7 @@ const userMutations = {
             // update the 'friend' 
             // add userID to the friends request array
             const didAdd = await User.findByIdAndUpdate(friendId,
-                { $push: { incomingRequests: context.user._id } },
+                { $addToSet: { incomingRequests: context.user._id } },
                 { new: true }
             ).select('-__v -password -email')
             if (didAdd !== undefined || didAdd !== null) {
@@ -231,7 +231,7 @@ const userMutations = {
             // add the friendID to the pending array
             const userData = await User.findByIdAndUpdate(context.user._id,
                 {
-                    $push: { friends: friendId },
+                    $addToSet: { friends: friendId },
                     $pull: { incomingRequests: friendId }
                 },
                 { new: true },
@@ -248,7 +248,7 @@ const userMutations = {
             // add userID to the friends request array
             const didAdd = await User.findByIdAndUpdate(friendId,
                 {
-                    $push: { friends: context.user._id },
+                    $addToSet: { friends: context.user._id },
                     $pull: { pendingRequests: context.user._id }
                 },
                 { new: true },

@@ -21,6 +21,7 @@ module.exports = {
                 }
             }
         });
+
         return d.filter(el => el !== undefined)
     },
 }

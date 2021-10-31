@@ -27,7 +27,7 @@ export default function Global_Chat({ userData, globalMessages }) {
     const [joined, setJoined] = useState(false)
     const socket = useSocketContext();
 
-    function ss() {
+    function handleSocketConnection() {
         if (socket.connected === true && !thisSocket) {
             console.log(`socket global`, socket)
             return setThisSocket(socket)
@@ -37,24 +37,21 @@ export default function Global_Chat({ userData, globalMessages }) {
         else if (socket.connected === false) {
             setTimeout(() => {
                 console.log('Socket Connection lagging, reattempting a connection...')
-                ss()
+                handleSocketConnection()
             }, 550)
         }
     }
     useEffect(() => {
         setMounted(true)
-        console.log(`global chat mounted`, mounted)
         return () => { setMounted(false); setJoined(false); setThisSocket(null) }
     }, [])
 
     useEffect(() => {
         if (userData !== undefined && userData !== null && mounted === true && me) {
             // REDUX HANDLERS
-            console.log(`Global-Chat mounted updating user's data:\nbegin setUsersInfo..\nbegin updateIncomingRequests`)
             setUsersInfo({ userData, dispatch });
-            SetUsersInRage({ data: userData.usersInRange, dispatch });
             updateIncomingRequests({ data: userData.incomingRequests, dispatch });
-            ss()
+            handleSocketConnection()
         }
     }, [mounted])
 
@@ -115,7 +112,6 @@ export async function getServerSideProps(req) {
     if (error || msgError) {
         console.log("Error retrieving data in the Global-Chat", error ? error : msgError);
     };
-    console.log(`USER DATA FOR CHAT PAGE`, data.user.usersInRange)
     return {
         props: { userData: data.user, globalMessages: msgData }
     };

@@ -23,7 +23,6 @@ export function setUsersInfo({ userData, dispatch }) {
     });
 };
 export function SetUsersInRage({ data, dispatch }) {
-    console.log(`helper USERS IN RANGE`, data)
     dispatch({
         type: _REDUX_UPDATE_USERS_IN_RANGE,
         usersInRange: data

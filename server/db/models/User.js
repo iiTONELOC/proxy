@@ -86,7 +86,10 @@ userSchema.virtual('usersInRange').get(async function () {
     .populate('location')
     .populate('status')
     .populate('profile')
-    .populate({ path: 'servers', populate: { path: 'channels' } });
+    .populate('friends')
+    .populate('incomingRequests')
+    .populate('pendingRequests')
+    .populate({ path: 'servers', populate: { path: 'channels' } })
   const radius = 250;
   return getDistances(this, Users, radius);
 });

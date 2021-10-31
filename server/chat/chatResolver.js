@@ -4,6 +4,7 @@ const { _authenticated } = reactions;
 const sharedMutations = require('../db/controller/shared/sharedMutations');
 const sharedQueries = require('../db/controller/shared/sharedQueries')
 const { createMessage } = require("../db/controller/messages/mutations");
+const { User } = require("../db/models");
 const { updateUserSocket } = sharedMutations;
 let globalChatArray = [];
 
@@ -25,7 +26,6 @@ function sendMessage({ message, chat }, socket, io) {
     };
 };
 const login = async ({ request, data }, socket, io) => {
-    console.log(`USER IS TRYING TO LOG IN`, { request, data })
     // eventually want to include an auth middleware on the socket
     if (request == _socket_user_login) {
         const { id } = data;
@@ -73,6 +73,7 @@ const joinGlobal = async (usersInRange, socket, io) => {
             // emit to our users inRange instead
             usersInRange?.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
             socket.join('GlobalChat');
+
         } else {
             console.log(`CHAT SERVER- joining global, RECONNECTION\n`)
             // we need to update our users socket o
@@ -141,8 +142,10 @@ async function addFriend({ data, sendTo }, socket, io) {
 async function acceptFriend({ data, sendTo }, socket, io) {
     // lookup user by their id find their socket
 
-    const user = await sharedQueries.findUserByID(sendTo._id);
+    const user = await User.findById(sendTo.userID)
     const sentToSocket = user.socket;
+
+    console.log(`SEND TO`, user)
     if (user) {
         io.to(sentToSocket).emit('Request Accepted', data);
     }

@@ -15,6 +15,20 @@ const cache = () => new InMemoryCache({
                 }
             }
         },
+        Mutation: {
+            fields: {
+                addFriend: {
+                    merge(existing, incoming) {
+                        return incoming
+                    }
+                },
+                acceptFriend: {
+                    merge(existing, incoming) {
+                        return incoming
+                    }
+                }
+            }
+        },
         User: {
             merge(existing, incoming) {
                 return incoming

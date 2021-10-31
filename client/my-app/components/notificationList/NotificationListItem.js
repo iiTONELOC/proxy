@@ -43,7 +43,6 @@ export default function NotificationItem({ user }) {
 
     useEffect(() => {
         setMounted(true);
-        console.log(`NOTIFICATION DATA`, user)
         return () => setMounted(null);
     }, [])
     useEffect(() => {
@@ -69,11 +68,10 @@ export default function NotificationItem({ user }) {
                     variables: { friendId: _id }
                 });
                 if (mutationResult) {
-                    // const userData = mutationResult.data.acceptFriendRequest
-                    console.log(`Result`, mutationResult)
                     const mD = mutationResult.data.acceptFriend;
                     updateUserData({ userData: mD, dispatch })
                     const emitData = { sendTo: userInfo, data: mD }
+                    console.log(`USER DATA`, { emitData, user })
                     thisSocket.emit('acceptedFriendRequest', emitData);
                 }
             } catch (error) {
@@ -85,7 +83,6 @@ export default function NotificationItem({ user }) {
     return (
         <article
             key={userInfo.username}
-
             className='p-2'
         >
             <div className='p-1 flex justify-between items-center'>
@@ -99,18 +96,14 @@ export default function NotificationItem({ user }) {
                                 color={{ color: `gray-600`, hover: `${icon.toolTip === 'Accept Request' ? 'green-500' : 'red-600'}` }}
                                 radius={'rounded-md'}
                                 class='text-white text-center p-2'
-
                             >
                                 <icon.icon size={'25px'} />
                             </Button>
-
                             {icon.state === true ? <span className={`mt-12 ${icon.toolTip === 'Deny Request' ? 'mr-10' : ''} absolute text-sm text-center text-white  bg-black rounded-lg p-1`}>{icon.toolTip}</span> : null}
                         </div>
                     ))}
                 </span>
-
             </div>
-
         </article>
     )
 }

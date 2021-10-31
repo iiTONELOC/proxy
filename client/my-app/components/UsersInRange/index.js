@@ -6,6 +6,8 @@ import { QUERY_IN_RANGE } from "../../utilities/graphql/queries";
 import UserItem from '../userItem/UserItem';
 import { SetUsersInRage } from '../../utilities/redux/helpers';
 
+
+
 export default function UsersInRange({ inRange }) {
     const state = useSelector((state) => state);
     const dispatch = useDispatch();
@@ -14,10 +16,15 @@ export default function UsersInRange({ inRange }) {
     const [users, setUsers] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [socket, setSocket] = useState(null);
+    async function updateUsersInRange() {
+        const { data } = await client.query({ query: QUERY_IN_RANGE, fetchPolicy: 'network-only' });
+        SetUsersInRage({ data: data.inRange.usersInRange, dispatch });
+        setUsers(data.inRange.usersInRange);
+    }
+
     useEffect(() => {
         setMounted(true);
-        console.log(`USER DATA FROM REDUX`, usersInRange);
-        setUsers(usersInRange);
+        updateUsersInRange();
         return () => { setMounted(false); setUsers(false) };
     }, []);
     useEffect(() => {
@@ -28,11 +35,7 @@ export default function UsersInRange({ inRange }) {
     useEffect(() => {
         if (socket) {
             socket.on('updateUsersInRange', async () => {
-                console.log(`received notice to update`)
-                const { data } = await client.query({ query: QUERY_IN_RANGE, fetchPolicy: 'network-only' });
-                SetUsersInRage({ data: data.inRange.usersInRange, dispatch });
-                console.log(`UPDATED USER IN RANGE DATA`, data)
-                setUsers(data.inRange.usersInRange);
+                updateUsersInRange()
             });
         }
     }, [socket]);

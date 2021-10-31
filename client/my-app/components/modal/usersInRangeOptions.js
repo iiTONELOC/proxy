@@ -6,7 +6,7 @@ import { useSocketContext } from '../Providers/Chat';
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_FRIEND } from '../../utilities/graphql/mutations';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
-import client from '../../utilities/apollo/client.config'
+
 export default function UsersInRangeOptionsModal(props) {
     const { username, _id, socket, status, location } = props;
     const [thisSocket, setThisSocket] = useState(null);
