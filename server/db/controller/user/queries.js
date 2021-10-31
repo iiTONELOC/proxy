@@ -23,7 +23,7 @@ const userQueries = {
     async findAll(parent, args, context) {
         const ourServer = await isOurServer(context);
         if (ourServer == false) {
-            return
+            return;
         } else {
             const userData = await User.find({})
                 .select('-__v -password -email')
@@ -35,7 +35,7 @@ const userQueries = {
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
-            return { userData };
+            return userData;
         }
     },
     async serverUser(parent, args, context) {
@@ -54,7 +54,7 @@ const userQueries = {
         if (!context.user) {
             throw new AuthenticationError('Not logged in');
         } else {
-            return await findUserByID(context.user._id)
+            return await findUserByID(context.user._id);
         }
     }
 }

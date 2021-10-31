@@ -5,16 +5,18 @@ import { MdPersonAdd } from 'react-icons/md';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import Button from '../Button';
 import client from '../../utilities/apollo/client.config';
+import { useSocketContext } from '../Providers/Chat'
 import { ACCEPT_FRIEND } from '../../utilities/graphql/mutations';
 import { updateUserData } from '../../utilities/redux/helpers';
 export default function NotificationItem({ user }) {
-
+    const _id = user.from?.userID || user._id;
+    const userInfo = user.from || user
     const [active, setActive] = useState(false);
-    const [isMounted, setMounted] = useState(false);
+    const [isMounted, setMounted] = useState(null);
     const [hover, setHover] = useState(false);
     const [thisSocket, setThisSocket] = useState(null);
     const state = useSelector(state => state);
-    const { socket } = state;
+    const socket = useSocketContext();
     const dispatch = useDispatch();
     const itemIcons = [
         {
@@ -41,10 +43,8 @@ export default function NotificationItem({ user }) {
 
     useEffect(() => {
         setMounted(true);
-        console.log(`here`, user)
-        return () => {
-            setMounted(false);
-        }
+        console.log(`NOTIFICATION DATA`, user)
+        return () => setMounted(null);
     }, [])
     useEffect(() => {
         if (isMounted) {
@@ -63,7 +63,6 @@ export default function NotificationItem({ user }) {
 
     async function acceptFriendRequest() {
         if (user) {
-            const { _id } = user;
             try {
                 const mutationResult = await client.mutate({
                     mutation: ACCEPT_FRIEND,
@@ -71,33 +70,28 @@ export default function NotificationItem({ user }) {
                 });
                 if (mutationResult) {
                     // const userData = mutationResult.data.acceptFriendRequest
-
                     console.log(`Result`, mutationResult)
-
-                    // updateUserData(userData, dispatch);
-                    // const sendTo = user.socket
-                    // const emitData = { sendTo, userData }
-                    // thisSocket.emit('acceptedFriendRequest', emitData);
+                    const mD = mutationResult.data.acceptFriend;
+                    updateUserData({ userData: mD, dispatch })
+                    const emitData = { sendTo: userInfo, data: mD }
+                    thisSocket.emit('acceptedFriendRequest', emitData);
                 }
-
             } catch (error) {
                 console.error(error)
             }
         }
-
-
     };
 
     return (
         <article
-            key={user.username}
+            key={userInfo.username}
 
             className='p-2'
         >
             <div className='p-1 flex justify-between items-center'>
                 <Avatar size='30px' />
-                {user.username}
-                <p className=''>{user.location ? `${user.location.city}, ${user.location.state}` : null}</p>
+                {userInfo.username}
+                <p className=''>{userInfo.location ? `${userInfo.location.city}, ${userInfo.location.state}` : null}</p>
                 <span className='flex flex-row justify-between items-center w-2/6'>
                     {itemIcons.map((icon, index) => (
                         <div className="static flex flex-col items-center w-full" key={index} onMouseEnter={icon.props.onMouseEnter} onMouseLeave={icon.props.onMouseLeave} onClick={icon.onClick}>

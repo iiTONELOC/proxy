@@ -16,12 +16,28 @@ const cache = () => new InMemoryCache({
             }
         },
         User: {
+            merge(existing, incoming) {
+                return incoming
+            },
+
             fields: {
                 usersInRange: {
                     merge(existing, incoming) {
                         return incoming
                     }
+                },
+                incomingRequests: {
+                    merge(existing, incoming) {
+                        return incoming
+                    }
+                },
+                pendingRequests: {
+                    merge(existing, incoming) {
+                        return incoming
+                    }
                 }
+
+
             }
         }
 

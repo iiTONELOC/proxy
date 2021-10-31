@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 import auth from "../../../utilities/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
-import { makeToast, setUsersInfo, SetUsersInRage, set_ReduxSocket, updateIncomingRequests } from "../../../utilities/redux/helpers";
+import { makeToast, setUsersInfo, SetUsersInRage, set_ReduxSocket, updateIncomingRequests, updateUserData } from "../../../utilities/redux/helpers";
 import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
 
 
@@ -86,7 +86,7 @@ export const ChatProvider = ({ ...props }) => {
                     dispatch
                 })
             });
-            socket.on('RequestAccepted', (data) => {
+            socket.on('Request Accepted', (data) => {
                 console.log('Request accepted', data);
                 makeToast({
                     bread: {
@@ -96,8 +96,9 @@ export const ChatProvider = ({ ...props }) => {
                         crumbs: data
                     },
                     dispatch
-                })
-                // STILL NEED TO UPDATE RECP's DATA
+                });
+
+                // need to update our data if we think that is needed
             })
         };
         return () => setJoined(false);

@@ -3,6 +3,7 @@ import Avatar from '../userAvatar/Avatar'
 import { hoverHandler } from "../navigation/NavLink";
 import UserOptions from '../userActions/UserOptions';
 export default function UserItem({ user }) {
+    console.log(`user ITEM`, user)
     const [isMounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
     function onHover() {

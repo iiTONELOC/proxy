@@ -92,6 +92,7 @@ query Query($user: ID) {
     incomingRequests {
       _id
       username
+      socket
       profile {
         _id
         bio

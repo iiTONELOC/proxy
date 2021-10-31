@@ -43,16 +43,16 @@ export default function Global_Chat({ userData, globalMessages }) {
     }
     useEffect(() => {
         setMounted(true)
-
+        console.log(`global chat mounted`, mounted)
         return () => { setMounted(false); setJoined(false); setThisSocket(null) }
     }, [])
 
     useEffect(() => {
-        if (userData !== undefined && mounted === true && me) {
+        if (userData !== undefined && userData !== null && mounted === true && me) {
             // REDUX HANDLERS
             console.log(`Global-Chat mounted updating user's data:\nbegin setUsersInfo..\nbegin updateIncomingRequests`)
             setUsersInfo({ userData, dispatch });
-            SetUsersInRage({ data: userData, dispatch });
+            SetUsersInRage({ data: userData.usersInRange, dispatch });
             updateIncomingRequests({ data: userData.incomingRequests, dispatch });
             ss()
         }
@@ -88,7 +88,7 @@ export default function Global_Chat({ userData, globalMessages }) {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <ResponsiveLayout viewData={{
-                    UsersInRange: { Element: UsersInRange, props: { inRange: userData?.usersInRange } },
+                    UsersInRange: { Element: UsersInRange, props: { inRange: userData.usersInRange } },
                     Messaging: { Element: Messaging, props: { chatName: 'Global Chat', globalMessages: globalMessages } },
                 }} />
             </div>
@@ -115,7 +115,7 @@ export async function getServerSideProps(req) {
     if (error || msgError) {
         console.log("Error retrieving data in the Global-Chat", error ? error : msgError);
     };
-
+    console.log(`USER DATA FOR CHAT PAGE`, data.user.usersInRange)
     return {
         props: { userData: data.user, globalMessages: msgData }
     };

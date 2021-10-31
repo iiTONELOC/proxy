@@ -21,7 +21,7 @@ const initialState = {
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
-        switch (action.type) {
+        switch (action?.type) {
             // currently used on login
             // this is for testing will 
             // refactor the cases later
@@ -32,9 +32,9 @@ export const reducers = (state = initialState, action) => {
                 return {
                     ...state,
                     me: { ...state.me, ...action.me },
-                    usersInRange: action.me.usersInRange.length > 0 ? [...action.me.usersInRange] : [],
-                    socket: action.me.socket,
-                    incomingFriendRequests: action.me.incomingRequests.length > 0 ? [...action.me.incomingRequests] : initialState.incomingFriendRequests,
+                    usersInRange: action.me?.usersInRange.length > 0 ? [...action.me.usersInRange] : [],
+                    socket: action.me?.socket,
+                    incomingFriendRequests: action.me?.incomingRequests.length > 0 ? [...action.me.incomingRequests] : initialState.incomingFriendRequests,
                 }
             case _REDUX_UPDATE_USERS_IN_RANGE:
                 let d = action.usersInRange
@@ -54,7 +54,7 @@ export const reducers = (state = initialState, action) => {
                     modalView: action.modalView === 'null' ? initialState.modalView : action.modalView
                 }
             case _REDUX_SET_FR:
-                console.log("UPDATING FRIEND REQUEST ARRAY", action.incomingRequests)
+
                 return {
                     ...state,
                     incomingFriendRequests: action.incomingRequests.length === 0 ? initialState.incomingFriendRequests : [...action.incomingRequests]

@@ -67,7 +67,7 @@ const joinGlobal = async (usersInRange, socket, io) => {
         const inChat = alreadyJoined(globalChatArray, socket);
 
         if (inChat === false && socket.CURRENT !== 'Global') {
-            console.log(`CHAT SERVER- joining global, first time\n`)
+            console.log(`CHAT SERVER- joining global\n`)
             globalChatArray.push({ user: user });
             socket.CURRENT = 'Global';
             // emit to our users inRange instead
@@ -138,10 +138,21 @@ const handleGlobalMessage = async (message, socket, io) => {
 async function addFriend({ data, sendTo }, socket, io) {
     return io.to(sendTo).emit('newFriendRequest', data);
 };
+async function acceptFriend({ data, sendTo }, socket, io) {
+    // lookup user by their id find their socket
+
+    const user = await sharedQueries.findUserByID(sendTo._id);
+    const sentToSocket = user.socket;
+    if (user) {
+        io.to(sentToSocket).emit('Request Accepted', data);
+    }
+
+}
 module.exports = {
     login,
     joinGlobal,
     handleGlobalMessage,
     handleGlobalDisconnect,
+    acceptFriend,
     addFriend,
 }

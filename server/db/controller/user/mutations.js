@@ -197,43 +197,44 @@ const userMutations = {
             throw new AuthenticationError('You must be logged in!')
         }
     },
-    addNewFriend: async (parent, { friendId }, context) => {
+
+    async addFriend(parent, { friendId }, context) {
+        // return null
         if (context.user) {
             // add the friendID to the pending array
-            const userData = await User.findOneAndUpdate(
-                { _id: context.user._id },
-                { $addToSet: { pendingRequests: friendId } },
+            const userData = await User.findByIdAndUpdate(context.user._id,
+                { $push: { pendingRequests: friendId } },
                 { new: true }
             ).select('-__v -password -email')
                 .populate('location')
                 .populate('status')
                 .populate('profile')
-                .populate({ path: 'servers', populate: { path: 'channels' } });
+                .populate('friends')
+                .populate('incomingRequests')
+                .populate('pendingRequests')
+                .populate({ path: 'servers', populate: { path: 'channels' } })
             // update the 'friend' 
             // add userID to the friends request array
-            const didAdd = await User.findOneAndUpdate(
-                { _id: friendId },
-                { $addToSet: { incomingRequests: context.user._id } },
+            const didAdd = await User.findByIdAndUpdate(friendId,
+                { $push: { incomingRequests: context.user._id } },
                 { new: true }
             ).select('-__v -password -email')
             if (didAdd !== undefined || didAdd !== null) {
                 return userData
-            }
+            } else throw new Error('Could not add friend')
         }
         throw new AuthenticationError('You need to be logged in!');
     },
 
-    acceptFriendRequest: async (parent, { friendId }, context) => {
+    async acceptFriend(parent, { friendId }, context) {
         if (context.user) {
-
             // add the friendID to the pending array
-            const userData = await User.findOneAndUpdate(
-                { _id: context.user._id },
+            const userData = await User.findByIdAndUpdate(context.user._id,
                 {
-                    $addToSet: { friends: friendId },
+                    $push: { friends: friendId },
                     $pull: { incomingRequests: friendId }
                 },
-                { new: true }
+                { new: true },
             )
                 .select('-__v -password -email')
                 .populate('location')
@@ -245,13 +246,12 @@ const userMutations = {
                 .populate({ path: 'servers', populate: { path: 'channels' } })
             // update the 'friend' 
             // add userID to the friends request array
-            const didAdd = await User.findOneAndUpdate(
-                { _id: friendId },
+            const didAdd = await User.findByIdAndUpdate(friendId,
                 {
-                    $addToSet: { friends: context.user._id },
+                    $push: { friends: context.user._id },
                     $pull: { pendingRequests: context.user._id }
                 },
-                { new: true }
+                { new: true },
             ).select('-__v -password -email')
             if (didAdd !== undefined || didAdd !== null) {
                 return userData

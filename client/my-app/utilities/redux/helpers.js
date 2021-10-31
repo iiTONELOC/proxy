@@ -9,6 +9,7 @@ import {
 } from "./actions"
 
 export function set_ReduxSocket({ socketData, dispatch }) {
+    console.log(`helper`, socketData)
     dispatch({
         type: _REDUX_SET_SOCKET,
         socket: { ...socketData }
@@ -22,6 +23,7 @@ export function setUsersInfo({ userData, dispatch }) {
     });
 };
 export function SetUsersInRage({ data, dispatch }) {
+    console.log(`helper USERS IN RANGE`, data)
     dispatch({
         type: _REDUX_UPDATE_USERS_IN_RANGE,
         usersInRange: data
@@ -54,7 +56,6 @@ export function updateIncomingRequests({ data, dispatch }) {
 };
 
 export function updateUserData({ userData, dispatch }) {
-    setUsersInfo({ userData, dispatch });
     SetUsersInRage({ data: userData.usersInRange, dispatch });
     updateIncomingRequests({ data: userData.incomingRequests, dispatch });
 };
