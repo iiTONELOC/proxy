@@ -8,15 +8,26 @@ export default function Authorization({ children, ...delegated }) {
     const [isAuthorized, setAuth] = useState(false);
     useEffect(() => {
         setHasMounted(true);
+        return () => setHasMounted(false);
     }, []);
     useEffect(() => {
         if (hasMounted) {
-            const signedIn = auth.getProfile()
-            if (signedIn) {
-                setAuth(true)
+            const userLoggedIn = auth.loggedIn()
+            if (userLoggedIn) {
+                const signedIn = auth.getProfile()
+                console.log(`AUTH`, signedIn)
+                if (signedIn) {
+
+                    setAuth(true)
+                } else {
+                    localStorage.removeItem('proxy_id_token')
+                    setAuth(false)
+                }
             } else {
+                localStorage.removeItem('proxy_id_token')
                 setAuth(false)
             }
+
         }
     })
     if (!hasMounted) {

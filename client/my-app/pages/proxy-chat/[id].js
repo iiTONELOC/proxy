@@ -59,7 +59,7 @@ export default function Global_Chat({ userData, globalMessages }) {
 
 
     useEffect(() => {
-        if (thisSocket && joined === false) {
+        if (thisSocket && joined === false && userData) {
 
 
             console.log(`JOINING GLOBAL CHAT`)
@@ -78,16 +78,18 @@ export default function Global_Chat({ userData, globalMessages }) {
 
     return (
         <Authorization>
+
             <div>
                 <Head>
                     <title>Proxy-Chat</title>
                     <meta name="Proxy's texting ground" content="Testing container for app" />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
-                <ResponsiveLayout viewData={{
+                {userData ? <ResponsiveLayout viewData={{
                     UsersInRange: { Element: UsersInRange, props: { inRange: userData.usersInRange } },
                     Messaging: { Element: Messaging, props: { chatName: 'Global Chat', globalMessages: globalMessages } },
-                }} />
+                }} /> : null}
+
             </div>
         </Authorization>
     );

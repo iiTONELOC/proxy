@@ -30,7 +30,7 @@ export const ChatProvider = ({ ...props }) => {
         setSocket(newSocket);
 
         console.log('Socket connection establishing...');
-        return () => setMounted(false);
+        return () => { setMounted(false); setLoggedIn(false); setJoined(false) }
     }, []);
     useEffect(() => {
         const loggedInData = auth.getProfile();
