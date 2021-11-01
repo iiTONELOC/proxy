@@ -74,6 +74,7 @@ type Query {
     users: [User]
     user(user:ID): User
     inRange: User
+    friendRequests:  User
     globalMessages: [Message]
 }
 

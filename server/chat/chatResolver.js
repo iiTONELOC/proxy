@@ -5,6 +5,7 @@ const sharedMutations = require('../db/controller/shared/sharedMutations');
 const sharedQueries = require('../db/controller/shared/sharedQueries')
 const { createMessage } = require("../db/controller/messages/mutations");
 const { User } = require("../db/models");
+const { findUserByID } = require("../db/controller/shared/sharedQueries");
 const { updateUserSocket } = sharedMutations;
 let globalChatArray = [];
 
@@ -96,7 +97,6 @@ const handleGlobalDisconnect = async (socket, io,) => {
         console.log(`USER DISCONNECT`, socket.USER)
         if (inChat === true && online === false && globalChatArray.length > 0 && socket.CURRENT === 'Global') {
             filterUserFromArray(socket);
-            console.log(`USER DISCONNECT`, uData)
             return io.to(`GlobalChat`).emit('updateUsersInRange')
         } else {
             io.to(`GlobalChat`).emit('updateUsersInRange')
@@ -125,9 +125,9 @@ async function addFriend({ data, sendTo }, socket, io) {
 };
 async function acceptFriend({ data, sendTo }, socket, io) {
     // lookup user by their id find their socket
-
-    const user = await User.findById(sendTo.userID)
-    const sentToSocket = user.socket;
+    const id = sendTo.userID || sendTo._id
+    const user = await findUserByID(id)
+    const sentToSocket = user?.socket;
 
     console.log(`SEND TO`, user)
     if (user) {

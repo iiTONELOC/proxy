@@ -4,42 +4,39 @@ import { useSocketContext } from '../Providers/Chat';
 import client from "../../utilities/apollo/client.config";
 import { QUERY_IN_RANGE } from "../../utilities/graphql/queries";
 import UserItem from '../userItem/UserItem';
-import { SetUsersInRage } from '../../utilities/redux/helpers';
+import { reduxSetUsersInRange } from '../../utilities/redux/helpers';
 
+export async function updateUsersInRangeHandler(dispatch) {
+    const { data } = await client.query({ query: QUERY_IN_RANGE, fetchPolicy: 'network-only' });
+    return reduxSetUsersInRange({ data: data.inRange.usersInRange, dispatch });
+}
 
-
-export default function UsersInRange({ inRange }) {
+export default function UsersInRange() {
     const state = useSelector((state) => state);
     const dispatch = useDispatch();
     const { usersInRange } = state;
     const socketConn = useSocketContext();
-    const [users, setUsers] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [socket, setSocket] = useState(null);
-    async function updateUsersInRange() {
-        const { data } = await client.query({ query: QUERY_IN_RANGE, fetchPolicy: 'network-only' });
-        SetUsersInRage({ data: data.inRange.usersInRange, dispatch });
-        setUsers(data.inRange.usersInRange);
-    }
+
 
     useEffect(() => {
         setMounted(true);
-        updateUsersInRange();
-        return () => { setMounted(false); setUsers(false) };
+        return () => { setMounted(false); setSocket(null) };
     }, []);
     useEffect(() => {
         if (mounted == true) {
             setSocket(socketConn);
         }
     }, [mounted]);
-    useEffect(() => {
-        if (socket) {
-            socket.on('updateUsersInRange', async () => {
-                console.log(`UPDATING USERS IN RANGE`)
-                updateUsersInRange()
-            });
-        }
-    }, [socket]);
+    // useEffect(() => {
+    //     if (socket) {
+    //         socket.on('updateUsersInRange', async () => {
+    //             console.log(`UPDATING USERS IN RANGE`)
+    //             updateUsersInRangeHandler(dispatch);
+    //         });
+    //     }
+    // }, [socket]);
     if (mounted == false) return null;
 
     return (

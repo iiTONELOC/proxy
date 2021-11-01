@@ -8,8 +8,10 @@ import { io } from "socket.io-client";
 import auth from "../../../utilities/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
-import { makeToast, setUsersInfo, SetUsersInRage, set_ReduxSocket, updateIncomingRequests, updateUserData } from "../../../utilities/redux/helpers";
+import { makeToast, reduxUpdateIncomingFriendRequests, } from "../../../utilities/redux/helpers";
 import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
+import { updateUsersInRangeHandler } from "../../UsersInRange";
+import { getFriendRequests } from "../../alertIcon/AlertIcon";
 
 
 const SocketContext = createContext();
@@ -72,9 +74,7 @@ export const ChatProvider = ({ ...props }) => {
                 setJoined(true);
             });
             socket.on('newFriendRequest', (data) => {
-                let pl = [data]
-                console.log('new friend request', pl);
-                updateIncomingRequests({ data: pl, dispatch })
+                reduxUpdateIncomingFriendRequests({ data: [data], dispatch })
                 makeToast({
                     bread: {
                         type: 'info',
@@ -98,7 +98,12 @@ export const ChatProvider = ({ ...props }) => {
                 });
 
                 // need to update our data if we think that is needed
-            })
+            });
+            socket.on('updateUsersInRange', async () => {
+                console.log(`UPDATING USERS IN RANGE`)
+                await updateUsersInRangeHandler(dispatch)
+                await getFriendRequests(dispatch)
+            });
         };
         return () => setJoined(false);
     }, [socket, loggedIn]);

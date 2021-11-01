@@ -7,9 +7,8 @@ const sharedQueries = {
             .populate('status')
             .populate('profile')
             .populate('friends')
-            .populate('incomingRequests')
+            .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
             .populate('pendingRequests')
-
             .populate({ path: 'servers', populate: { path: 'channels' } })
             ;
         return user

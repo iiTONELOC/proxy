@@ -3,50 +3,109 @@ import { gql } from '@apollo/client';
 export const ALL_USERS = gql`
 query users {
   users{
+   _id
     username
-    location{
+    location {
+      _id
       latitude
       longitude
       city
       state
     }
     profile {
+      ProfilePicture
       bio
       visible
-      ProfilePicture
+      _id
     }
-    status{
+    status {
+      _id
       online
       status
     }
-    servers {
+    friends {
       _id
-      name
-      description
-      private
-      channels {
+      username
+      location {
         _id
+        latitude
+        longitude
+        city
+        state
+      }
+      profile {
+        _id
+        bio
+        visible
+        ProfilePicture
+      }
+      status {
+        _id
+        online
+        status
+      }
+      servers {
         name
         description
+        _id
         private
-        messages {
+        channels {
           _id
-          text
-          time
-          sender
-        }
-        active {
-          _id
-          username
-          status {
-            status
-          }
-        }
-        members {
-          _id
-          username
+          name
+          description
+          private
+          server
         }
       }
+    }
+    friendCount
+    usersInRange {
+      _id
+      username
+      location {
+        latitude
+        longitude
+        city
+        state
+      }
+      profile {
+        _id
+        username
+        bio
+        visible
+        ProfilePicture
+      }
+      status {
+        _id
+        online
+        status
+      }
+      friendCount
+      socket
+    }
+    socket
+    incomingRequests {
+      _id
+      username
+      location {
+        _id
+        latitude
+        longitude
+        city
+        state
+      }
+      profile {
+        _id
+        ProfilePicture
+        visible
+        bio
+      }
+      socket
+    }
+    pendingRequests {
+      _id
+      username
+      socket
     }
   }
 }
@@ -63,69 +122,34 @@ query Query {
         state
         _id
       }
+      profile {
+        ProfilePicture
+      }
     }
   }
 }
 `;
-export const SERVER_SIDE_FETCH_USER = gql`
-query Query($user: ID) {
-  user(user: $user) {
+export const QUERY_FRIEND_REQUESTS = gql`
+query Query {
+  friendRequests {
     _id
     username
-    socket
-    usersInRange {
+    location {
       _id
-      username
-      socket
-      status {
-        online
-        status
-      }
-      location {
-        _id
-        latitude
-        longitude
-        city
-        state
-      }
-    }
-    incomingRequests {
-      _id
-      username
-      socket
-      profile {
-        _id
-        bio
-        visible
-        ProfilePicture
-      }
-      location {
-        latitude
-        longitude
-        city
-        state
-      }
-    }
-    pendingRequests {
-      _id
-      username
-    }
-    location{
-      city,
+      city
       state
     }
-    friends{
+    profile {
+      ProfilePicture
       _id
-      username
     }
-    profile{
+    status {
       _id
-      bio
-    }
-    status{
       online
       status
     }
+    socket
+    friendCount
   }
 }
 `;

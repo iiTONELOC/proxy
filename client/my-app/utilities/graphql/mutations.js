@@ -46,8 +46,8 @@ mutation Mutation($friendId: ID!) {
   acceptFriend(friendId: $friendId) {
     _id
     username
-    email
     location {
+
       latitude
       longitude
       city
@@ -119,6 +119,7 @@ mutation Mutation($friendId: ID!) {
       _id
       username
       location {
+        _id
         city
         state
         latitude

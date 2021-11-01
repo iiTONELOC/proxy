@@ -18,6 +18,7 @@ export function NotificationList(props) {
     }, [])
     useEffect(() => {
         if (mounted === true && incomingFriendRequests) {
+
             setNotifications(incomingFriendRequests);
         }
     }, [mounted]);

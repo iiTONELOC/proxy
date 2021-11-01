@@ -8,7 +8,7 @@ import {
     _REDUX_SET_FR,
 } from './actions';
 const initialState = {
-    me: {},
+    me: null,
     usersInRange: [],
     socket: false,
     currentChat: null,
@@ -31,16 +31,13 @@ export const reducers = (state = initialState, action) => {
             case _REDUX_SET_USER_DATA:
                 return {
                     ...state,
-                    me: { ...state.me, ...action.me },
-                    usersInRange: action.me?.usersInRange.length > 0 ? [...action.me.usersInRange] : [],
-                    socket: action.me?.socket,
-                    incomingFriendRequests: action.me?.incomingRequests.length > 0 ? [...action.me.incomingRequests] : initialState.incomingFriendRequests,
+                    me: action.me,
                 }
             case _REDUX_UPDATE_USERS_IN_RANGE:
                 let d = action.usersInRange
                 return {
                     ...state,
-                    usersInRange: d.length > 0 ? [...d] : initialState.incomingFriendRequests,
+                    usersInRange: [...d]
                 }
             case _REDUX_SET_CHAT:
                 return {
@@ -57,7 +54,7 @@ export const reducers = (state = initialState, action) => {
 
                 return {
                     ...state,
-                    incomingFriendRequests: action.incomingRequests.length === 0 ? initialState.incomingFriendRequests : [...action.incomingRequests]
+                    incomingFriendRequests: action.incomingRequests
                 }
             case _REDUX_SET_TOAST:
                 return {

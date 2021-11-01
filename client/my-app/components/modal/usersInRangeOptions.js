@@ -91,10 +91,6 @@ export default function UsersInRangeOptionsModal(props) {
                         from: {
                             username: me.username,
                             userID: me._id,
-                            location: { city: me.location.city, state: me.location.state },
-                            status: { online: me.status.online, status: me.status.status },
-                            friends: me.friends.length,
-                            bio: me.profile.bio,
                         }
                     },
                     sendTo: socket,
