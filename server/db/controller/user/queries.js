@@ -23,7 +23,19 @@ const userQueries = {
     async findAll(parent, args, context) {
         const ourServer = await isOurServer(context);
         if (ourServer == false) {
-            return
+            // REMOVE LATER JUST FOR TESTING
+            // SHOULD BE EMPTY RETURN
+            const userData = await User.find({})
+                .select('-__v -password -email')
+                .populate('location')
+                .populate('status')
+                .populate('profile')
+                .populate('friends')
+                .populate('incomingRequests')
+                .populate('pendingRequests')
+                .populate({ path: 'servers', populate: { path: 'channels' } })
+                ;
+            return userData;
         } else {
             const userData = await User.find({})
                 .select('-__v -password -email')
