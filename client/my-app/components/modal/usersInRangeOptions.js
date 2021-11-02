@@ -17,10 +17,23 @@ export default function UsersInRangeOptionsModal(props) {
     const [hover, setHover] = useState(false);
     const mySocket = useSocketContext();
     const dispatch = useDispatch();
-    const { me } = state;
+    const { me, friendsList } = state;
 
+    function isFriend() {
+        if (friendsList) {
+            const list = friendsList.filter(friend => friend.username === username)
+            if (list.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false
+        }
 
-    const pageIcons = [
+    }
+    const friendStatus = isFriend();
+    const pageIcons = friendStatus === false ? [
         {
             icon: MdAccountBox,
             props: {
@@ -40,6 +53,17 @@ export default function UsersInRangeOptionsModal(props) {
             state: active,
             onClick: handleAddFriend
         },
+    ] : [
+        {
+            icon: MdAccountBox,
+            props: {
+                onMouseEnter: hoverHandler,
+                onMouseLeave: hoverHandler
+            },
+            toolTip: "View Profile",
+            state: hover
+        },
+
     ];
     useEffect(() => {
         setMounted(true);

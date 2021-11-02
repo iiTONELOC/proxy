@@ -6,10 +6,11 @@ const { user, message } = query;
 const resolvers = {
     Query: {
         users: user.findAll,
-        user: user.serverUser,
-        inRange: user.inRange,
-        globalMessages: message.globalMessages
-        // location: location.findAll
+        user: user.serverFindMe,
+        inRange: user.findMe,
+        globalMessages: message.globalMessages,
+        friends: user.findMe,
+        // location:   location.findAll
     },
     Mutation: {
         addUser: createNewUser,

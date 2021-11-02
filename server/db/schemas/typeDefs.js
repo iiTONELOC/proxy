@@ -75,6 +75,7 @@ type Query {
     user(user:ID): User
     inRange: User
     globalMessages: [Message]
+    friends: [User]
 }
 
 type Mutation{

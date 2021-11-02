@@ -67,6 +67,35 @@ query Query {
   }
 }
 `;
+export const QUERY_FRIENDS = gql`
+query Query {
+  friends {
+    _id
+    username
+    location {
+      _id
+      latitude
+      longitude
+      city
+      state
+    }
+    profile {
+      _id
+    }
+    status {
+      _id
+      online
+      status
+    }
+    servers {
+      _id
+      private
+    }
+    friendCount
+    socket
+  }
+}
+`;
 export const SERVER_SIDE_FETCH_USER = gql`
 query Query($user: ID) {
   user(user: $user) {

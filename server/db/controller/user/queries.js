@@ -23,7 +23,6 @@ const userQueries = {
     async findAll(parent, args, context) {
         const ourServer = await isOurServer(context);
         if (ourServer == false) {
-<<<<<<< HEAD
             // REMOVE LATER JUST FOR TESTING
             // SHOULD BE EMPTY RETURN
             const userData = await User.find({})
@@ -37,9 +36,6 @@ const userQueries = {
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
             return userData;
-=======
-            return;
->>>>>>> 97bc8ed3281a7d4ae8fe8f7ffdfb4c76814b84d7
         } else {
             const userData = await User.find({})
                 .select('-__v -password -email')
@@ -54,7 +50,7 @@ const userQueries = {
             return userData;
         }
     },
-    async serverUser(parent, args, context) {
+    async serverFindMe(parent, args, context) {
         const ourServer = await isOurServer(context);
         const { user } = args
         if (ourServer == false) {
@@ -66,13 +62,15 @@ const userQueries = {
             }
         }
     },
-    async inRange(parent, args, context) {
+    // REUSABLE CAUSE THE DATA RETURN IS DEFINED IN THE QUERY :)
+    async findMe(parent, args, context) {
         if (!context.user) {
             throw new AuthenticationError('Not logged in');
         } else {
             return await findUserByID(context.user._id);
         }
-    }
+    },
+
 }
 
 module.exports = { userQueries, }

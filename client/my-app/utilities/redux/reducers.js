@@ -1,6 +1,7 @@
 import {
     _REDUX_SET_NOTIFICATION_LIST_VISIBILITY,
     _REDUX_UPDATE_USERS_IN_RANGE,
+    _REDUX_UPDATE_FRIENDS_LIST,
     _REDUX_SET_USER_DATA,
     _REDUX_SET_TOAST,
     _REDUX_SET_MODAL,
@@ -17,7 +18,7 @@ const initialState = {
     incomingFriendRequests: [],
     toast: null,
     notificationList: false,
-
+    friendsList: null,
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
