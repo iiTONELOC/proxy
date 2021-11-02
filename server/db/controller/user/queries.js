@@ -23,6 +23,7 @@ const userQueries = {
     async findAll(parent, args, context) {
         const ourServer = await isOurServer(context);
         if (ourServer == false) {
+<<<<<<< HEAD
             // REMOVE LATER JUST FOR TESTING
             // SHOULD BE EMPTY RETURN
             const userData = await User.find({})
@@ -36,6 +37,9 @@ const userQueries = {
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
             return userData;
+=======
+            return;
+>>>>>>> 97bc8ed3281a7d4ae8fe8f7ffdfb4c76814b84d7
         } else {
             const userData = await User.find({})
                 .select('-__v -password -email')
@@ -47,7 +51,7 @@ const userQueries = {
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
-            return { userData };
+            return userData;
         }
     },
     async serverUser(parent, args, context) {
@@ -66,7 +70,7 @@ const userQueries = {
         if (!context.user) {
             throw new AuthenticationError('Not logged in');
         } else {
-            return await findUserByID(context.user._id)
+            return await findUserByID(context.user._id);
         }
     }
 }

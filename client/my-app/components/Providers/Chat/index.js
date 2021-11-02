@@ -8,8 +8,9 @@ import { io } from "socket.io-client";
 import auth from "../../../utilities/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
-import { makeToast, setUsersInfo, SetUsersInRage, updateIncomingRequests } from "../../../utilities/redux/helpers";
+import { makeToast, setUsersInfo, SetUsersInRage, set_ReduxSocket, updateIncomingRequests, updateUserData } from "../../../utilities/redux/helpers";
 import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
+
 
 const SocketContext = createContext();
 const { Provider } = SocketContext;
@@ -20,48 +21,59 @@ export const ChatProvider = ({ ...props }) => {
     const [mounted, setMounted] = useState(false);
     const [socket, setSocket] = useState(null);
     const [joined, setJoined] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(null);
     const dispatch = useDispatch();
     useEffect(() => {
         setMounted(true);
-        if (mounted) {
-            const nS = io(`http://${window.location.hostname}:3001`);
-            const newSocket = nS;
-            setSocket(newSocket);
-        }
-    }, [mounted]);
-
+        const nS = io(`http://${window.location.hostname}:3001`);
+        const newSocket = nS;
+        setSocket(newSocket);
+        console.log('Socket connection establishing...');
+        return () => { setMounted(false); setLoggedIn(false); setJoined(false) }
+    }, []);
     useEffect(() => {
-        if (socket && mounted === true) {
-            const loggedInData = auth.getProfile();
+        const isLoggedIn = auth.loggedIn();
+        if (isLoggedIn) {
+            const loggedInData = auth.getProfile()
+            if (loggedInData && !loggedIn) {
+                setLoggedIn(loggedInData);
+            }
+        } else {
+            setLoggedIn(null)
+        }
+    }, [loggedIn]);
+    useEffect(() => {
+        if (socket && mounted && loggedIn) {
             const { _authenticated } = reactions;
             const { _socket_user_login } = actions;
-            if (loggedInData !== undefined || loggedInData !== null) {
-                // grab our data and package it for ChatServer
-                const { _id, username } = loggedInData ? loggedInData?.data : {};
-                const socketData = {
-                    user: username,
-                    id: _id
-                };
-                console.log('socket connecting...');
-                const payload = {
-                    request: _socket_user_login,
-                    data: socketData,
-                    emitUpdate: joined === true ? false : true
-                };
-                if (joined !== true) {
-                    socket.emit(_socket_user_login, payload);
-                    console.log('requesting login..');
-                    setJoined(true);
-                };
-
+            // grab our data and package it for ChatServer
+            const { _id, username } = loggedIn.data;
+            const socketData = {
+                user: username,
+                id: _id
             };
+            console.log('socket connecting...');
+            const payload = {
+                request: _socket_user_login,
+                data: socketData,
+                emitUpdate: joined === true ? false : true
+            };
+            if (joined !== true) {
+                socket.emit(_socket_user_login, payload);
+                console.log('requesting login..');
+            };
+
+
             /*CALLBACKS FOR GLOBAL SOCKET ACTIONS */
             // after a successful connection to the chatServer
             // we need to set our user and socket
-            socket.on(_authenticated, (data) => { console.log('...Socket is Authorized') });
+            socket.on(_authenticated, (data) => {
+                console.log('...Socket is Authorized');
+                setJoined(true);
+            });
             socket.on('newFriendRequest', (data) => {
                 let pl = [data]
-                console.log('new friend request', [data]);
+                console.log('new friend request', pl);
                 updateIncomingRequests({ data: pl, dispatch })
                 makeToast({
                     bread: {
@@ -73,7 +85,7 @@ export const ChatProvider = ({ ...props }) => {
                     dispatch
                 })
             });
-            socket.on('RequestAccepted', (data) => {
+            socket.on('Request Accepted', (data) => {
                 console.log('Request accepted', data);
                 makeToast({
                     bread: {
@@ -83,12 +95,13 @@ export const ChatProvider = ({ ...props }) => {
                         crumbs: data
                     },
                     dispatch
-                })
-                // STILL NEED TO UPDATE RECP's DATA
+                });
+
+                // need to update our data if we think that is needed
             })
         };
         return () => setJoined(false);
-    }, [socket]);
+    }, [socket, loggedIn]);
     if (!mounted) return null;
 
 

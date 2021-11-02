@@ -29,9 +29,7 @@ export default function UserItem({ user }) {
                         <UserOptions {...user} />
                     </span> :
                     null}
-
             </div>
-
         </article>
     )
 }

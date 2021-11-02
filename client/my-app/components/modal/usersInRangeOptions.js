@@ -6,6 +6,7 @@ import { useSocketContext } from '../Providers/Chat';
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_FRIEND } from '../../utilities/graphql/mutations';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
+
 export default function UsersInRangeOptionsModal(props) {
     const { username, _id, socket, status, location } = props;
     const [thisSocket, setThisSocket] = useState(null);
@@ -70,6 +71,9 @@ export default function UsersInRangeOptionsModal(props) {
         e.preventDefault();
         console.log(`you clicked add friend!`);
         try {
+            // const addNewFriend = await client.mutate({
+            //     mutation: ADD_FRIEND, variables: { friendId: _id }
+            // })
             const addNewFriend = await addFriend({
                 variables: { friendId: _id }
             });

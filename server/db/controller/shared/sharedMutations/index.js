@@ -24,13 +24,13 @@ const sharedMutations = {
     },
     addChannelToServer: ({ server, channel }) => {
         return Server.findByIdAndUpdate(server, {
-            $push: { channels: channel }
+            $addToSet: { channels: channel }
         });
     },
     // add message to channel
     addMessageToChannel: ({ channel, message }) => {
         return Channel.findOneAndUpdate({ name: channel }, {
-            $push: { messages: message }
+            $addToSet: { messages: message }
         });
     }
 }

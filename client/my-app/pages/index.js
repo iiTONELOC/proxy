@@ -8,7 +8,7 @@ export default function Home({ memory }) {
   const router = useRouter();
   const [userID, setUserID] = useState(null);
   useEffect(() => {
-    const loggedIn = auth.getProfile();
+    const loggedIn = auth.loggedIn();
     if (loggedIn) {
       setUserID(loggedIn.data._id);
     }
