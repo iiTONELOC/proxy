@@ -6,7 +6,7 @@ const messageQueries = require('./messages/queries');
 const query = {
     user: userQueries,
     location: locationQueries,
-    message: messageQueries
+    message: messageQueries,
 }
 
 const mutate = {

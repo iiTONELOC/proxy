@@ -31,7 +31,7 @@ const userQueries = {
                 .populate('status')
                 .populate('profile')
                 .populate('friends')
-                .populate('incomingRequests')
+                .populate(`incomingRequests`)
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
@@ -43,7 +43,7 @@ const userQueries = {
                 .populate('status')
                 .populate('profile')
                 .populate('friends')
-                .populate('incomingRequests')
+                .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
@@ -56,11 +56,18 @@ const userQueries = {
         if (ourServer == false) {
             return
         } else {
-            if (!context.user) {
-                const userData = await findUserByID(user);
-                return userData;
-            }
+            throw new AuthenticationError('Not logged in');
         }
+        // const ourServer = await isOurServer(context);
+        // const { user } = args
+        // if (ourServer == false) {
+        //     return
+        // } else {
+        //     if (!context.user) {
+        //         const userData = await findUserByID(user);
+        //         return userData;
+        //     }
+        // }
     },
     // REUSABLE CAUSE THE DATA RETURN IS DEFINED IN THE QUERY :)
     async findMe(parent, args, context) {
@@ -71,6 +78,13 @@ const userQueries = {
         }
     },
 
+    async friendRequests(parent, args, context) {
+        if (!context.user) {
+            throw new AuthenticationError('Not logged in');
+        } else {
+            return await findUserByID(context.user._id);
+        }
+    }
 }
 
 module.exports = { userQueries, }

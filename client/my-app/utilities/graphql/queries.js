@@ -3,65 +3,77 @@ import { gql } from '@apollo/client';
 export const ALL_USERS = gql`
 query users {
   users{
+   _id
     username
-    location{
+    location {
+      _id
       latitude
       longitude
       city
       state
     }
     profile {
+      ProfilePicture
       bio
       visible
-      ProfilePicture
+      _id
     }
-    status{
+    status {
+      _id
       online
       status
     }
-    servers {
+    friends {
       _id
-      name
-      description
-      private
-      channels {
+      username
+      location {
         _id
+        latitude
+        longitude
+        city
+        state
+      }
+      profile {
+        _id
+        bio
+        visible
+        ProfilePicture
+      }
+      status {
+        _id
+        online
+        status
+      }
+      servers {
         name
         description
+        _id
         private
-        messages {
+        channels {
           _id
-          text
-          time
-          sender
-        }
-        active {
-          _id
-          username
-          status {
-            status
-          }
-        }
-        members {
-          _id
-          username
+          name
+          description
+          private
+          server
         }
       }
     }
-  }
-}
-`;
-export const QUERY_IN_RANGE = gql`
-query Query {
-  inRange {
+    friendCount
     usersInRange {
       _id
       username
-      socket
       location {
+        latitude
+        longitude
         city
         state
+      }
+      profile {
         _id
+        username
+        bio
+        visible
+        ProfilePicture
       }
     }
   }
@@ -107,54 +119,80 @@ query Query($user: ID) {
       username
       socket
       status {
+        _id
         online
         status
       }
-      location {
-        _id
-        latitude
-        longitude
-        city
-        state
-      }
+      friendCount
+      socket
     }
+    socket
     incomingRequests {
       _id
       username
-      socket
-      profile {
-        _id
-        bio
-        visible
-        ProfilePicture
-      }
       location {
+        _id
         latitude
         longitude
         city
         state
       }
+      profile {
+        _id
+        ProfilePicture
+        visible
+        bio
+      }
+      socket
     }
     pendingRequests {
       _id
       username
+      socket
     }
-    location{
-      city,
-      state
-    }
-    friends{
+  }
+}
+`;
+export const QUERY_IN_RANGE = gql`
+query Query {
+  inRange {
+    usersInRange {
       _id
       username
+      socket
+      location {
+        city
+        state
+        _id
+      }
+      profile {
+        ProfilePicture
+      }
     }
-    profile{
+  }
+}
+`;
+export const QUERY_FRIEND_REQUESTS = gql`
+query Query {
+  friendRequests {
+    _id
+    username
+    location {
       _id
-      bio
+      city
+      state
     }
-    status{
+    profile {
+      ProfilePicture
+      _id
+    }
+    status {
+      _id
       online
       status
     }
+    socket
+    friendCount
   }
 }
 `;

@@ -8,7 +8,7 @@ import {
 
 } from "./actions"
 
-export function set_ReduxSocket({ socketData, dispatch }) {
+export function reduxSetSocket({ socketData, dispatch }) {
     console.log(`helper`, socketData)
     dispatch({
         type: _REDUX_SET_SOCKET,
@@ -16,13 +16,13 @@ export function set_ReduxSocket({ socketData, dispatch }) {
     })
 };
 
-export function setUsersInfo({ userData, dispatch }) {
+export function reduxSetMe({ me, dispatch }) {
     dispatch({
         type: _REDUX_SET_USER_DATA,
-        me: userData
+        me: me
     });
 };
-export function SetUsersInRage({ data, dispatch }) {
+export function reduxSetUsersInRange({ data, dispatch }) {
     dispatch({
         type: _REDUX_UPDATE_USERS_IN_RANGE,
         usersInRange: data
@@ -47,14 +47,15 @@ export function makeToast({ bread, dispatch }) {
         }
     })
 };
-export function updateIncomingRequests({ data, dispatch }) {
+export function reduxUpdateIncomingFriendRequests({ data, dispatch }) {
     dispatch({
         type: _REDUX_SET_FR,
         incomingRequests: data
     })
 };
 
-export function updateUserData({ userData, dispatch }) {
-    SetUsersInRage({ data: userData.usersInRange, dispatch });
-    updateIncomingRequests({ data: userData.incomingRequests, dispatch });
-};
+// export function reduxUpdateUserData({ userData, dispatch }) {
+
+//     reduxSetUsersInRange({ data: userData.usersInRange, dispatch });
+//     reduxUpdateIncomingFriendRequests({ data: userData.incomingRequests, dispatch });
+// };

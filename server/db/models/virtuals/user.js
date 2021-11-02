@@ -1,11 +1,12 @@
 const Distance = require('../../../utils/Distance');
+
 module.exports = {
     getDistances(currentUser, allUsersArray, radius) {
+
         const AllUsers = allUsersArray.filter(el => el._id.toString() != currentUser._id.toString());
         const data = currentUser.location
         //  lat-lon 1
         const { latitude, longitude } = data;
-
         // map over users
         const d = AllUsers.map((el) => {
             const data2 = el.location;
@@ -21,7 +22,7 @@ module.exports = {
                 }
             }
         });
-
-        return d.filter(el => el !== undefined)
+        const usersToSet = d.filter(el => el !== undefined)
+        return usersToSet
     },
 }

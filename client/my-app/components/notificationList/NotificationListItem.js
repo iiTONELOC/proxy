@@ -7,7 +7,7 @@ import Button from '../Button';
 import client from '../../utilities/apollo/client.config';
 import { useSocketContext } from '../Providers/Chat'
 import { ACCEPT_FRIEND } from '../../utilities/graphql/mutations';
-import { updateUserData } from '../../utilities/redux/helpers';
+import { reduxUpdateIncomingFriendRequests, updateUserData } from '../../utilities/redux/helpers';
 export default function NotificationItem({ user }) {
     const _id = user.from?.userID || user._id;
     const userInfo = user.from || user
@@ -69,7 +69,9 @@ export default function NotificationItem({ user }) {
                 });
                 if (mutationResult) {
                     const mD = mutationResult.data.acceptFriend;
-                    updateUserData({ userData: mD, dispatch })
+                    console.log(mD)
+                    // reduxUpdateIncomingFriendRequests({ data: mD.incomingFriendRequests, dispatch });
+                    // need to eventually update redux for a friends list
                     const emitData = { sendTo: userInfo, data: mD }
                     console.log(`USER DATA`, { emitData, user })
                     thisSocket.emit('acceptedFriendRequest', emitData);

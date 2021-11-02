@@ -1,7 +1,7 @@
 
 const { query } = require('../controller');
 const userMutations = require('../controller/user/mutations');
-const { createNewUser, loginUser, userLogout, addFriend, acceptFriend } = userMutations;
+const { createNewUser, loginUser, userLogout, addFriend, acceptFriend, } = userMutations;
 const { user, message } = query;
 const resolvers = {
     Query: {

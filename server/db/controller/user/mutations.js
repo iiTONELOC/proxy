@@ -14,6 +14,7 @@ const {
 } = require('../shared/sharedMutations');
 
 
+
 async function returnLocation(args, ip) {
 
     let data
@@ -160,10 +161,14 @@ const userMutations = {
     async loginUser(parent, { email, username, password }, { ip }) {
         // use sharedMutation to update the onlineStatus for the user when logging in
         const user = await User.findOne({ email })
+            .select('-__v ')
             .populate('location')
             .populate('status')
             .populate('profile')
-            .populate({ path: 'servers', populate: { path: 'channels' } });
+            .populate('friends')
+            .populate('incomingRequests')
+            .populate('pendingRequests')
+            .populate({ path: 'servers', populate: { path: 'channels' } })
         if (!user) {
             throw new AuthenticationError('Incorrect credentials');
         } else {
@@ -204,22 +209,31 @@ const userMutations = {
             // add the friendID to the pending array
             const userData = await User.findByIdAndUpdate(context.user._id,
                 { $addToSet: { pendingRequests: friendId } },
-                { new: true }
+                { new: true },
             ).select('-__v -password -email')
                 .populate('location')
                 .populate('status')
                 .populate('profile')
                 .populate('friends')
-                .populate('incomingRequests')
+                .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
             // update the 'friend' 
             // add userID to the friends request array
             const didAdd = await User.findByIdAndUpdate(friendId,
                 { $addToSet: { incomingRequests: context.user._id } },
-                { new: true }
-            ).select('-__v -password -email')
+                { new: true },
+            )
+                .select('-__v -password -email')
+                .populate('location')
+                .populate('status')
+                .populate('profile')
+                .populate('friends')
+                .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
+                .populate('pendingRequests')
+                .populate({ path: 'servers', populate: { path: 'channels' } })
             if (didAdd !== undefined || didAdd !== null) {
+                console.log(`ADD FRIEND REQUEST `, { friendId, userData })
                 return userData
             } else throw new Error('Could not add friend')
         }
@@ -241,7 +255,7 @@ const userMutations = {
                 .populate('status')
                 .populate('profile')
                 .populate('friends')
-                .populate('incomingRequests')
+                .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
             // update the 'friend' 
@@ -253,6 +267,13 @@ const userMutations = {
                 },
                 { new: true },
             ).select('-__v -password -email')
+                .populate('location')
+                .populate('status')
+                .populate('profile')
+                .populate('friends')
+                .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
+                .populate('pendingRequests')
+                .populate({ path: 'servers', populate: { path: 'channels' } })
             if (didAdd !== undefined || didAdd !== null) {
                 return userData
             } else {
