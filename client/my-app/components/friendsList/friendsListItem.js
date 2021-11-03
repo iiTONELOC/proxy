@@ -12,7 +12,7 @@ export default function FriendsListItem({ user }) {
     }
     useEffect(() => {
         setMounted(true);
-        console.log(user)
+        // console.log(user)
         return () => setMounted(false)
     }, [])
     if (!isMounted) return null
@@ -31,7 +31,7 @@ export default function FriendsListItem({ user }) {
                     <p className='text-gray-400 italic'>{user.status.status}</p>
                 </div>
                 <span className='static flex flex-row justify-between items-center'>
-                    {hover ? <FriendOptions {...user} /> : <RiMoreFill size='30px' color='gray' />}
+                    {hover ? <FriendOptions user={user} /> : <RiMoreFill size='30px' color='gray' />}
 
                 </span>
 
