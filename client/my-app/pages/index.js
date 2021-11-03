@@ -10,7 +10,8 @@ export default function Home({ memory }) {
   useEffect(() => {
     const loggedIn = auth.loggedIn();
     if (loggedIn) {
-      setUserID(loggedIn.data._id);
+      const profile = auth.getProfile();
+      setUserID(profile.data._id);
     }
   }, []);
 

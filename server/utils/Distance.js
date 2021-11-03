@@ -15,7 +15,7 @@ const Distance = function (latitude1, longitude1, latitude2, longitude2, units) 
     if (units == 'km') {
         return d;
     } else {
-        return miles;
+        return miles
     }
 }
 

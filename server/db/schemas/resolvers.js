@@ -10,6 +10,7 @@ const resolvers = {
         inRange: user.findMe,
         globalMessages: message.globalMessages,
         friends: user.findMe,
+        getDistance: user.getDistance,
         // location:   location.findAll
     },
     Mutation: {

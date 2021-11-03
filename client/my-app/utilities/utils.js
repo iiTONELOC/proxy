@@ -76,3 +76,18 @@ export function variantIcon(Type, iconSize) {
             break;
     }
 };
+export function statusColor(status) {
+    // ['active', 'busy', 'away', 'do not disturb']
+    switch (status) {
+        case 'active':
+            return variantColor('success')
+        case 'busy':
+            return 'gray-400'
+        case 'away':
+            return variantColor('warning')
+        case 'do not disturb':
+            return variantColor('danger')
+        default:
+            return 'gray-400'
+    }
+}

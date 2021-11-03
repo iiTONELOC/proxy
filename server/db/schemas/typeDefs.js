@@ -67,6 +67,9 @@ type User {
     incomingRequests: [User]
     pendingRequests: [User]
 }
+type Distance{
+    distance: String
+}
 
 type Query {
     me: User
@@ -76,6 +79,12 @@ type Query {
     friendRequests: User
     globalMessages: [Message]
     friends: User
+    getDistance(
+        lat1: String!
+        lon1: String!
+        lat2: String
+        lon2: String
+    ): Distance
 }
 
 type Mutation{
