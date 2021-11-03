@@ -1,6 +1,6 @@
 import { CgOptions } from 'react-icons/cg'
 import { useState, useEffect } from 'react';
-import Button from '../Button';
+import Button from '../Button/Button';
 import { useDispatch } from 'react-redux';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 import { AiOutlineProfile } from 'react-icons/ai';
@@ -74,12 +74,10 @@ export default function FriendOptions(props) {
                         onClick={() => alert(option.action)}
                     >
                         <Button
-
                             color={{ color: `${option.props.color.color}`, hover: `${option.props.color.hover}` }}
                             radius={'rounded-md'}
                             class='text-gray-400 text-center p-1'
                             toolTip={option.toolTip}
-
                         >
                             <option.icon size={iconSize} key={'friendIconOption' + `${index}`} />
                         </Button>

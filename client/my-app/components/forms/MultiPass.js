@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER, CREATE_USER } from '../../utilities/graphql/mutations'
-import Button from '../Button';
+import Button from '../Button/Button';
 import auth from '../../utilities/auth';
 import client from '../../utilities/apollo/client.config';
 

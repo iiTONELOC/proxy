@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { hoverHandler } from "./navigation/NavLink";
+import { hoverHandler } from "../navigation/NavLink";
 
 export default function Button({ children, action, ...props }) {
     const [isMounted, setMounted] = useState(false);

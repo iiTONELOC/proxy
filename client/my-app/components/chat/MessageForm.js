@@ -1,4 +1,4 @@
-import Button from "../Button";
+import Button from "../Button/Button";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 // import { useMutation } from "@apollo/client";

@@ -5,7 +5,7 @@ import Avatar from './Avatar';
 
 
 
-export default function AvatarWithStatus({ user }) {
+export default function AvatarWithStatus({ user, size }) {
     const dispatch = useDispatch();
     const state = useSelector(state => state);
     const [mounted, setMounted] = useState(null);
@@ -15,7 +15,7 @@ export default function AvatarWithStatus({ user }) {
 
     useEffect(() => {
         setMounted(true);
-        console.log(user)
+        // console.log(user)
         return () => setMounted(null);
     }, [])
     if (!mounted) return null;
@@ -27,7 +27,7 @@ export default function AvatarWithStatus({ user }) {
                 </svg>
 
             </span>
-            <Avatar size='35px' />
+            <Avatar size={size} />
         </span>
     )
 }

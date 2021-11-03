@@ -1,5 +1,5 @@
 import { CgOptions } from 'react-icons/cg'
-import Button from '../Button';
+import Button from '../Button/Button';
 import { useDispatch } from 'react-redux';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 export default function UserOptions(props) {
@@ -21,7 +21,7 @@ export default function UserOptions(props) {
                 class='text-white text-center p-2'
                 action={{ onClick: toggleModal }}
             >
-                <CgOptions />
+                <CgOptions size='20px' />
             </Button>
         </>
     );

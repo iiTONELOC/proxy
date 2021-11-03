@@ -1,7 +1,7 @@
-import Button from '../Button';
 import Avatar from '../userAvatar/Avatar'
 import { useState, useEffect } from 'react';
 import { MdPersonAdd } from 'react-icons/md';
+import Button from '../Button/Button';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useSocketContext } from '../Providers/Chat'
 import { useSelector, useDispatch } from 'react-redux';
