@@ -13,7 +13,7 @@ export default function FriendsListItem({ user }) {
     const [isMounted, setMounted] = useState(null);
     const [hover, setHover] = useState(false);
     const [howFar, setHowFar] = useState(null);
-
+    const [online, setOnline] = useState(null);
 
     function onHover() {
         return hoverHandler({ hover, setHover });
@@ -30,10 +30,10 @@ export default function FriendsListItem({ user }) {
                 lon1: user.location.longitude,
             }
             const d = async () => await calculateDistance({ ...args });
-            d().then(res => { console.log('HERE', res); setHowFar(res) });
+            d().then(res => { setHowFar(res) });
         }
     }, [isMounted]);
-
+    useEffect(() => { setOnline(user.status.online) }, [user]);
     if (!isMounted) return null
     return (
         <article
@@ -42,15 +42,15 @@ export default function FriendsListItem({ user }) {
             onMouseLeave={onHover}
             className=''
         >
-            <div className=' p-1 flex flex-row justify-between items-center' style={{ height: '50px ' }}>
+            <div className='static p-1 flex flex-row justify-between items-center' style={{ height: '50px ' }}>
 
-                <div className='flex flex-row justify-between items-center w-2/3 gap-2'>
-                    <AvatarWithStatus user={user} size={'30px'} />
+                <div className='flex flex-row justify-between items-center gap-2 overflow-x-hidden' style={{ width: '205px' }}>
+                    <AvatarWithStatus user={user} size={'25px'} />
                     <p>{user.username}</p>
-                    <p className={`text-${statusColor(user.status.status)}`}>{user.status.status}</p>
-                    <p className='text-gray-400 italic'>{howFar} miles</p>
+                    <p className={`text-${online === true ? statusColor(user.status.status) : 'gray-400'}`}>{online === true ? user.status.status : 'offline'}</p>
+                    <p className='text-gray-400 italic text-xs mt-1'>{howFar} miles</p>
                 </div>
-                <span className='static flex flex-row justify-between items-center '>
+                <span className='static flex flex-row justify-end' style={{ width: '90px' }}>
                     {hover ? <FriendOptions user={user} /> : <RiMoreFill size='30px' color='gray' />}
 
                 </span>

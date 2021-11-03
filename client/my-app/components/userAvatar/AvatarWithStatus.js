@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Avatar from './Avatar';
-
+import { genTailwindColorEquiv } from '../../utilities/utils'
 
 
 
@@ -10,24 +10,33 @@ export default function AvatarWithStatus({ user, size }) {
     const state = useSelector(state => state);
     const [mounted, setMounted] = useState(null);
     const [statusColor, setStatusColor] = useState('');
-    const { } = state;
+    const { friendsList } = state;
 
 
     useEffect(() => {
         setMounted(true);
-        // console.log(user)
+        console.log(user)
+
         return () => setMounted(null);
     }, [])
+    useEffect(() => {
+        console.log(`userChanged`)
+        if (user.status.online === true) {
+            setStatusColor('success')
+        } else {
+            setStatusColor('danger')
+        }
+    }, [user])
     if (!mounted) return null;
     return (
         <span className='relative'>
             <span className='absolute'>
-                <svg height="20" width="20" >
-                    <circle cx="5" cy="5" r="4" stroke="red" strokeWidth="2" fill="red" />
+                <svg height="25" width="25" >
+                    <circle cx="5" cy="5" r="4" stroke={`${genTailwindColorEquiv(statusColor)}`} strokeWidth="2" fill={`${genTailwindColorEquiv(statusColor)}`} />
                 </svg>
 
             </span>
-            <Avatar size={size} />
+            <Avatar size={size} color='bg-gray-500' />
         </span>
     )
 }

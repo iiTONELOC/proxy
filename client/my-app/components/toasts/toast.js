@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { _REDUX_SET_TOAST } from '../../utilities/redux/actions';
 import {
     generateRandomTwBgColor,
-    genTailWindColorEquiv,
+    genTailwindColorEquiv,
     variantColor,
     variantIcon
 } from '../../utilities/utils';
@@ -49,7 +49,7 @@ export default function Toast({ timeout }) {
                     </span>
                 </section>
                 <button className="self-start m-1 p-2" onClick={() => closeToast(dispatch)}>
-                    <AiOutlineClose color={genTailWindColorEquiv(toast.type.type)} size='20px' />
+                    <AiOutlineClose color={genTailwindColorEquiv(toast.type.type)} size='20px' />
                 </button>
             </div>
         </article>

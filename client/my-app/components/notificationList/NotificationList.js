@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { genTailWindColorEquiv } from '../../utilities/utils';
+import { genTailwindColorEquiv } from '../../utilities/utils';
 import { AiOutlineClose } from 'react-icons/ai';
 import { toggleNotificationList } from '../alertIcon/AlertIcon';
 import NotificationItem from './NotificationListItem';
@@ -36,7 +36,7 @@ export function NotificationList(props) {
                     <header className='bg-gray-400 w-full text-center flex flex-row justify-between items center' >
                         <h1 className='ml-5'>Notifications</h1>
                         <span className='p-1 bg-gray-900' onClick={() => { toggleNotificationList(false, dispatch) }}>
-                            <AiOutlineClose color={genTailWindColorEquiv('info')} size='20px' />
+                            <AiOutlineClose color={genTailwindColorEquiv('info')} size='20px' />
                         </span>
                     </header>
 

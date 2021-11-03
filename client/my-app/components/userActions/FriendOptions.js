@@ -6,7 +6,7 @@ import { AiOutlineProfile } from 'react-icons/ai';
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 
-const iconSize = '30px';
+const iconSize = '25px';
 const iconColor = 'text-gray-400';
 const options = [
     {
@@ -67,7 +67,7 @@ export default function FriendOptions({ user }) {
     if (!isMounted) return null
 
     return (
-        <div className='p-1 flex justify-between items-center w-full'>
+        <div className='p-1 flex justify-between items-center w-full ' style={{ width: '95px' }}>
             {
                 options.map(option => (
                     <ButtonWithToolTip

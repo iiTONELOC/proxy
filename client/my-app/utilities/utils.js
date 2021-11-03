@@ -25,7 +25,7 @@ export function calculateHeight(winHeight, navHeight, desktop) {
     // if (desktop && height < 490) return 490;
     return height;
 };
-export function genTailWindColorEquiv(style) {
+export function genTailwindColorEquiv(style) {
     switch (style) {
         case 'danger':
             return 'rgba(220, 38, 38, 1)';
@@ -57,7 +57,7 @@ export function variantColor(type) {
     }
 };
 const iconStyle = (variant) => {
-    return { color: genTailWindColorEquiv(variant) }
+    return { color: genTailwindColorEquiv(variant) }
 }
 export function variantIcon(Type, iconSize) {
     const variant = Type.type

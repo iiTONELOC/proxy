@@ -26,7 +26,14 @@ function sendMessage({ message, chat }, socket, io) {
         return io.to(chat).emit('incomingChatMessage', message);
     };
 };
-
+function alertFriends(friends, io) {
+    console.log(`alerting friends`)
+    if (friends.length > 0) {
+        friends.forEach(friend => {
+            io.to(friend.socket).emit('updateFriendsList');
+        });
+    };
+};
 
 const login = async ({ request, data }, socket, io) => {
     // eventually want to include an auth middleware on the socket
@@ -42,6 +49,10 @@ const login = async ({ request, data }, socket, io) => {
                     socket: isUser.socket,
                 }
                 socket.CURRENT = 'landing';
+                // emit to our friends we are online
+                const friends = isUser.friends;
+
+                alertFriends(friends, io);
                 return io.to(socket.id).emit(_authenticated, isUser);
             } else {
                 return null;
@@ -94,10 +105,16 @@ const handleGlobalDisconnect = async (socket, io,) => {
         // if we are in the GlobalChat, we are set to offline status and there are members in the chat
         // and the users socket is currently set to globalChat we can go ahead and alert everyone in the 
         // chat to update their users in range
-        console.log(`USER DISCONNECT`, socket.USER)
-        if (inChat === true && online === false && globalChatArray.length > 0 && socket.CURRENT === 'Global') {
+
+        if (online === false && socket.CURRENT === 'Global') {
+
             filterUserFromArray(socket);
+            alertFriends(uData.friends, io)
             return io.to(`GlobalChat`).emit('updateUsersInRange')
+        } else if (online === false && inChat === false) {
+            // user is logging out, not in global chat
+            // only alert friends that they are offline
+            alertFriends(uData.friends, io)
         } else {
             io.to(`GlobalChat`).emit('updateUsersInRange')
             //    do nothing, this is prob due to a user refreshing or a socket disconnect but

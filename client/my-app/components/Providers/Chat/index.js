@@ -103,6 +103,11 @@ export const ChatProvider = ({ ...props }) => {
                 await getUsersInRange(dispatch)
                 // await getFriendRequests(dispatch)
             });
+            socket.on('updateFriendsList', async () => {
+                console.log(`NOTICE TO UPDATE FRIENDS LIST`)
+                await getMyFriendsList(dispatch)
+                // await getFriendRequests(dispatch)
+            });
         };
         return () => setJoined(false);
     }, [socket, loggedIn]);
