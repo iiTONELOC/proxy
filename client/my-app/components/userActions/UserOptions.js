@@ -1,29 +1,55 @@
 import { CgOptions } from 'react-icons/cg'
-import Button from '../Button/Button';
+import ButtonWithToolTip from '../Button/ButtonWithToolTip';
 import { useDispatch } from 'react-redux';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
-export default function UserOptions(props) {
+
+const iconSize = '20px';
+const iconColor = 'text-gray-400';
+const options = [
+    {
+        toolTip: 'View Options',
+        Icon: CgOptions,
+        iconSize: iconSize,
+        action: 'viewOptions',
+        settings: {
+            button: {
+                color: 'gray-800',
+                hover: 'green-500'
+            },
+            icon: {
+                color: iconColor
+            },
+        },
+        action: (e, dispatch, data,) => {
+            e.preventDefault();
+            dispatch({
+                type: _REDUX_SET_MODAL,
+                modalView: { view: 'usersInRangeOptions', data: data }
+            });
+        }
+    },
+];
+
+
+
+
+
+export default function UserOptions({ user, userItemHoverHandler }) {
     const dispatch = useDispatch();
-    function toggleModal(e) {
-
-        e.preventDefault();
-        dispatch({
-            type: _REDUX_SET_MODAL,
-            modalView: { view: 'usersInRangeOptions', data: props }
-        });
-    };
-
     return (
-        <>
-            <Button
-                color={{ color: 'gray-700', hover: 'green-700' }}
-                radius={'rounded-md'}
-                class='text-white text-center p-2'
-                action={{ onClick: toggleModal }}
-            >
-                <CgOptions size='20px' />
-            </Button>
-        </>
+        <div className='p-1 flex justify-between items-center w-full'>
+            {
+                options.map(option => (
+                    <ButtonWithToolTip
+                        key={option.toolTip + `${Date.now()}`}
+                        dispatch={dispatch}
+                        user={user}
+                        parentHoverHandler={userItemHoverHandler}
+                        {...option}
+                    />
+                ))
+            }
+        </div>
     );
 };
 

@@ -9,12 +9,12 @@ export default function FriendsListItem({ user }) {
     const [hover, setHover] = useState(false);
     function onHover() {
         return hoverHandler({ hover, setHover });
-    }
+    };
     useEffect(() => {
         setMounted(true);
         // console.log(user)
-        return () => setMounted(false)
-    }, [])
+        return () => setMounted(false);
+    }, []);
     if (!isMounted) return null
     return (
         <article

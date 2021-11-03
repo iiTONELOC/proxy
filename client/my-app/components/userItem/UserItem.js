@@ -3,6 +3,9 @@ import Avatar from '../userAvatar/Avatar'
 import { hoverHandler } from "../navigation/NavLink";
 import UserOptions from '../userActions/UserOptions';
 import { RiMoreFill } from "react-icons/ri";
+
+
+
 export default function UserItem({ user }) {
     const [isMounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
@@ -28,11 +31,10 @@ export default function UserItem({ user }) {
                     <p className=''>{user.location ? `${user.location.city}, ${user.location.state}` : null}</p>
                 </div>
 
-                {hover ?
+                <span className='static flex flex-row justify-between items-center'>
+                    {hover ? <UserOptions user={user} userItemHoverHandler={onHover} /> : <RiMoreFill size='30px' color='gray' />}
 
-                    <UserOptions {...user} />
-                    :
-                    <RiMoreFill size='30px' color='gray' />}
+                </span>
             </div>
         </article>
     )

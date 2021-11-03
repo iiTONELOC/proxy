@@ -70,7 +70,7 @@ export const reducers = (state = initialState, action) => {
             case _REDUX_UPDATE_FRIENDS_LIST:
                 return {
                     ...state,
-                    friendsList: action.friends.length ? [...action.friends] : [action.friends]
+                    friendsList: action.friends.length > 0 ? [...action.friends] : []
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
 import { makeToast, reduxUpdateIncomingFriendRequests, } from "../../../utilities/redux/helpers";
 import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
-import { getUsersInRange } from "../../../utilities/graphql/userAPI";
+import { getMyFriendsList, getUsersInRange } from "../../../utilities/graphql/userAPI";
 
 
 

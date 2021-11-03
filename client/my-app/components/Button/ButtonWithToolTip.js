@@ -27,7 +27,7 @@ const iconColor = 'text-gray-400'
             },
         },
 */
-export default function ButtonWithToolTip({ user, dispatch, ...props }) {
+export default function ButtonWithToolTip({ user, dispatch, parentHoverHandler, ...props }) {
     const { Icon, toolTip, action, settings, iconSize } = props;
     const [isMounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
@@ -36,8 +36,7 @@ export default function ButtonWithToolTip({ user, dispatch, ...props }) {
     };
     useEffect(() => {
         setMounted(true);
-        console.log(user)
-        return () => setMounted(false);
+        return () => { setMounted(false); setHover(false) };
     }, []);
     if (!isMounted) return null
     return (
@@ -45,8 +44,7 @@ export default function ButtonWithToolTip({ user, dispatch, ...props }) {
             className="static flex flex-col items-center w-full"
             onMouseEnter={onHover}
             onMouseLeave={onHover}
-
-            onClick={() => alert(action)}
+            onClick={(e) => { typeof action === 'function' ? action(e, dispatch, user) : alert(action); parentHoverHandler ? parentHoverHandler() : null }}
         >
             <Button
                 color={{ color: `${settings.button.color}`, hover: `${settings.button.hover}` }}
@@ -62,7 +60,6 @@ export default function ButtonWithToolTip({ user, dispatch, ...props }) {
                         <p>{toolTip}</p>
                     </span>
                     : null
-
             }
         </span>
     )

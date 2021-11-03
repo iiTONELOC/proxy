@@ -11,7 +11,7 @@ export default function FriendsList() {
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
-
+        console.log(`Friends List`, { length: friendsList.length, friendsList });
         return () => { setMounted(false) };
     }, []);
 
@@ -19,7 +19,8 @@ export default function FriendsList() {
     if (mounted == false) return null;
 
     return (
-        friendsList?.length > 0 ? (
+        friendsList && friendsList.length > 0 ? (
+
             <section className='bg-gray-800 rounded p-2 flex-row justify-center text-white' >
                 <h1 className='text-center mb-2'>Nodes</h1>
                 <div className='max-h-40 p-1 overflow-x-hidden overflow-y-auto'>
@@ -29,6 +30,8 @@ export default function FriendsList() {
                     )}
                 </div>
             </section>
-        ) : 'Make some friends!'
+
+        ) : <p>Make some friends!</p>
+
     );
 };
