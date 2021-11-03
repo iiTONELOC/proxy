@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { genTailWindColorEquiv } from '../../utilities/utils';
 import { AiOutlineClose } from 'react-icons/ai';
 import { toggleNotificationList } from '../alertIcon/AlertIcon';
-import UserItem from '../userItem/UserItem';
 import NotificationItem from './NotificationListItem';
 export function NotificationList(props) {
     const [notifications, setNotifications] = useState(null);
