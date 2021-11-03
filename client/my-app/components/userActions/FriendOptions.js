@@ -1,48 +1,101 @@
 import { CgOptions } from 'react-icons/cg'
+import { useState, useEffect } from 'react';
 import Button from '../Button';
 import { useDispatch } from 'react-redux';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
-
-const options = {
-    viewProfile: {
-        toolTip: 'View Profile',
-        icon: <CgOptions />,
-        action: 'viewProfile'
-    },
-    sendMessage: {
-        toolTip: 'Send Message',
-        icon: <CgOptions />,
-        action: 'sendMessage'
-    },
-    removeFriend: {
-        toolTip: 'Remove Friend',
-        icon: <CgOptions />,
-        action: 'removeFriend'
-    },
-
-}
+import { AiOutlineProfile } from 'react-icons/ai';
+import { HiMail } from 'react-icons/hi';
+import { GoDiffRemoved } from 'react-icons/go';
+const iconSize = '30px'
 
 export default function FriendOptions(props) {
     const dispatch = useDispatch();
-    function toggleModal(e) {
-
-        e.preventDefault();
-        dispatch({
-            type: _REDUX_SET_MODAL,
-            modalView: { view: 'usersInRangeOptions', data: props }
-        });
-    };
+    const [viewProfileBtnState, setViewProfileBtnState] = useState(false);
+    const [sendMsgBtnState, setSendMsgBtnState] = useState(false);
+    const [removeFriendBtnState, setRemoveFriendBtnState] = useState(false);
+    const [isMounted, setMounted] = useState(false);
+    const options = [
+        {
+            toolTip: 'View Profile',
+            icon: AiOutlineProfile,
+            action: 'viewProfile',
+            props: {
+                color: {
+                    color: 'gray-800',
+                    hover: 'purple-500'
+                }
+            },
+            state: viewProfileBtnState,
+            stateHandler: () => { setViewProfileBtnState(!viewProfileBtnState) }
+        },
+        {
+            toolTip: 'Send Message',
+            icon: HiMail,
+            action: 'sendMessage',
+            props: {
+                color: {
+                    color: 'gray-800',
+                    hover: 'gray-500'
+                }
+            },
+            state: sendMsgBtnState,
+            stateHandler: () => { setSendMsgBtnState(!sendMsgBtnState) }
+        },
+        {
+            toolTip: 'Remove Friend',
+            icon: GoDiffRemoved,
+            action: 'removeFriend',
+            props: {
+                color: {
+                    color: 'gray-800',
+                    hover: 'red-500'
+                }
+            },
+            state: removeFriendBtnState,
+            stateHandler: () => { setRemoveFriendBtnState(!removeFriendBtnState) }
+        },
+    ];
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false)
+    }, [])
+    if (!isMounted) return null
 
     return (
-        <>
-            <Button
-                color={{ color: 'gray-700', hover: 'green-700' }}
-                radius={'rounded-md'}
-                class='text-white text-center p-2'
-                action={{ onClick: toggleModal }}
-            >
-                <CgOptions />
-            </Button>
-        </>
+        <div className='p-1 flex justify-between items-center w-full'>
+            {
+                options.map((option, index) => (
+                    <span
+                        key={option.action + `${index}`}
+                        className="static flex flex-col items-center w-full"
+                        onMouseEnter={option.stateHandler}
+                        onMouseLeave={option.stateHandler}
+
+                        onClick={() => alert(option.action)}
+                    >
+                        <Button
+
+                            color={{ color: `${option.props.color.color}`, hover: `${option.props.color.hover}` }}
+                            radius={'rounded-md'}
+                            class='text-gray-400 text-center p-1'
+                            toolTip={option.toolTip}
+
+                        >
+                            <option.icon size={iconSize} key={'friendIconOption' + `${index}`} />
+                        </Button>
+                        {
+                            option.state === true ?
+                                <span
+                                    className={`absolute text-sm text-center text-white  bg-black rounded-lg p-1 mt-12`}>
+                                    {option.toolTip}
+                                </span>
+                                : null
+
+                        }
+                    </span>
+                ))
+            }
+
+        </div>
     );
 };

@@ -98,7 +98,11 @@ export default function NotificationItem({ user }) {
                 <p className=''>{userInfo.location ? `${userInfo.location.city}, ${userInfo.location.state}` : null}</p>
                 <span className='flex flex-row justify-between items-center w-2/6'>
                     {itemIcons.map((icon, index) => (
-                        <div className="static flex flex-col items-center w-full" key={index} onMouseEnter={icon.props.onMouseEnter} onMouseLeave={icon.props.onMouseLeave} onClick={icon.onClick}>
+                        <div className="static flex flex-col items-center w-full"
+                            key={index}
+                            onClick={icon.onClick}
+                            onMouseEnter={icon.props.onMouseEnter}
+                            onMouseLeave={icon.props.onMouseLeave} >
                             <Button
                                 color={{ color: `gray-600`, hover: `${icon.toolTip === 'Accept Request' ? 'green-500' : 'red-600'}` }}
                                 radius={'rounded-md'}

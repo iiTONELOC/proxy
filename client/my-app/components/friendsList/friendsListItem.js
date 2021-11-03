@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { hoverHandler } from "../navigation/NavLink";
+import FriendOptions from '../userActions/FriendOptions';
 import UserOptions from '../userActions/UserOptions';
 import AvatarWithStatus from '../userAvatar/AvatarWithStatus';
 
@@ -22,12 +23,14 @@ export default function FriendsListItem({ user }) {
             className=''
         >
             <div className=' p-1 flex flex-row justify-between items-center' style={{ height: '50px ' }}>
-                <AvatarWithStatus user={user} />
-                <span>
-                    {user.username}
-                </span>
-                <span>
-                    <UserOptions {...user} />
+
+                <div className='flex flex-row justify-between items-center w-1/2 '>
+                    <AvatarWithStatus user={user} />
+                    <span>{user.username}</span>
+                </div>
+                <span className='static flex flex-row justify-between items-center'>
+                    {hover ? <FriendOptions {...user} /> : null}
+
                 </span>
 
             </div>
