@@ -31,7 +31,7 @@ export function NotificationList(props) {
     if (mounted === false) return null
 
     return (
-        (notifications && notificationList === true && (
+        (notifications && notificationList === true ? (
             <section className='absolute  w-full flex flex-row justify-end h-5/6 '>
                 <div className='w-1/3 bg-black bg-opacity-70 flex flex-col gap-3'>
                     <header className='bg-gray-400 w-full text-center flex flex-row justify-between items center' >
@@ -49,7 +49,7 @@ export function NotificationList(props) {
                         })}
                     </div>
                 </div>
-            </section>))
+            </section>) : null)
 
     )
 }

@@ -23,27 +23,15 @@ const userQueries = {
     async findAll(parent, args, context) {
         const ourServer = await isOurServer(context);
         if (ourServer == false) {
-            // REMOVE LATER JUST FOR TESTING
-            // SHOULD BE EMPTY RETURN
-            const userData = await User.find({})
-                .select('-__v -password -email')
-                .populate('location')
-                .populate('status')
-                .populate('profile')
-                .populate('friends')
-                .populate(`incomingRequests`)
-                .populate('pendingRequests')
-                .populate({ path: 'servers', populate: { path: 'channels' } })
-                ;
-            return userData;
+            return
         } else {
             const userData = await User.find({})
                 .select('-__v -password -email')
                 .populate('location')
                 .populate('status')
                 .populate('profile')
-                .populate('friends')
-                .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
+                .populate({ path: 'friends', populate: ['location', 'profile', 'status', 'servers'] })
+                .populate({ path: 'incomingRequests', populate: ['location', 'profile', 'status', 'servers'] })
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
                 ;
@@ -56,20 +44,13 @@ const userQueries = {
         if (ourServer == false) {
             return
         } else {
-            throw new AuthenticationError('Not logged in');
+            if (!context.user) {
+                const userData = await findUserByID(user);
+                return userData;
+            }
         }
-        // const ourServer = await isOurServer(context);
-        // const { user } = args
-        // if (ourServer == false) {
-        //     return
-        // } else {
-        //     if (!context.user) {
-        //         const userData = await findUserByID(user);
-        //         return userData;
-        //     }
-        // }
     },
-    // REUSABLE CAUSE THE DATA RETURN IS DEFINED IN THE QUERY :)
+
     async findMe(parent, args, context) {
         if (!context.user) {
             throw new AuthenticationError('Not logged in');
@@ -78,13 +59,7 @@ const userQueries = {
         }
     },
 
-    async friendRequests(parent, args, context) {
-        if (!context.user) {
-            throw new AuthenticationError('Not logged in');
-        } else {
-            return await findUserByID(context.user._id);
-        }
-    }
+
 }
 
 module.exports = { userQueries, }

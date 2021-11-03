@@ -10,13 +10,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
 import { makeToast, reduxUpdateIncomingFriendRequests, } from "../../../utilities/redux/helpers";
 import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
-import { updateUsersInRangeHandler } from "../../UsersInRange";
-import { getFriendRequests } from "../../alertIcon/AlertIcon";
+import { getUsersInRange } from "../../../utilities/graphql/userAPI";
+
 
 
 const SocketContext = createContext();
 const { Provider } = SocketContext;
-
 
 
 export const ChatProvider = ({ ...props }) => {
@@ -64,13 +63,13 @@ export const ChatProvider = ({ ...props }) => {
                 socket.emit(_socket_user_login, payload);
                 console.log('requesting login..');
             };
-
-
             /*CALLBACKS FOR GLOBAL SOCKET ACTIONS */
             // after a successful connection to the chatServer
             // we need to set our user and socket
             socket.on(_authenticated, (data) => {
                 console.log('...Socket is Authorized');
+                // grab our friends list data and set it in redux
+
                 setJoined(true);
             });
             socket.on('newFriendRequest', (data) => {
@@ -96,13 +95,13 @@ export const ChatProvider = ({ ...props }) => {
                     },
                     dispatch
                 });
-
+                getMyFriendsList(dispatch)
                 // need to update our data if we think that is needed
             });
             socket.on('updateUsersInRange', async () => {
                 console.log(`UPDATING USERS IN RANGE`)
-                await updateUsersInRangeHandler(dispatch)
-                await getFriendRequests(dispatch)
+                await getUsersInRange(dispatch)
+                // await getFriendRequests(dispatch)
             });
         };
         return () => setJoined(false);
@@ -114,8 +113,22 @@ export const ChatProvider = ({ ...props }) => {
         socket ? <Provider value={socket} {...props} /> : null
     );
 };
+
 export const useSocketContext = () => {
     return useContext(SocketContext);
+};
+
+export function handleSocketConnection(setThisSocket, thisSocket, socket) {
+    if (socket.connected === true && !thisSocket) {
+        return setThisSocket(socket);
+    } else if (thisSocket) {
+        return
+    }
+    else if (socket.connected === false) {
+        setTimeout(() => {
+            handleSocketConnection(setThisSocket, thisSocket, socket);
+        }, 550);
+    };
 };
 
 export default ChatProvider

@@ -18,7 +18,7 @@ const initialState = {
     incomingFriendRequests: [],
     toast: null,
     notificationList: false,
-    friendsList: null,
+    friendsList: [],
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
@@ -66,6 +66,11 @@ export const reducers = (state = initialState, action) => {
                 return {
                     ...state,
                     notificationList: action.toggle
+                }
+            case _REDUX_UPDATE_FRIENDS_LIST:
+                return {
+                    ...state,
+                    friendsList: action.friends.length ? [...action.friends] : [action.friends]
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })

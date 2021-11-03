@@ -30,7 +30,6 @@ export default function UsersInRangeOptionsModal(props) {
         } else {
             return false
         }
-
     }
     const friendStatus = isFriend();
     const pageIcons = friendStatus === false ? [

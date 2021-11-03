@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
+import Button from '../Button';
 import Avatar from '../userAvatar/Avatar'
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { MdPersonAdd } from 'react-icons/md';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import Button from '../Button';
-import client from '../../utilities/apollo/client.config';
 import { useSocketContext } from '../Providers/Chat'
+import { useSelector, useDispatch } from 'react-redux';
+import client from '../../utilities/apollo/client.config';
 import { ACCEPT_FRIEND } from '../../utilities/graphql/mutations';
-import { reduxUpdateIncomingFriendRequests, updateUserData } from '../../utilities/redux/helpers';
+import { reduxSetUsersInRange, reduxUpdateIncomingFriendRequests, reduxSetMyFriends } from '../../utilities/redux/helpers';
+import { getMyFriendsList } from '../../utilities/graphql/userAPI';
+
 export default function NotificationItem({ user }) {
     const _id = user.from?.userID || user._id;
     const userInfo = user.from || user
@@ -18,6 +20,7 @@ export default function NotificationItem({ user }) {
     const state = useSelector(state => state);
     const socket = useSocketContext();
     const dispatch = useDispatch();
+
     const itemIcons = [
         {
             icon: MdPersonAdd,
@@ -41,24 +44,28 @@ export default function NotificationItem({ user }) {
         },
     ];
 
+
     useEffect(() => {
         setMounted(true);
         return () => setMounted(null);
-    }, [])
+    }, []);
+
     useEffect(() => {
         if (isMounted) {
             if (socket.connected && !thisSocket) {
                 setThisSocket(socket);
             }
         }
-    }, [isMounted])
+    }, [isMounted]);
+
     if (!isMounted) return null;
     function activeHandler() {
         setActive(!active);
     };
+
     function onHover() {
         setHover(!hover);
-    }
+    };
 
     async function acceptFriendRequest() {
         if (user) {
@@ -69,17 +76,15 @@ export default function NotificationItem({ user }) {
                 });
                 if (mutationResult) {
                     const mD = mutationResult.data.acceptFriend;
-                    console.log(mD)
-                    // reduxUpdateIncomingFriendRequests({ data: mD.incomingFriendRequests, dispatch });
-                    // need to eventually update redux for a friends list
-                    const emitData = { sendTo: userInfo, data: mD }
-                    console.log(`USER DATA`, { emitData, user })
-                    thisSocket.emit('acceptedFriendRequest', emitData);
-                }
+                    thisSocket.emit('acceptedFriendRequest', { sendTo: userInfo, data: mD });
+                    getMyFriendsList(dispatch)
+                    reduxSetUsersInRange({ data: mD.usersInRange, dispatch });
+                    reduxUpdateIncomingFriendRequests({ data: mD.incomingFriendRequests, dispatch });
+                };
             } catch (error) {
-                console.error(error)
-            }
-        }
+                console.error(error);
+            };
+        };
     };
 
     return (
@@ -107,5 +112,5 @@ export default function NotificationItem({ user }) {
                 </span>
             </div>
         </article>
-    )
-}
+    );
+};

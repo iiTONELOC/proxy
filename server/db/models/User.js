@@ -32,6 +32,7 @@ const userSchema = new Schema(
     friends: [{
       type: Schema.Types.ObjectId,
       required: false,
+      ref: 'User'
     }],
     profile: {
       type: Schema.Types.ObjectId,

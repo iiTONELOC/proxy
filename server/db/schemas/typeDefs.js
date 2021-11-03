@@ -62,21 +62,20 @@ type User {
     servers:[Server]
     friends:[User]
     friendCount: Int
-    usersInRange: [User]
+    usersInRange: [User] 
     socket: ID
     incomingRequests: [User]
     pendingRequests: [User]
 }
-
 
 type Query {
     me: User
     users: [User]
     user(user:ID): User
     inRange: User
-    friendRequests:  User
+    friendRequests: User
     globalMessages: [Message]
-    friends: [User]
+    friends: User
 }
 
 type Mutation{

@@ -3,6 +3,7 @@ import {
     _REDUX_SET_TOAST,
     _REDUX_SET_USER_DATA,
     _REDUX_UPDATE_USERS_IN_RANGE,
+    _REDUX_UPDATE_FRIENDS_LIST,
     _REDUX_SET_SOCKET,
     _REDUX_SET_FR,
 
@@ -53,7 +54,12 @@ export function reduxUpdateIncomingFriendRequests({ data, dispatch }) {
         incomingRequests: data
     })
 };
-
+export function reduxSetMyFriends({ data, dispatch }) {
+    dispatch({
+        type: _REDUX_UPDATE_FRIENDS_LIST,
+        friends: data
+    })
+};
 // export function reduxUpdateUserData({ userData, dispatch }) {
 
 //     reduxSetUsersInRange({ data: userData.usersInRange, dispatch });

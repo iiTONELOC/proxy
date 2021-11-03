@@ -83,7 +83,8 @@ export const QUERY_FRIENDS = gql`
 query Query {
   friends {
     _id
-    username
+    friends{
+  username
     location {
       _id
       latitude
@@ -105,6 +106,8 @@ query Query {
     }
     friendCount
     socket
+    }
+  
   }
 }
 `;
