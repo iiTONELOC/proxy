@@ -27,7 +27,6 @@ function sendMessage({ message, chat }, socket, io) {
     };
 };
 function alertFriends(friends, io) {
-    console.log(`alerting friends`)
     if (friends.length > 0) {
         friends.forEach(friend => {
             io.to(friend.socket).emit('updateFriendsList');
@@ -146,7 +145,6 @@ async function acceptFriend({ data, sendTo }, socket, io) {
     const user = await findUserByID(id)
     const sentToSocket = user?.socket;
 
-    console.log(`SEND TO`, user)
     if (user) {
         io.to(sentToSocket).emit('Request Accepted', data);
     }

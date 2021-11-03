@@ -26,7 +26,6 @@ export default function SideBar() {
         }
     }
     useEffect(() => {
-        console.log(`SideBar is mounting`);
         setMounted(true);
         const loggedIn = auth.getProfile();
         const { data } = loggedIn ? loggedIn : {};

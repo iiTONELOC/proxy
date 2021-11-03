@@ -2,22 +2,15 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import UserItem from '../userItem/UserItem';
 
-
-
-
-
 export default function UsersInRange() {
     const state = useSelector((state) => state);
     const { usersInRange } = state;
     const [mounted, setMounted] = useState(false);
 
-
-
     useEffect(() => {
         setMounted(true);
         return () => { setMounted(false) };
     }, []);
-
 
     if (mounted == false) return null;
 

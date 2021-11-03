@@ -8,13 +8,6 @@ import { ADD_FRIEND } from '../../utilities/graphql/mutations';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 
 
-
-
-
-
-
-
-
 export default function UsersInRangeOptionsModal(props) {
     const { username, _id, socket, status, location } = props;
     const [thisSocket, setThisSocket] = useState(null);
@@ -100,22 +93,11 @@ export default function UsersInRangeOptionsModal(props) {
     }
     async function handleAddFriend(e) {
         e.preventDefault();
-        console.log(`you clicked add friend!`);
         try {
-            // const addNewFriend = await client.mutate({
-            //     mutation: ADD_FRIEND, variables: { friendId: _id }
-            // })
             const addNewFriend = await addFriend({
                 variables: { friendId: _id }
             });
             if (addNewFriend !== undefined || addNewFriend !== null) {
-                /*
-                    need to pkg data for socket server,
-                    expects current userInfo and the
-                    userID of the friend to add
-                 */
-
-
                 const emitData = {
                     data: {
                         type: 'Friend Request',
@@ -126,9 +108,7 @@ export default function UsersInRangeOptionsModal(props) {
                     },
                     sendTo: socket,
                 };
-
                 if (thisSocket) { thisSocket.emit("sendFriendRequest", emitData) };
-
                 dispatch({
                     type: _REDUX_SET_MODAL,
                     modalView: { view: 'success', data: 1500 },
@@ -141,8 +121,7 @@ export default function UsersInRangeOptionsModal(props) {
         } catch (error) {
             console.log(error);
         };
-    }
-
+    };
 
     return (
         <section className=' text-white p-2' style={{ height: '170x' }}>

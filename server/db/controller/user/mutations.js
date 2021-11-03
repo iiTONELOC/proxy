@@ -222,18 +222,8 @@ const userMutations = {
             // add userID to the friends request array
             const didAdd = await User.findByIdAndUpdate(friendId,
                 { $addToSet: { incomingRequests: context.user._id } },
-                { new: true },
-            )
-                .select('-__v -password -email')
-                .populate('location')
-                .populate('status')
-                .populate('profile')
-                .populate('friends')
-                .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
-                .populate('pendingRequests')
-                .populate({ path: 'servers', populate: { path: 'channels' } })
+                { new: true })
             if (didAdd !== undefined || didAdd !== null) {
-                console.log(`ADD FRIEND REQUEST `, { friendId, userData })
                 return userData
             } else throw new Error('Could not add friend')
         }

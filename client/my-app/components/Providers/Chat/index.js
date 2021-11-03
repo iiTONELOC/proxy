@@ -1,9 +1,3 @@
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useState
-} from "react";
 import { io } from "socket.io-client";
 import auth from "../../../utilities/auth";
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +5,12 @@ import { actions, reactions } from "../../../../../server/chat/actions";
 import { makeToast, reduxUpdateIncomingFriendRequests, } from "../../../utilities/redux/helpers";
 import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
 import { getMyFriendsList, getUsersInRange } from "../../../utilities/graphql/userAPI";
-
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState
+} from "react";
 
 
 const SocketContext = createContext();
@@ -29,7 +28,6 @@ export const ChatProvider = ({ ...props }) => {
         const nS = io(`http://${window.location.hostname}:3001`);
         const newSocket = nS;
         setSocket(newSocket);
-        console.log('Socket connection establishing...');
         return () => { setMounted(false); setLoggedIn(false); setJoined(false) }
     }, []);
     useEffect(() => {
@@ -53,7 +51,7 @@ export const ChatProvider = ({ ...props }) => {
                 user: username,
                 id: _id
             };
-            console.log('socket connecting...');
+            // socket payload
             const payload = {
                 request: _socket_user_login,
                 data: socketData,
@@ -61,15 +59,9 @@ export const ChatProvider = ({ ...props }) => {
             };
             if (joined !== true) {
                 socket.emit(_socket_user_login, payload);
-                console.log('requesting login..');
             };
-            /*CALLBACKS FOR GLOBAL SOCKET ACTIONS */
-            // after a successful connection to the chatServer
-            // we need to set our user and socket
-            socket.on(_authenticated, (data) => {
-                console.log('...Socket is Authorized');
-                // grab our friends list data and set it in redux
 
+            socket.on(_authenticated, (data) => {
                 setJoined(true);
             });
             socket.on('newFriendRequest', (data) => {
@@ -85,7 +77,6 @@ export const ChatProvider = ({ ...props }) => {
                 })
             });
             socket.on('Request Accepted', (data) => {
-                console.log('Request accepted', data);
                 makeToast({
                     bread: {
                         type: 'success',
@@ -96,17 +87,12 @@ export const ChatProvider = ({ ...props }) => {
                     dispatch
                 });
                 getMyFriendsList(dispatch)
-                // need to update our data if we think that is needed
             });
             socket.on('updateUsersInRange', async () => {
-                console.log(`UPDATING USERS IN RANGE`)
-                await getUsersInRange(dispatch)
-                // await getFriendRequests(dispatch)
+                await getUsersInRange(dispatch);
             });
             socket.on('updateFriendsList', async () => {
-                console.log(`NOTICE TO UPDATE FRIENDS LIST`)
-                await getMyFriendsList(dispatch)
-                // await getFriendRequests(dispatch)
+                await getMyFriendsList(dispatch);
             });
         };
         return () => setJoined(false);

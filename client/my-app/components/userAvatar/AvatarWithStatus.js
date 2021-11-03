@@ -10,17 +10,12 @@ export default function AvatarWithStatus({ user, size }) {
     const state = useSelector(state => state);
     const [mounted, setMounted] = useState(null);
     const [statusColor, setStatusColor] = useState('');
-    const { friendsList } = state;
-
 
     useEffect(() => {
         setMounted(true);
-        console.log(user)
-
         return () => setMounted(null);
     }, [])
     useEffect(() => {
-        console.log(`userChanged`)
         if (user.status.online === true) {
             setStatusColor('success')
         } else {
@@ -34,9 +29,8 @@ export default function AvatarWithStatus({ user, size }) {
                 <svg height="25" width="25" >
                     <circle cx="5" cy="5" r="4" stroke={`${genTailwindColorEquiv(statusColor)}`} strokeWidth="2" fill={`${genTailwindColorEquiv(statusColor)}`} />
                 </svg>
-
             </span>
             <Avatar size={size} color='bg-gray-500' />
         </span>
-    )
-}
+    );
+};
