@@ -8,12 +8,11 @@ import MobileLayout from './Mobile';
 
 export default function ResponsiveLayout({ viewData }) {
     const [mounted, setMounted] = useState(false);
-    const [height, setHeight] = useState(false);
+    const [height, setHeight] = useState(null);
     const state = useSelector(state => state);
-    const [view, setView] = useState(false);
+    const [view, setView] = useState(null);
     const { modal, toast } = state;
 
-    const navHeight = 65;
 
     function handleView(width, setView) {
         if (width <= 781) {
@@ -24,17 +23,12 @@ export default function ResponsiveLayout({ viewData }) {
     };
     useEffect(() => {
         setMounted(true);
-        let currentView = view === 'desktop';
         if (mounted) {
-            const currentHeight = window.innerHeight;
-            const width = window.innerWidth;
-            setHeight(calculateHeight(currentHeight, navHeight, currentView));
-            handleView(width, setView);
+            setHeight(calculateHeight());
+            handleView(window.innerWidth, setView);
             window.addEventListener('resize', () => {
-                const reHeight = window.innerHeight;
-                const reWidth = window.innerWidth;
-                setHeight(calculateHeight(reHeight, navHeight, currentView));
-                handleView(reWidth, setView);
+                setHeight(calculateHeight());
+                handleView(window.innerWidth, setView);
             });
         }
         return () => setMounted(false);
@@ -54,7 +48,6 @@ export default function ResponsiveLayout({ viewData }) {
     return (
         <OnlyOnClient>
             <section className="bg-gray-700  w-full" style={{ height: height ? `${height}px` : '93vh', }} >
-
                 {viewController(view, viewData)}
             </section>
         </OnlyOnClient>

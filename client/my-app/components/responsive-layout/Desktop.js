@@ -3,9 +3,12 @@ import Toast from '../toasts/toast';
 import { Modal } from '../modal';
 import { NotificationList } from '../notificationList/NotificationList';
 import FriendsList from '../friendsList/friendsList';
+import { useEffect, useState } from 'react';
+
 export default function DesktopLayout(
     {
         Messaging,
+        InformationPane,
         UsersInRange,
         Landing,
         display,
@@ -15,7 +18,18 @@ export default function DesktopLayout(
         modal
     }
 ) {
+    const [mounted, setMounted] = useState(null);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(null)
+    }, []);
+    useEffect(() => {
+        if (mounted) {
+            window.addEventListener('resize', () => { setWindowWidth(window.innerWidth) });
+        }
 
+    }, [mounted]);
     return (
         <>
             {toast &&
@@ -32,9 +46,22 @@ export default function DesktopLayout(
                 {display !== 'single' ?
                     <>
                         <div className="bg-gray-600 w-14  p-0"> <SideBar /> </div>
-                        <div className="bg-gray-600 w-5/12  md:w-4/12 lg:w-3/12 p-1 flex flex-col gap-2" style={{ minWidth: '325px' }}>{UsersInRange ? <UsersInRange.Element {...UsersInRange.props} /> : null} <FriendsList />  </div>
-                        <div className="bg-gray-600 w-7/12  md:w-8/12 lg:w-9/12 p-1 h-full flex">{Messaging ? <Messaging.Element {...Messaging.props} /> : `In progress`}</div>
-                    </> :
+                        <div
+                            className="bg-gray-600 w-5/12  md:w-4/12 lg:w-3/12 p-1 flex flex-col gap-2"
+                            style={{ minWidth: '325px' }}
+                        >
+
+                            <FriendsList />
+                            {windowWidth < 1293 ? InformationPane ? <InformationPane.Element {...InformationPane.props} /> : null : null}
+                        </div>
+                        <div
+                            className="bg-gray-600 w-7/12  md:w-8/12 lg:w-9/12 p-1 h-full flex"
+                        >
+                            {Messaging ? <Messaging.Element {...Messaging.props} /> : `In progress`}
+                            {windowWidth > 1293 ? InformationPane ? <div className='w-2/3 h-full  p-2'><InformationPane.Element {...InformationPane.props} /> </div> : null : null}
+
+                        </div>
+                    </> : /* single displays, ie no columns */
                     <>
                         <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: '65vh' }}>
                             {Landing && <Landing />}

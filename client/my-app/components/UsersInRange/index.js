@@ -15,16 +15,18 @@ export default function UsersInRange() {
     if (mounted == false) return null;
 
     return (
-        usersInRange?.length > 0 ? (
-            <section className='bg-gray-800 rounded p-2 flex-row justify-center text-white'>
-                <h1 className='text-center mb-2'>Proxies</h1>
-                <div className='max-h-40 p-1 overflow-x-hidden overflow-y-auto'>
-                    {usersInRange.map(user => (
+
+        <section className='bg-gray-800 rounded p-2 flex-row justify-center text-white'>
+            <h1 className='text-center mb-2'>In Range</h1>
+            <div className='max-h-40 p-1 overflow-x-hidden overflow-y-auto'>
+                {
+                    usersInRange.length > 0 ? usersInRange.map(user => (
                         <UserItem key={user._id} user={user} />
                     )
-                    )}
-                </div>
-            </section>
-        ) : 'No users!'
+                    ) : <p className='text-center'>No one is around !</p>
+                }
+            </div>
+        </section>
+
     );
 };

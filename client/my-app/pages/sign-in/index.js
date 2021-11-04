@@ -5,16 +5,18 @@ import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import auth from '../../utilities/auth';
 
 export default function SignIn() {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const router = useRouter();
-    useEffect(() => {
-        const user = auth.getProfile();
-        if (user) {
-            setLoggedIn(true);
-        };
-    }, []);
-    if (loggedIn) router.push('/playground');
+    // const [loggedIn, setLoggedIn] = useState(false);
+    // const router = useRouter();
+    // useEffect(() => {
+    //     const user = auth.getProfile();
+    //     if (user) {
+    //         setLoggedIn(true);
+    //     };
+    // }, []);
+    // if (loggedIn) {
+    //     console.log(router)
+    // }
     return (
-        !loggedIn && <ResponsiveLayout viewData={{ Login: { Element: MultiPass, props: 'login' }, display: 'single' }} />
+        <ResponsiveLayout viewData={{ Login: { Element: MultiPass, props: 'login' }, display: 'single' }} />
     )
 }

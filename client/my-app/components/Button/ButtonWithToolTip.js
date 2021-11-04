@@ -44,12 +44,19 @@ export default function ButtonWithToolTip({ user, dispatch, parentHoverHandler, 
             className="static flex flex-col items-center w-full"
             onMouseEnter={onHover}
             onMouseLeave={onHover}
-            onClick={(e) => { typeof action === 'function' ? action(e, dispatch, user) : alert(action); parentHoverHandler ? parentHoverHandler() : null }}
+            onClick={(e) => {
+                typeof action === 'function' ?
+                    action(e, dispatch, user) :
+                    alert(action);
+                parentHoverHandler ?
+                    parentHoverHandler() :
+                    null
+            }}
         >
             <Button
                 color={{ color: `${settings.button.color}`, hover: `${settings.button.hover}` }}
                 radius={'rounded-md'}
-                class={`${settings.icon.color} text-center p-1`}
+                class={`${!hover ? settings.icon.color : 'text-gray-100'} text-center p-1`}
             >
                 {<Icon size={iconSize} />}
             </Button>

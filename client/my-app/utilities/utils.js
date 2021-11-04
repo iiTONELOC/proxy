@@ -20,10 +20,9 @@ export function generateRandomTwBgColor() {
     const num = randomNumber(colors.length - 1);
     return colors[num]
 };
-export function calculateHeight(winHeight, navHeight, desktop) {
-    const height = winHeight - navHeight;
-    // if (desktop && height < 490) return 490;
-    return height;
+export function calculateHeight() {
+    const navHeight = 65;
+    return window.innerHeight - navHeight;
 };
 export function genTailwindColorEquiv(style) {
     switch (style) {

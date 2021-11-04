@@ -5,17 +5,29 @@ import { reduxSetUsersInRange, reduxUpdateIncomingFriendRequests, reduxSetMyFrie
 
 export async function getUsersInRange(dispatch) {
     const { data } = await client.query({ query: QUERY_IN_RANGE, fetchPolicy: 'network-only' });
-    return reduxSetUsersInRange({ data: data.inRange.usersInRange, dispatch });
-};
+    if (data?.inRange?.usersInRange) {
+        return reduxSetUsersInRange({ data: data.inRange.usersInRange, dispatch });
+    };
+}
+
 export async function getFriendRequests(dispatch) {
     const { data, error } = await client.query({ query: QUERY_FRIEND_REQUESTS, fetchPolicy: 'network-only' });
-    reduxUpdateIncomingFriendRequests({ data: data.friendRequests, dispatch });
+    if (data?.friendRequests) {
+        return reduxUpdateIncomingFriendRequests({ data: data.friendRequests, dispatch });
+    }
+
 }
 export async function getMyFriendsList(dispatch) {
     const { data, error } = await client.query({ query: QUERY_FRIENDS, fetchPolicy: 'network-only' });
-    reduxSetMyFriends({ data: data.friends.friends, dispatch });
+    if (data?.friends?.friends) {
+        return reduxSetMyFriends({ data: data.friends.friends, dispatch });
+    }
+
 }
 export async function calculateDistance(args) {
     const { data } = await client.query({ query: CAL_DISTANCE, fetchPolicy: 'network-only', variables: { ...args } });
-    return data?.getDistance.distance;
+    if (data?.getDistance?.distance) {
+        return data.getDistance.distance;
+    }
+
 }
