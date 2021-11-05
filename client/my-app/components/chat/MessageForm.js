@@ -83,7 +83,7 @@ export default function MessageForm({ socket }) {
                 </div>
                 <div className="flex items-center justify-end bp-1 w-1/6">
                     <Button
-                        color={{ color: 'green-500', hover: 'green-700' }}
+                        color={{ color: 'green-800', hover: 'green-600' }}
                         radius={'rounded-md'}
                         class='text-white text-center p-2 h-14 w-28'
                         onSubmit={(e) => handleFormSubmit(e)}

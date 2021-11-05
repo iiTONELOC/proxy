@@ -38,7 +38,7 @@ export function Modal() {
             onDoubleClick={toggleModal}
             style={{ height: calculateHeight() }}
         >
-            <div className="w-1/4 bg-gray-600 h-auto rounded-lg p-2 z-50">
+            <div className="bg-gray-600 h-auto rounded-lg p-2 z-50" style={{ width: 365 }}>
                 <header className='flex justify-end'>
                     <span onClick={toggleModal}>
                         <Button className="mr-2 p-2" color={{ color: 'gray-600', hover: 'green-700' }} >

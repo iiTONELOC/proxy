@@ -38,20 +38,22 @@ export default function UsersInRange() {
         }
     };
     async function setUsers(setProxies) {
-        const users = await filterUsersByDistance(usersInRange);
-        setProxies(users);
+        if (typeof setProxies === 'function') {
+            const users = await filterUsersByDistance(usersInRange);
+            setProxies(users);
+        }
     };
-
     useEffect(() => {
         setMounted(true);
-        return () => { setMounted(false) };
+        return () => { setMounted(false); setUsers(null) };
     }, []);
     useEffect(() => {
-        setUsers(setProxies)
-    }, [usersInRange]);
-    useEffect(() => {
-        setUsers(setProxies)
-    }, [filterRange])
+        if (mounted === true) {
+            setUsers(setProxies)
+        }
+    }, [mounted, usersInRange, filterRange]);
+
+
     if (mounted == false) return null;
     function handleFilter(e) {
         e.preventDefault();
@@ -60,8 +62,6 @@ export default function UsersInRange() {
             modalView: { view: 'inRangeFilter', data: filterRange }
         });
     };
-
-
     return (
         <div className=' static bg-gray-800 rounded p-2 flex mt  flex-col justify-center text-white'>
             <header className='w-full flex flex-row justify-between text-center p-2'>
@@ -86,11 +86,9 @@ export default function UsersInRange() {
                         action={handleFilter}
                     />
                 </span>
-
                 <span className='bg-gray-900 text-gray-300 p-2 rounded-md'>{filterRange} miles</span>
             </header>
-
-            <div className='max-h-40 p-1 overflow-x-hidden overflow-y-auto'>
+            <div className='max-h-40 p-1 overflow-x-hidden overflow-y-auto flex flex-col gap-3'>
                 {proxies?.length > 0 ? proxies.map(user => (
                     <UserItem key={user._id} user={user} />
                 )
@@ -98,18 +96,5 @@ export default function UsersInRange() {
                 }
             </div>
         </div>
-
     );
 };
-
-// rangeOptions.map(option => (
-//     <Button
-//         color={{ color: 'gray-500', hover: 'green-700' }}
-//         radius={'rounded-md'}
-//         class='text-white text-center p-2'
-//         action={{ onClick: () => { setRange(option) } }}
-//         key={option}
-//     >
-//         {option} miles
-//     </Button>
-// ))

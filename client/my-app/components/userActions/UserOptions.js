@@ -19,6 +19,9 @@ const options = [
             icon: {
                 color: iconColor
             },
+            toolTip: {
+                classNames: 'mt-8  p-2 bg-green-900 border-2 border-black drop-shadow-lg',
+            },
         },
         action: (e, dispatch, data,) => {
             e.preventDefault();

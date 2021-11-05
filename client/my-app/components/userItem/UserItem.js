@@ -24,7 +24,7 @@ export default function UserItem({ user }) {
             onMouseLeave={onHover}
             className=''
         >
-            <div className='p-1 flex justify-between items-center' style={{ height: '50px ' }}>
+            <div className='p-2 flex justify-between items-center bg-gray-900 rounded-lg' style={{ height: '50px ' }}>
                 <div className='flex flex-row justify-between items-center w-4/6 '>
                     <Avatar size='20px' />
                     <p>{user.username}</p>

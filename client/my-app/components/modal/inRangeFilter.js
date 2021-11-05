@@ -3,12 +3,12 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { _REDUX_SET_MODAL, _REDUX_SET_RANGE } from "../../utilities/redux/actions";
 
-function textColor(value) {
-    if (value >= 0 && value <= 30) { return 'text-green-500' }
-    else if (value >= 31 && value <= 60) { return 'text-green-700 ' }
-    else if (value >= 61 && value <= 90) { return 'text-yellow-300' }
-    else if (value >= 91 && value <= 150) { return 'text-yellow-500' }
-    else if (value >= 151) { return 'text-red-500' }
+function genColor(value) {
+    if (value >= 0 && value <= 30) { return 'green-400' }
+    else if (value >= 31 && value <= 60) { return 'green-500 ' }
+    else if (value >= 61 && value <= 90) { return 'yellow-300' }
+    else if (value >= 91 && value <= 150) { return 'yellow-500' }
+    else if (value >= 151) { return 'red-500' }
 }
 
 export default function InRangeFilter({ currentRange }) {
@@ -58,9 +58,9 @@ export default function InRangeFilter({ currentRange }) {
 
     return (
         <span className='w-full flex flex-col justify-start gap-3 items-center text-gray-300 bg-gray-800 rounded-md p-2'>
-            <h1>Currently viewing all users within <span className={`${textColor(currentRange)}  w-24 text-center`}>{currentRange} miles</span></h1>
+            <h1 className='text-center break-normal py-1'>Currently viewing all users within <span className={`text-${genColor(currentRange)} w-24 text-center bg-gray-700 p-1 rounded-md break-word`}>{currentRange} miles</span></h1>
             <label className=''> Select a new range: </label>
-            <span className='h-8'>{newValue > 0 && <p className={`${textColor(newValue)}`}>{newValue} miles</p>} </span>
+            <span className='h-8'>{newValue > 0 && <p className={`text-${genColor(newValue)} bg-gray-700 p-1 rounded-md`}>{newValue} miles</p>} </span>
             <input
                 type="range"
                 name="range"
@@ -68,6 +68,7 @@ export default function InRangeFilter({ currentRange }) {
                 min='0'
                 max='250'
                 onChange={handleSelect}
+                className={`bg-${genColor(newValue ? newValue : range)}`}
             />
             <span>
                 {pageButtons.map((button, index) => {
