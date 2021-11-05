@@ -3,6 +3,7 @@ import {
     _REDUX_UPDATE_USERS_IN_RANGE,
     _REDUX_UPDATE_FRIENDS_LIST,
     _REDUX_SET_USER_DATA,
+    _REDUX_SET_RANGE,
     _REDUX_SET_TOAST,
     _REDUX_SET_MODAL,
     _REDUX_SET_CHAT,
@@ -19,6 +20,7 @@ const initialState = {
     toast: null,
     notificationList: false,
     friendsList: [],
+    filterRange: 5,
 }
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
@@ -71,6 +73,11 @@ export const reducers = (state = initialState, action) => {
                 return {
                     ...state,
                     friendsList: action.friends.length > 0 ? [...action.friends] : []
+                }
+            case _REDUX_SET_RANGE:
+                return {
+                    ...state,
+                    filterRange: action.range
                 }
             default:
                 // console.log(`unknown reducer fired`, { state, action })

@@ -84,13 +84,7 @@ export default function UsersInRangeOptionsModal(props) {
     function activeHandler() {
         setActive(!active);
     };
-    function toggleModal(e) {
-        e.preventDefault();
-        dispatch({
-            type: _REDUX_SET_MODAL,
-            modalView: 'null'
-        });
-    }
+
     async function handleAddFriend(e) {
         e.preventDefault();
         try {

@@ -22,7 +22,7 @@ export default function Authorization({ children, ...delegated }) {
             const signedIn = auth.getProfile();
             if (signedIn) {
                 reduxSetMe({ me: signedIn.data, dispatch });
-                setAuth(true); setTimeout(() => { handleExpiredToken(dispatch, setAuth); document.location.reload() }, 300000)
+                setAuth(true); setTimeout(() => { handleExpiredToken(dispatch, setAuth); document.location.assign('/sign-in') }, (60 * 1439.45 * 1000))
             } else {
                 handleExpiredToken(dispatch, setAuth);
             };

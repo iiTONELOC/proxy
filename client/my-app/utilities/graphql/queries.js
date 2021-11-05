@@ -166,6 +166,8 @@ query Query {
       location {
         city
         state
+        latitude
+        longitude
         _id
       }
       profile {

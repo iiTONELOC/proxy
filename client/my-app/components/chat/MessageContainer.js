@@ -51,9 +51,10 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
                 </h1>
             </div>
             <div className=" h-full mt-3 text-gray-300 p-2 overflow-y-auto">
-                {[...Object.values(messages)].map((message,) => (
-                    <MessageItem message={message} key={message._id} user={ message.sender === me.username ? true : null }/>
+                {me && [...Object.values(messages)].map((message,) => (
+                    <MessageItem message={message} key={message._id} user={message.sender === me.username ? true : null} />
                 ))}
+
                 <div style={{ minHeight: '10px' }} id='messageContainerEnd'></div>
             </div>
         </div>

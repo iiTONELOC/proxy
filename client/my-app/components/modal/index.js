@@ -1,9 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux';
-import UsersInRangeOptionsModal from './usersInRangeOptions';
-import { AiOutlineClose } from 'react-icons/ai';
-import Button from '../Button/Button';
-import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 import SuccessModal from './success';
+import Button from '../Button/Button';
+import InRangeFilter from './inRangeFilter';
+import { AiOutlineClose } from 'react-icons/ai';
+import { useSelector, useDispatch } from 'react-redux';
+import { calculateHeight } from '../../utilities/utils';
+import UsersInRangeOptionsModal from './usersInRangeOptions';
+import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
+
 
 export function Modal() {
     const dispatch = useDispatch();
@@ -17,12 +20,13 @@ export function Modal() {
     }
 
     function handleModalView(view) {
-
         switch (view.view) {
             case 'usersInRangeOptions':
                 return <UsersInRangeOptionsModal {...modalView.data} />;
             case 'success':
                 return <SuccessModal timeout={modalView.data} />;
+            case 'inRangeFilter':
+                return <InRangeFilter currentRange={modalView.data} />;
             default:
                 break;
         }
@@ -30,8 +34,9 @@ export function Modal() {
 
     return (
         <section
-            className='bg-gray-900 bg-opacity-80 z-40 w-full h-full absolute flex flex-row justify-center items-center'
+            className={`bg-gray-900 bg-opacity-80 z-40 w-full  absolute flex flex-row justify-center items-center`}
             onDoubleClick={toggleModal}
+            style={{ height: calculateHeight() }}
         >
             <div className="w-1/4 bg-gray-600 h-auto rounded-lg p-2 z-50">
                 <header className='flex justify-end'>
