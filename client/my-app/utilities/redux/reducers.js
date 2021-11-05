@@ -54,10 +54,9 @@ export const reducers = (state = initialState, action) => {
                     modalView: action.modalView === 'null' ? initialState.modalView : action.modalView
                 }
             case _REDUX_SET_FR:
-
                 return {
                     ...state,
-                    incomingFriendRequests: action.incomingRequests
+                    incomingFriendRequests: action.incomingRequests.length > 0 ? [action.incomingRequests] : initialState.incomingFriendRequests,
                 }
             case _REDUX_SET_TOAST:
                 return {

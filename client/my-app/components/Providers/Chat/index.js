@@ -88,6 +88,16 @@ export const ChatProvider = ({ ...props }) => {
                 });
                 getMyFriendsList(dispatch)
             });
+            socket.on('Request Rejected', (data) => {
+                makeToast({
+                    bread: {
+                        type: 'danger',
+                        notification: 'Friend Request Not accepted',
+                        message: `${data} did not accept your friend request!`,
+                    },
+                    dispatch
+                });
+            });
             socket.on('updateUsersInRange', async () => {
                 await getUsersInRange(dispatch);
             });

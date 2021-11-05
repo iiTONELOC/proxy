@@ -100,6 +100,7 @@ type Mutation{
     logout:User
     addFriend(friendId: ID!): User
     acceptFriend(friendId: ID!): User
+    rejectFriend(friendId: ID!): User
 }
 
 type Auth {

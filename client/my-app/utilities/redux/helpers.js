@@ -10,7 +10,7 @@ import {
 } from "./actions"
 
 export function reduxSetSocket({ socketData, dispatch }) {
-    console.log(`helper`, socketData)
+
     dispatch({
         type: _REDUX_SET_SOCKET,
         socket: { ...socketData }
@@ -49,6 +49,7 @@ export function makeToast({ bread, dispatch }) {
     })
 };
 export function reduxUpdateIncomingFriendRequests({ data, dispatch }) {
+
     dispatch({
         type: _REDUX_SET_FR,
         incomingRequests: data

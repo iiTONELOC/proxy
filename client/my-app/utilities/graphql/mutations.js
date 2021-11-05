@@ -41,13 +41,21 @@ mutation addFriend($friendId: ID!) {
   }
 }
 `;
+export const REJECT_FRIEND = gql`
+mutation rejectFriend($friendId: ID!) {
+    rejectFriend(friendId: $friendId) {
+        _id
+    username
+    socket
+  }
+}
+`;
 export const ACCEPT_FRIEND = gql`
 mutation Mutation($friendId: ID!) {
   acceptFriend(friendId: $friendId) {
     _id
     username
     location {
-
       latitude
       longitude
       city

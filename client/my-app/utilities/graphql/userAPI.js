@@ -12,8 +12,9 @@ export async function getUsersInRange(dispatch) {
 
 export async function getFriendRequests(dispatch) {
     const { data, error } = await client.query({ query: QUERY_FRIEND_REQUESTS, fetchPolicy: 'network-only' });
-    if (data?.friendRequests) {
-        return reduxUpdateIncomingFriendRequests({ data: data.friendRequests, dispatch });
+
+    if (data?.friendRequests?.incomingRequests) {
+        return reduxUpdateIncomingFriendRequests({ data: data.friendRequests.incomingRequests, dispatch });
     }
 
 }

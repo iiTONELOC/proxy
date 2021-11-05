@@ -1,12 +1,11 @@
+const sharedMutations = require('../db/controller/shared/sharedMutations');
+const { findUserByID } = require("../db/controller/shared/sharedQueries");
+const { createMessage } = require("../db/controller/messages/mutations");
+const sharedQueries = require('../db/controller/shared/sharedQueries');
 const { actions, reactions } = require("./actions");
+const { updateUserSocket } = sharedMutations;
 const { _socket_user_login } = actions;
 const { _authenticated } = reactions;
-const sharedMutations = require('../db/controller/shared/sharedMutations');
-const sharedQueries = require('../db/controller/shared/sharedQueries')
-const { createMessage } = require("../db/controller/messages/mutations");
-const { User } = require("../db/models");
-const { findUserByID } = require("../db/controller/shared/sharedQueries");
-const { updateUserSocket } = sharedMutations;
 let globalChatArray = [];
 
 
@@ -149,6 +148,17 @@ async function acceptFriend({ data, sendTo }, socket, io) {
         io.to(sentToSocket).emit('Request Accepted', data);
     }
 
+};
+async function reject({ data, sendTo }, socket, io) {
+    // lookup user by their id find their socket
+    const id = sendTo.userID || sendTo._id
+    const user = await findUserByID(id)
+    const sentToSocket = user?.socket;
+
+    if (user) {
+        io.to(sentToSocket).emit('Request Rejected', data);
+    }
+
 }
 module.exports = {
     login,
@@ -157,4 +167,5 @@ module.exports = {
     handleGlobalDisconnect,
     acceptFriend,
     addFriend,
+    reject
 }

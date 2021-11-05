@@ -1,11 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { genTailwindColorEquiv } from '../../utilities/utils';
 import { AiOutlineClose } from 'react-icons/ai';
-import { toggleNotificationList } from '../alertIcon/AlertIcon';
 import NotificationItem from './NotificationListItem';
+import { useSelector, useDispatch } from 'react-redux';
+import { calculateHeight } from '../../utilities/utils';
+import { toggleNotificationList } from '../alertIcon/AlertIcon';
+
 export function NotificationList(props) {
-    const [notifications, setNotifications] = useState(null);
     const [mounted, setMounted] = useState(false);
     const state = useSelector(state => state);
     const dispatch = useDispatch();
@@ -13,35 +13,24 @@ export function NotificationList(props) {
 
     useEffect(() => {
         setMounted(true);
-        return () => { setMounted(false); setNotifications(null); }
-    }, [])
-    useEffect(() => {
-        if (mounted === true && incomingFriendRequests) {
+        return () => { setMounted(false); }
+    }, []);
 
-            setNotifications(incomingFriendRequests);
-        }
-    }, [mounted]);
-    useEffect(() => {
-        if (mounted === true) {
-            setNotifications(incomingFriendRequests);
-        }
-    }, [incomingFriendRequests]);
 
     if (mounted === false) return null
 
     return (
-        (notifications && notificationList === true ? (
-            <section className='absolute  w-full flex flex-row justify-end h-5/6 '>
-                <div className='w-1/3 bg-black bg-opacity-70 flex flex-col gap-3'>
-                    <header className='bg-gray-400 w-full text-center flex flex-row justify-between items center' >
-                        <h1 className='ml-5'>Notifications</h1>
-                        <span className='p-1 bg-gray-900' onClick={() => { toggleNotificationList(false, dispatch) }}>
-                            <AiOutlineClose color={genTailwindColorEquiv('info')} size='20px' />
+        (incomingFriendRequests.length > 0 && notificationList === true ? (
+            <section className={`absolute  w-full flex flex-row justify-end`} style={{ height: calculateHeight() }}>
+                <div className='w-1/3 bg-gray-900 flex flex-col gap-3'>
+                    <header className=' w-full text-center flex flex-row justify-between items center p-1' >
+                        <h1 className='ml-5 text-gray-400 text-lg font-bold italic '>Friend Requests</h1>
+                        <span className='p-1 bg-gray-900 hover:bg-red-600' onClick={() => { toggleNotificationList(false, dispatch) }}>
+                            <AiOutlineClose color='white' size='20px' />
                         </span>
                     </header>
-
-                    <div className='bg-gray-500 flex flex-col w-full '>
-                        {notifications.map((data, index) => {
+                    <div className=' flex flex-col w-full p-1'>
+                        {incomingFriendRequests.length > 0 && incomingFriendRequests.map((data, index) => {
                             return (
                                 <NotificationItem key={index} user={data} />
                             )
@@ -49,6 +38,5 @@ export function NotificationList(props) {
                     </div>
                 </div>
             </section>) : null)
-
-    )
-}
+    );
+};

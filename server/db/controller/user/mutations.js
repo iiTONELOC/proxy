@@ -257,6 +257,25 @@ const userMutations = {
                 },
                 { new: true },
             ).select('-__v -password -email')
+
+            if (didAdd !== undefined || didAdd !== null) {
+                return userData
+            } else {
+                throw new Error('Something went wrong!')
+            }
+        }
+        throw new AuthenticationError('You need to be logged in!');
+    },
+    rejectFriend: async (parent, { friendId }, context) => {
+        if (context.user) {
+            const userData = await User.findOneAndUpdate(
+                { _id: context.user._id },
+                {
+                    $pull: { incomingRequests: friendId }
+                },
+                { new: true }
+            )
+                .select('-__v -password -email')
                 .populate('location')
                 .populate('status')
                 .populate('profile')
@@ -264,11 +283,22 @@ const userMutations = {
                 .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
                 .populate('pendingRequests')
                 .populate({ path: 'servers', populate: { path: 'channels' } })
-            if (didAdd !== undefined || didAdd !== null) {
-                return userData
-            } else {
-                throw new Error('Something went wrong!')
+            // update the 'friend' 
+            // add userID to the friends request array
+            const didRemove = await User.findOneAndUpdate(
+                { _id: friendId },
+                {
+                    $pull: {
+                        incomingRequests: context.user._id,
+                        pendingRequests: context.user._id
+                    }
+                },
+                { new: true }
+            ).select('-__v -password -email')
+            if (didRemove !== undefined || didRemove !== null) {
+                return didRemove
             }
+
         }
         throw new AuthenticationError('You need to be logged in!');
     },

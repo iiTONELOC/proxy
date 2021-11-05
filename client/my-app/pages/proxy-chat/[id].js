@@ -9,7 +9,7 @@ import serverClient from '../../utilities/apollo/server.config';
 import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
 import { getMyFriendsList, getUsersInRange } from '../../utilities/graphql/userAPI';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import { _REDUX_SET_CHAT, _REDUX_SET_FR } from '../../utilities/redux/actions';
+import { _REDUX_SET_CHAT, } from '../../utilities/redux/actions';
 import { SERVER_SIDE_FETCH_GLOBAL_MESSAGES } from '../../utilities/graphql/queries';
 import { handleSocketConnection, useSocketContext } from '../../components/Providers/Chat';
 import InformationPane from '../../components/information';

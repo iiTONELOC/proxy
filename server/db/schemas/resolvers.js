@@ -1,7 +1,7 @@
 
 const { query } = require('../controller');
 const userMutations = require('../controller/user/mutations');
-const { createNewUser, loginUser, userLogout, addFriend, acceptFriend, } = userMutations;
+const { createNewUser, loginUser, userLogout, addFriend, acceptFriend, rejectFriend } = userMutations;
 const { user, message } = query;
 const resolvers = {
     Query: {
@@ -9,8 +9,10 @@ const resolvers = {
         user: user.serverFindMe,
         inRange: user.findMe,
         globalMessages: message.globalMessages,
+        friendRequests: user.findMe,
         friends: user.findMe,
         getDistance: user.getDistance,
+
         // location:   location.findAll
     },
     Mutation: {
@@ -18,7 +20,8 @@ const resolvers = {
         login: loginUser,
         logout: userLogout,
         addFriend: addFriend,
-        acceptFriend: acceptFriend
+        acceptFriend: acceptFriend,
+        rejectFriend: rejectFriend,
     }
 };
 module.exports = resolvers;

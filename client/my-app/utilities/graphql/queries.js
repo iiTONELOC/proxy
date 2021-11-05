@@ -180,6 +180,7 @@ query Query {
 export const QUERY_FRIEND_REQUESTS = gql`
 query Query {
   friendRequests {
+    incomingRequests{
     _id
     username
     location {
@@ -198,7 +199,9 @@ query Query {
     }
     socket
     friendCount
-  }
+    }
+    }
+    
 }
 `;
 
