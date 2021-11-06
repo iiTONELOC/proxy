@@ -4,8 +4,11 @@ import InRangeFilter from './inRangeFilter';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
 import { calculateHeight } from '../../utilities/utils';
+import FriendsListOptionsModal from './friendsListOptions';
 import UsersInRangeOptionsModal from './usersInRangeOptions';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
+
+
 
 
 export function Modal() {
@@ -27,6 +30,8 @@ export function Modal() {
                 return <SuccessModal timeout={modalView.data} />;
             case 'inRangeFilter':
                 return <InRangeFilter currentRange={modalView.data} />;
+            case 'friendsListOptions':
+                return <FriendsListOptionsModal {...modalView.data} />;
             default:
                 break;
         }

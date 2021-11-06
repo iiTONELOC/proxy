@@ -24,6 +24,8 @@ export default function FriendsList() {
                     )}
                 </div>
             </section>
-        ) : <p>Make some friends!</p>
+        ) : (<div className='w-full p-2 bg-gray-900 rounded-md text-gray-300'>
+            <h1 className='text-xl text-center bg-gray-700 p-2 rounded-md'>Make some Friends!</h1>
+        </div>)
     );
 };

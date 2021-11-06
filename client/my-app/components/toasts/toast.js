@@ -40,12 +40,12 @@ export default function Toast({ timeout }) {
         <article className={`flex flex-row justify-between items-start ${randomColor ? randomColor : `bg-${variantColor(toast.type.type)}`} rounded-l-md`}>
             <div className={`h-full w-2 `}>
             </div>
-            <div className="toast-body b rounded-l-md bg-gray-900 h-full flex justify-between">
+            <div className="toast-body b rounded-l-md bg-gray-900  h-full flex justify-between">
                 <section className='flex flex-row items-start gap-2 text-gray-200 p-2'>
                     <span className='flex flex-col justify-center items-center h-full w-1/6'> {variantIcon(toast.type, iconSize)} </span>
                     <span className='w-5/6 h-full'>
-                        <h1 className={`text-sm block text-${randomColor ? 'gray-200' : `${variantColor(toast.type.type)}`}`}>{toast.type.notification}</h1>
-                        <p className='text-sm block'>{toast?.message}</p>
+                        <h1 className={`text-lg block text-${randomColor ? 'gray-200' : `${variantColor(toast.type.type)}`}`}>{toast.type.notification}</h1>
+                        <p className='text-md block'>{toast?.message}</p>
                     </span>
                 </section>
                 <button className="self-start m-1 p-2" onClick={() => closeToast(dispatch)}>

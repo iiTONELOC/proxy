@@ -5,11 +5,12 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { useSocketContext } from '../Providers/Chat'
 import { useDispatch, useSelector } from 'react-redux';
 import client from '../../utilities/apollo/client.config';
+import ButtonWithToolTip from '../Button/ButtonWithToolTip';
+import { toggleNotificationList } from '../alertIcon/AlertIcon';
+import { getMyFriendsList } from '../../utilities/graphql/userAPI';
 import { ACCEPT_FRIEND, REJECT_FRIEND } from '../../utilities/graphql/mutations';
 import { reduxSetUsersInRange, reduxUpdateIncomingFriendRequests } from '../../utilities/redux/helpers';
-import { getMyFriendsList } from '../../utilities/graphql/userAPI';
-import ButtonWithToolTip from '../Button/ButtonWithToolTip';
-import { getData } from '../alertIcon/AlertIcon';
+
 
 export default function NotificationItem({ user }) {
     const [isMounted, setMounted] = useState(null);
@@ -84,7 +85,6 @@ export default function NotificationItem({ user }) {
     }, [isMounted]);
 
     if (!isMounted || !userInfo) return null;
-
     async function acceptFriendRequest(user) {
         if (user) {
             try {
@@ -98,6 +98,7 @@ export default function NotificationItem({ user }) {
                     getMyFriendsList(dispatch)
                     reduxSetUsersInRange({ data: mD.usersInRange, dispatch });
                     reduxUpdateIncomingFriendRequests({ data: mD?.incomingFriendRequests?.length > 0 ? [mD.incomingFriendRequests] : [], dispatch });
+                    mD?.incomingFriendRequests?.length > 0 ? null : toggleNotificationList(false, dispatch)
                 };
             } catch (error) {
                 console.error(error);
@@ -122,41 +123,41 @@ export default function NotificationItem({ user }) {
         };
     };
 
-
     return (
-        incomingFriendRequests?.length > 0 ? <article
-            key={userInfo?.username}
-            className='p-2 bg-gray-700 rounded-md'
-        >
-            <div className='p-1 flex justify-between items-center'>
-                <span>
-                    <ButtonWithToolTip
-                        toolTip='view profile'
-                        Icon={Avatar}
-                        iconSize='35px'
-                        action='view profile'
-                        settings={{
-                            button: {
-                                color: 'gray-800',
-                                hover: 'gray-700'
-                            },
-                            icon: {
-                                color: ''
-                            },
-                            toolTip: {
-                                classNames: 'mt-20 text-medium p-2 bg-purple-500 border-2 border-black drop-shadow-lg',
-                            },
-                        }}
-                    />
-                </span>
-                <p className='text-gray-300'>{userInfo?.username}</p>
-                <p className=''>{userInfo?.location ? `${userInfo?.location.city}, ${userInfo?.location.state}` : null}</p>
-                <span className='flex flex-row justify-between items-center w-2/6'>
-                    {itemIcons.map((icon, index) => (
-                        <ButtonWithToolTip {...icon} key={index} />
-                    ))}
-                </span>
-            </div>
-        </article> : null
+        incomingFriendRequests?.length > 0 ?
+            <article
+                key={userInfo?.username}
+                className='p-2 bg-gray-700 rounded-md'
+            >
+                <div className='p-1 flex justify-between items-center'>
+                    <span>
+                        <ButtonWithToolTip
+                            toolTip='view profile'
+                            Icon={Avatar}
+                            iconSize='35px'
+                            action='view profile'
+                            settings={{
+                                button: {
+                                    color: 'gray-800',
+                                    hover: 'gray-700'
+                                },
+                                icon: {
+                                    color: ''
+                                },
+                                toolTip: {
+                                    classNames: 'mt-20 text-medium p-2 bg-purple-500 border-2 border-black drop-shadow-lg',
+                                },
+                            }}
+                        />
+                    </span>
+                    <p className='text-gray-300'>{userInfo?.username}</p>
+                    <p className=''>{userInfo?.location ? `${userInfo?.location.city}, ${userInfo?.location.state}` : null}</p>
+                    <span className='flex flex-row justify-between items-center w-2/6'>
+                        {itemIcons.map((icon, index) => (
+                            <ButtonWithToolTip {...icon} key={index} />
+                        ))}
+                    </span>
+                </div>
+            </article> : null
     );
 };

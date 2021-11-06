@@ -104,6 +104,7 @@ export const ChatProvider = ({ ...props }) => {
                     },
                     dispatch
                 });
+                getMyFriendsList(dispatch);
             });
             socket.on('updateUsersInRange', async () => {
                 await getUsersInRange(dispatch);

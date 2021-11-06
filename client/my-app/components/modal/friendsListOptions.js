@@ -1,44 +1,33 @@
+import { HiMail } from 'react-icons/hi';
+import Avatar from '../userAvatar/Avatar';
 import { useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { MdAccountBox } from 'react-icons/md';
-import { AiOutlineUserAdd } from 'react-icons/ai';
+import { GoDiffRemoved } from 'react-icons/go';
+import { AiOutlineProfile } from 'react-icons/ai';
 import { useSocketContext } from '../Providers/Chat';
 import { useSelector, useDispatch } from 'react-redux';
+import client from '../../utilities/apollo/client.config';
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
-import { ADD_FRIEND } from '../../utilities/graphql/mutations';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
-import Avatar from '../userAvatar/Avatar';
+import { REMOVE_FRIEND } from '../../utilities/graphql/mutations';
+import { getMyFriendsList } from '../../utilities/graphql/userAPI';
+import { toggleNotificationList } from '../alertIcon/AlertIcon'
 
 
-export default function UsersInRangeOptionsModal(props) {
+export default function FriendsListOptionsModal(props) {
     const { username, _id, socket, status, location } = props;
     const [thisSocket, setThisSocket] = useState(null);
     const [isMounted, setMounted] = useState(false);
-    const [addFriend] = useMutation(ADD_FRIEND);
     const state = useSelector(state => state);
     const mySocket = useSocketContext();
     const dispatch = useDispatch();
-    const { me, friendsList } = state;
+    const { me } = state;
 
-    function isFriend() {
-        if (friendsList) {
-            const list = friendsList.filter(friend => friend.username === username)
-            if (list.length > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false
-        }
-    }
-    const friendStatus = isFriend();
     const iconSize = '35px';
     const iconColor = 'text-gray-400';
-    const pageIcons = friendStatus === false ? [
+    const pageIcons = [
         {
-            Icon: MdAccountBox,
-            toolTip: "View Profile",
+            toolTip: 'View Profile',
+            Icon: AiOutlineProfile,
             iconSize: iconSize,
             action: 'viewProfile',
             settings: {
@@ -55,44 +44,42 @@ export default function UsersInRangeOptionsModal(props) {
             },
         },
         {
-            Icon: AiOutlineUserAdd,
-            toolTip: "AddFriend",
+            toolTip: 'Send Message',
+            Icon: HiMail,
             iconSize: iconSize,
-            iconColor: iconColor,
-            action: handleAddFriend,
+            action: 'sendMessage',
             settings: {
                 button: {
                     color: 'gray-800',
-                    hover: 'green-500'
+                    hover: 'gray-500'
                 },
                 icon: {
                     color: iconColor
                 },
                 toolTip: {
-                    classNames: 'mt-20 text-medium p-2 bg-green-500 border-2 border-black drop-shadow-lg',
+                    classNames: 'mt-20 text-medium p-2 bg-gray-500 border-2 border-black drop-shadow-lg',
                 },
-            },
-        },
-    ] : [
-        {
-            Icon: MdAccountBox,
-            toolTip: "View Profile",
-            iconSize: iconSize,
-            action: 'viewProfile',
-            settings: {
-                button: {
-                    color: 'gray-800',
-                    hover: 'purple-500'
-                },
-                icon: {
-                    color: iconColor
-                },
-                toolTip: {
-                    classNames: 'mt-20 text-medium p-2 bg-purple-500 border-2 border-black drop-shadow-lg',
-                },
-            },
-        },
 
+            },
+        },
+        {
+            toolTip: 'Remove Friend',
+            Icon: GoDiffRemoved,
+            iconSize: iconSize,
+            action: handleRemove,
+            settings: {
+                button: {
+                    color: 'gray-800',
+                    hover: 'red-500'
+                },
+                icon: {
+                    color: iconColor
+                },
+                toolTip: {
+                    classNames: 'mt-20 text-medium p-2 bg-red-500 border-2 border-black drop-shadow-lg',
+                },
+            },
+        },
     ];
     useEffect(() => {
         setMounted(true);
@@ -109,36 +96,35 @@ export default function UsersInRangeOptionsModal(props) {
     }, [isMounted])
 
 
-    async function handleAddFriend(e) {
+    async function handleRemove(e) {
+        console.log('removing friend');
         e.preventDefault();
         try {
-            const addNewFriend = await addFriend({
+            const removeFriend = await client.mutate({
+                mutation: REMOVE_FRIEND,
                 variables: { friendId: _id }
             });
-            if (addNewFriend !== undefined || addNewFriend !== null) {
+            if (removeFriend !== undefined || removeFriend !== null) {
                 const emitData = {
-                    data: {
-                        type: 'Friend Request',
-                        from: {
-                            username: me.username,
-                            userID: me._id,
-                        }
-                    },
-                    sendTo: socket,
+                    sendTo: { userID: _id },
+                    data: { username: me.username },
                 };
-                if (thisSocket) { thisSocket.emit("sendFriendRequest", emitData) };
+                if (thisSocket) { thisSocket.emit("removedUser", emitData) };
+                getMyFriendsList(dispatch);
+
+                toggleNotificationList(false, dispatch);
                 dispatch({
                     type: _REDUX_SET_MODAL,
-                    modalView: { view: 'success', data: 1500 },
-                    toggle: 'false'
+                    modalView: 'null'
                 });
             } else {
-                console.log(addNewFriend);
+                console.log(removeFriend);
             };
         } catch (error) {
             console.log(error);
         };
     };
+
 
     return (
         <section className='w-full flex flex-col justify-between gap-3 items-center text-gray-300 bg-gray-800 rounded-md p-2'>
@@ -154,6 +140,7 @@ export default function UsersInRangeOptionsModal(props) {
                     <span key={option.toolTip + `${Date.now()}`}>
                         <ButtonWithToolTip
                             dispatch={dispatch}
+                            user={props}
                             {...option}
                         />
                     </span>
