@@ -5,7 +5,7 @@ import { GiRadarDish } from "react-icons/gi";
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 import { calculateDistance } from '../../utilities/graphql/userAPI';
-
+import Button from '../Button/Button';
 export default function UsersInRange() {
     const [mounted, setMounted] = useState(false);
     const state = useSelector((state) => state);
@@ -66,27 +66,40 @@ export default function UsersInRange() {
         <div className=' static bg-gray-800 rounded p-2 flex mt  flex-col justify-center text-white'>
             <header className='w-full flex flex-row justify-between text-center p-2'>
                 <span>
+                    <Button
+                        color={{ color: 'gray-800', hover: 'gray-700' }}
+                        radius={'rounded-md'}
+                        class='text-white text-center p-2'
+                        action={{ onClick: handleFilter }}
+                    >
+                        <GiRadarDish color='white' size='35px' />
+                    </Button>
+
+                </span>
+                <span>
                     <ButtonWithToolTip
                         toolTip='Adjust Range'
-                        Icon={GiRadarDish}
+                        name={`${filterRange} miles`}
                         iconSize='35px'
                         action='adjust range'
                         settings={{
                             button: {
-                                color: 'gray-800',
-                                hover: 'purple-500'
+                                color: 'gray-900',
+                                hover: 'green-700',
+                                classNames: 'p-2'
                             },
                             icon: {
                                 color: 'bg-gray-400'
                             },
                             toolTip: {
-                                classNames: 'mt-20 text-medium p-2 bg-purple-500 border-2 border-black drop-shadow-lg',
+                                classNames: 'mt-20 text-medium p-2 bg-green-700 border-2 border-black drop-shadow-lg',
                             },
                         }}
                         action={handleFilter}
                     />
                 </span>
-                <span className='bg-gray-900 text-gray-300 p-2 rounded-md'>{filterRange} miles</span>
+
+
             </header>
             <div className='max-h-40 p-1 overflow-x-hidden overflow-y-auto flex flex-col gap-3'>
                 {proxies?.length > 0 ? proxies.map(user => (
