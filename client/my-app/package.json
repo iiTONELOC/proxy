@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build-css": "tailwindcss build src/styles.css -o public/styles.css",
     "start": "next start && cd .. && cd .. && cd/server node index.js",
     "lint": "next lint"
   },
@@ -18,9 +19,7 @@
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
     "react-redux": "^7.2.5",
-    "socket.io-client": "^4.2.0",
-    "postcss": "^8.3.9",
-    "tailwindcss": "^2.2.17"
+    "socket.io-client": "^4.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.7",
