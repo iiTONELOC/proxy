@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
+import { useDispatch } from 'react-redux';
 import auth from "../../../utilities/auth";
-import { useDispatch, useSelector } from 'react-redux';
 import { actions, reactions } from "../../../../../server/chat/actions";
 import { makeToast, reduxUpdateIncomingFriendRequests, } from "../../../utilities/redux/helpers";
 import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
@@ -45,13 +45,11 @@ export const ChatProvider = ({ ...props }) => {
         if (socket && mounted && loggedIn) {
             const { _authenticated } = reactions;
             const { _socket_user_login } = actions;
-            // grab our data and package it for ChatServer
             const { _id, username } = loggedIn.data;
             const socketData = {
                 user: username,
                 id: _id
             };
-            // socket payload
             const payload = {
                 request: _socket_user_login,
                 data: socketData,
@@ -60,7 +58,6 @@ export const ChatProvider = ({ ...props }) => {
             if (joined !== true) {
                 socket.emit(_socket_user_login, payload);
             };
-
             socket.on(_authenticated, (data) => {
                 setJoined(true);
             });
@@ -69,31 +66,41 @@ export const ChatProvider = ({ ...props }) => {
                 makeToast({
                     bread: {
                         type: 'info',
-                        notification: 'New Friend Request',
+                        notification: 'New Friend Request!!',
                         message: `${data.from.username} sent you a friend request!`,
                         crumbs: data.from
                     },
                     dispatch
-                })
+                });
             });
             socket.on('Request Accepted', (data) => {
                 makeToast({
                     bread: {
                         type: 'success',
-                        notification: 'Request Accepted',
+                        notification: 'Request Accepted!!',
                         message: `${data.username} accepted your friend request!`,
                         crumbs: data
                     },
                     dispatch
                 });
-                getMyFriendsList(dispatch)
+                getMyFriendsList(dispatch);
             });
             socket.on('Request Rejected', (data) => {
                 makeToast({
                     bread: {
                         type: 'danger',
-                        notification: 'Friend Request Not accepted',
+                        notification: 'Friend Request Not Accepted!!',
                         message: `${data} did not accept your friend request!`,
+                    },
+                    dispatch
+                });
+            });
+            socket.on('Removed', (data) => {
+                makeToast({
+                    bread: {
+                        type: 'danger',
+                        notification: 'Removed from friends list!!',
+                        message: `${data.username} removed you as a friend!`,
                     },
                     dispatch
                 });

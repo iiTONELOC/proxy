@@ -298,9 +298,34 @@ const userMutations = {
             if (didRemove !== undefined || didRemove !== null) {
                 return didRemove
             }
-
         }
         throw new AuthenticationError('You need to be logged in!');
+    },
+
+    removeSelectedFriend: async (parent, { friendId }, context) => {
+        if (context.user) {
+            const userRemovedFromFriend = await User.findByIdAndUpdate(friendId, {
+                $pull: { friends: context.user._id }
+            });
+            if (userRemovedFromFriend) {
+                const updatedUser = await User.findByIdAndUpdate(context.user._id,
+                    {
+                        $pull: { friends: friendId }
+                    },
+                    { new: true })
+                    .select('-__v -password -email')
+                    .populate('location')
+                    .populate('status')
+                    .populate('profile')
+                    .populate('friends')
+                    .populate({ path: 'incomingRequests', populate: { path: 'location', path: 'profile' } })
+                    .populate('pendingRequests')
+                    .populate({ path: 'servers', populate: { path: 'channels' } });
+                return updatedUser
+            } else {
+                throw new AuthenticationError('You need to be logged in!');
+            }
+        }
     },
 
 }

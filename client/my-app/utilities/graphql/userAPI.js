@@ -30,5 +30,4 @@ export async function calculateDistance(args) {
     if (data?.getDistance?.distance) {
         return data.getDistance.distance;
     }
-
 }

@@ -82,8 +82,9 @@ query users {
 export const QUERY_FRIENDS = gql`
 query Query {
   friends {
-    _id
+    
     friends{
+      _id
   username
     location {
       _id
@@ -94,6 +95,9 @@ query Query {
     }
     profile {
       _id
+        ProfilePicture
+        visible
+        bio
     }
     status {
       _id

@@ -46,7 +46,14 @@ mutation rejectFriend($friendId: ID!) {
     rejectFriend(friendId: $friendId) {
         _id
     username
-    socket
+  }
+}
+`;
+export const REMOVE_FRIEND = gql`
+mutation removeFriend($friendId: ID!) {
+    removeFriend(friendId: $friendId) {
+        _id
+    username
   }
 }
 `;

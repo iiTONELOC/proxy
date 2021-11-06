@@ -1,4 +1,4 @@
-const { login, joinGlobal, handleGlobalDisconnect, handleGlobalMessage, addFriend, acceptFriend, reject } = require("./chatResolver")
+const { login, joinGlobal, handleGlobalDisconnect, handleGlobalMessage, addFriend, acceptFriend, reject, removeUser } = require("./chatResolver")
 const { actions, reactions } = require("./actions");
 const { _socket_user_login, JOIN_GLOBAL_CHAT } = actions;
 // const { _authenticated } = reactions
@@ -11,7 +11,8 @@ class Connection {
             this.socket.on('globalChatMessage', (message) => { handleGlobalMessage(message, socket, io) }),
             this.socket.on('sendFriendRequest', (data) => { addFriend(data, socket, io) }),
             this.socket.on('acceptedFriendRequest', (data) => { acceptFriend(data, socket, io) }),
-            this.socket.on('rejectRequest', (data) => { reject(data, socket, io) })
+            this.socket.on('rejectRequest', (data) => { reject(data, socket, io) }),
+            this.socket.on('removedUser', (data) => { removeUser(data, socket, io) })
     }
 };
 

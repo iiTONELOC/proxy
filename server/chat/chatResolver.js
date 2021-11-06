@@ -159,6 +159,16 @@ async function reject({ data, sendTo }, socket, io) {
         io.to(sentToSocket).emit('Request Rejected', data);
     }
 
+} async function removeUser({ data, sendTo }, socket, io) {
+    // lookup user by their id find their socket
+    const id = sendTo.userID || sendTo._id
+    const user = await findUserByID(id)
+    const sentToSocket = user?.socket;
+
+    if (user) {
+        io.to(sentToSocket).emit('Removed', data);
+    }
+
 }
 module.exports = {
     login,
@@ -167,5 +177,6 @@ module.exports = {
     handleGlobalDisconnect,
     acceptFriend,
     addFriend,
+    removeUser,
     reject
 }

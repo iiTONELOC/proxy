@@ -1,27 +1,36 @@
 
 const { query } = require('../controller');
 const userMutations = require('../controller/user/mutations');
-const { createNewUser, loginUser, userLogout, addFriend, acceptFriend, rejectFriend } = userMutations;
 const { user, message } = query;
+const {
+    loginUser,
+    addFriend,
+    userLogout,
+    acceptFriend,
+    rejectFriend,
+    createNewUser,
+    removeSelectedFriend
+} = userMutations;
+
 const resolvers = {
     Query: {
         users: user.findAll,
-        user: user.serverFindMe,
-        inRange: user.findMe,
-        globalMessages: message.globalMessages,
-        friendRequests: user.findMe,
         friends: user.findMe,
+        inRange: user.findMe,
+        user: user.serverFindMe,
+        friendRequests: user.findMe,
         getDistance: user.getDistance,
-
+        globalMessages: message.globalMessages,
         // location:   location.findAll
     },
     Mutation: {
-        addUser: createNewUser,
         login: loginUser,
         logout: userLogout,
         addFriend: addFriend,
+        addUser: createNewUser,
         acceptFriend: acceptFriend,
         rejectFriend: rejectFriend,
+        removeFriend: removeSelectedFriend,
     }
 };
 module.exports = resolvers;

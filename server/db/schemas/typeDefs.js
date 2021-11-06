@@ -101,6 +101,7 @@ type Mutation{
     addFriend(friendId: ID!): User
     acceptFriend(friendId: ID!): User
     rejectFriend(friendId: ID!): User
+    removeFriend(friendId: ID!): User
 }
 
 type Auth {
