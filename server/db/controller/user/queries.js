@@ -2,7 +2,7 @@ const { User } = require("../../models");
 const sharedQueries = require('../shared/sharedQueries');
 const { AuthenticationError } = require('apollo-server-express');
 const Distance = require("../../../utils/Distance");
-const IpLocation = require('../../../utils/IpLoc');
+const IpLocation = require('../../../utils/ipLoc');
 const { findUserByID } = sharedQueries;
 async function isOurServer(context) {
     const { origin, host, } = context.socket.parser.incoming.headers
