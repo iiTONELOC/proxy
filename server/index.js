@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT + 1 || 3001;
 const socketIo = require('socket.io');
 const { Chat } = require('./chat/index');
 const db = require('./db/config/connection');
