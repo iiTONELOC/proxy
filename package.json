@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd server && node index.js",
+    "start": "concurrently \"cd server && node index.js \" \"cd client/my-app && npm run start\"",
     "develop": "concurrently \"cd server && npm run watch \" \"cd client/my-app && npm run dev\"",
     "install": "cd server && npm i && cd ../client/my-app && npm i ",
-    "build": "cd client && npm run build",
+    "build": "cd client/my-app && npm run build",
     "del-db": "cd server && npm run seed"
   },
   "repository": {
@@ -22,5 +22,15 @@
   "homepage": "https://github.com/iiTONELOC/proxy#readme",
   "dependencies": {
     "concurrently": "^6.3.0"
-  }
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "eslint": "^7.32.0",
+    "eslint-config-next": "^12.0.3",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^2.2.19"
+  },
+  "cacheDirectories": [
+    "client/my-app/.next/cache"
+  ]
 }

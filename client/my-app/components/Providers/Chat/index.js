@@ -25,7 +25,7 @@ export const ChatProvider = ({ ...props }) => {
     const dispatch = useDispatch();
     useEffect(() => {
         setMounted(true);
-        const nS = io(`http://${window.location.hostname}:3001`);
+        const nS = io(`https://${window.location.hostname}`);
         const newSocket = nS;
         setSocket(newSocket);
         return () => { setMounted(false); setLoggedIn(false); setJoined(false) }

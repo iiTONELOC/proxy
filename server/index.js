@@ -10,7 +10,7 @@ const { ApolloServer } = require('apollo-server-express');
 
 async function startApolloServer() {
     const apolloServer = new ApolloServer({
-        uri: "http://localhost:3001/graphql",
+        uri: "http://localhost:3000/graphql",
         typeDefs,
         resolvers,
         context:
@@ -33,4 +33,5 @@ async function startApolloServer() {
 
 db.once('open', () => {
     startApolloServer();
+    console.log(`Server Is Running on ${PORT}`)
 });
