@@ -26,7 +26,7 @@ if (typeof window !== undefined) {
     };
 } else {
     clientData = {
-        uri: `http://proximo-chat.herokuapp.com/graphql`,
+        uri: `/graphql`,
         cache: cache(),
     };
 };
