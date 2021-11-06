@@ -7,7 +7,7 @@
     "start": "cd server && node index.js",
     "develop": "concurrently \"cd server && npm run watch \" \"cd client/my-app && npm run dev\"",
     "install": "cd server && npm i && cd ../client/my-app && npm i ",
-    "build": "cd client && npm run build",
+    "build": "cd client/my-app && npm run build",
     "del-db": "cd server && npm run seed"
   },
   "repository": {
