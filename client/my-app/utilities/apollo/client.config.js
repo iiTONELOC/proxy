@@ -9,7 +9,7 @@ let clientData;
 
 if (typeof window !== undefined) {
     const httpLink = createHttpLink({
-        uri: `http://${window.location.hostname}:3001/graphql`,
+        uri: `/graphql`,
     });
     const authLink = setContext((_, { headers }) => {
         const token = localStorage.getItem('proxy_id_token');
@@ -26,7 +26,7 @@ if (typeof window !== undefined) {
     };
 } else {
     clientData = {
-        uri: `http://${window.location.hostname}:3001/graphql`,
+        uri: `http://proximo-chat.herokuapp.com/graphql`,
         cache: cache(),
     };
 };
