@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build-css": "tailwindcss build src/styles.css -o public/styles.css",
     "start": "next start && cd .. && cd .. && cd/server node index.js",
     "lint": "next lint"
   },
