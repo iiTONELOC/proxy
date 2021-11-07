@@ -33,7 +33,7 @@ async function bootstrapNextApp(expressApp) {
 
 async function bootstrapApolloServer(expressApp) {
     const apolloServer = new ApolloServer({
-        uri: 'http://localhost:3000/graphql',
+        uri: `http://localhost:${PORT}/graphql`,
         typeDefs,
         resolvers,
         context:
@@ -53,7 +53,7 @@ function bootstrap_and_start_SystemsServer(expressApp) {
     });
     return systemsServer.listen(PORT, (err) => {
         if (err) throw err;
-        console.log(`[Server] ready on port ${PORT} Access @ http://localhost:3000`);
+        console.log(`[Server] ready on port ${PORT} Access @ http://localhost:${PORT}`);
         Chat(io);
     });
 };
