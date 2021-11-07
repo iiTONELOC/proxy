@@ -6,6 +6,6 @@ import {
 import cache from "./cache";
 
 
-const serverClient = new ApolloClient({ uri: 'http://localhost:3000/graphql', cache: cache() });
+const serverClient = new ApolloClient({ uri: 'http://localhost/graphql', cache: cache() });
 
 export default serverClient;
