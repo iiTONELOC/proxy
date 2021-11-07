@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setChat } from '../../utilities/redux/helpers';
 import Authorization from '../../components/Providers/Auth';
-import serverClient from '../../utilities/apollo/server.config';
 import { useSocketContext } from '../../components/Providers/Chat';
-import ResponsiveLayout from '../../components/responsive-layout/Responsive';
+
 
 export default function User_Home({ userID }) {
     const dispatch = useDispatch();
