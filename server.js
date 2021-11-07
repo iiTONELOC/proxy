@@ -34,7 +34,7 @@ async function bootstrapNextApp(expressApp) {
 
 async function bootstrapApolloServer(expressApp) {
     const apolloServer = new ApolloServer({
-        uri: `http://localhost:3000/graphql`,
+        uri: `http://localhost:${PORT}/graphql`,
         typeDefs,
         resolvers,
         context:
