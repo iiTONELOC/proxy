@@ -25,8 +25,8 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
     }, []);
     useEffect(() => {
         if (mounted === true) {
-            if (globalMessages) {
-                globalMessages.globalMessages.forEach(message => {
+            if (globalMessages.length > 0) {
+                globalMessages.forEach(message => {
                     saveMessage(message, setMessage);
                 });
             }

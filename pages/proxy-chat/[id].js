@@ -5,7 +5,7 @@ import Messaging from '../../components/chat';
 import { useSelector, useDispatch } from 'react-redux';
 import { setChat } from '../../utilities/redux/helpers';
 import Authorization from '../../components/Providers/Auth';
-import serverClient from '../../utilities/apollo/server.config';
+import messageQueries from '../../lib/db/controller/messages/queries';
 import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
 import { getMyFriendsList, getUsersInRange } from '../../utilities/graphql/userAPI';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
@@ -84,14 +84,16 @@ export default function Global_Chat({ globalMessages }) {
 // ssr
 export async function getServerSideProps(req) {
 
-    const globalMessages = await serverClient.query({
-        query: SERVER_SIDE_FETCH_GLOBAL_MESSAGES, fetchPolicy: "network-only"
-    });
-    const msgError = globalMessages.errors;
-    const msgData = globalMessages.data;
-    if (msgError) {
-        console.log("Error retrieving data in the Global-Chat", msgError);
-    };
+    // const globalMessages = await serverClient.query({
+    //     query: SERVER_SIDE_FETCH_GLOBAL_MESSAGES, fetchPolicy: "network-only"
+    // });
+    // const msgError = globalMessages.errors;
+    // const msgData = globalMessages.data;
+    // if (msgError) {
+    //     console.log("Error retrieving data in the Global-Chat", msgError);
+
+    // };
+    const msgData = await messageQueries.globalMessages();
     return {
         props: { globalMessages: msgData }
     };
