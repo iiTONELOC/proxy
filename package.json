@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "cross-env NODE_ENV=production node server.js",
     "lint": "next lint",
-    "del-db": "cd server && npm run seed"
+    "del-db": "cd lib/db/seeders && node seeds.js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
     "react-redux": "^7.2.5",
+    "request-ip": "^2.1.3",
     "socket.io": "^4.1.3",
     "socket.io-client": "^4.2.0"
   },

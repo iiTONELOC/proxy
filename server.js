@@ -5,6 +5,7 @@ const app = express();
 
 const socketIo = require('socket.io');
 const PORT = process.env.PORT || 3000;
+
 const { Chat } = require('./lib/chat/index');
 const DB = require('./lib/db/config/connection');
 const dev = process.env.NODE_ENV !== 'production';
@@ -27,13 +28,13 @@ async function startServer() {
 async function bootstrapNextApp(expressApp) {
     const NextApp = next({ dev })
     await NextApp.prepare();
-    expressApp.get('*', NextApp.getRequestHandler());
+    expressApp.get('*', NextApp.getRequestHandler())
     console.log(`[Next.js Ready]`);
 };
 
 async function bootstrapApolloServer(expressApp) {
     const apolloServer = new ApolloServer({
-        uri: `http://localhost:${PORT}/graphql`,
+        uri: `http://localhost:3000/graphql`,
         typeDefs,
         resolvers,
         context:
