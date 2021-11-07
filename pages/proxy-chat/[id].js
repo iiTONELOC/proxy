@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react';
 import Messaging from '../../components/chat';
 import { useSelector, useDispatch } from 'react-redux';
 import { setChat } from '../../utilities/redux/helpers';
-import Authorization from '../../components/Providers/Auth';
-import messageQueries from '../../lib/db/controller/messages/queries';
-import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
-import { getMyFriendsList, getUsersInRange } from '../../utilities/graphql/userAPI';
-import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import { _REDUX_SET_CHAT, } from '../../utilities/redux/actions';
-import { SERVER_SIDE_FETCH_GLOBAL_MESSAGES } from '../../utilities/graphql/queries';
-import { handleSocketConnection, useSocketContext } from '../../components/Providers/Chat';
 import InformationPane from '../../components/information';
+import Authorization from '../../components/Providers/Auth';
+import { _REDUX_SET_CHAT, } from '../../utilities/redux/actions';
+import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
 import ProxySearch from '../../components/information/proxySearch';
+import messageQueries from '../../lib/db/controller/messages/queries';
+import ResponsiveLayout from '../../components/responsive-layout/Responsive';
+import { getMyFriendsList, getUsersInRange } from '../../utilities/graphql/userAPI';
+import { handleSocketConnection, useSocketContext } from '../../components/Providers/Chat';
+
+
 export default function Global_Chat({ globalMessages }) {
     const dispatch = useDispatch();
     const socket = useSocketContext();
@@ -22,7 +23,7 @@ export default function Global_Chat({ globalMessages }) {
     const [joined, setJoined] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [thisSocket, setThisSocket] = useState(null);
-
+    const messages = globalMessages.map(el => JSON.parse(el));
 
     useEffect(() => {
         setMounted(true);
@@ -70,7 +71,7 @@ export default function Global_Chat({ globalMessages }) {
                         <ResponsiveLayout
                             viewData={{
 
-                                Messaging: { Element: Messaging, props: { chatName: 'Global Chat', globalMessages: globalMessages } },
+                                Messaging: { Element: Messaging, props: { chatName: 'Global Chat', globalMessages: messages } },
                                 InformationPane: { Element: InformationPane, props: { ProxySearch } }
                             }}
                         />
@@ -84,18 +85,11 @@ export default function Global_Chat({ globalMessages }) {
 // ssr
 export async function getServerSideProps(req) {
 
-    // const globalMessages = await serverClient.query({
-    //     query: SERVER_SIDE_FETCH_GLOBAL_MESSAGES, fetchPolicy: "network-only"
-    // });
-    // const msgError = globalMessages.errors;
-    // const msgData = globalMessages.data;
-    // if (msgError) {
-    //     console.log("Error retrieving data in the Global-Chat", msgError);
-
-    // };
     const msgData = await messageQueries.globalMessages();
+
+    const data = msgData.map(el => JSON.stringify(el));
     return {
-        props: { globalMessages: msgData }
+        props: { globalMessages: data }
     };
 };
 
