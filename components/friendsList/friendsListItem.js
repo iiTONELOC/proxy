@@ -24,8 +24,8 @@ export default function FriendsListItem({ user }) {
     useEffect(() => {
         if (isMounted) {
             const args = {
-                lat1: user.location.latitude,
-                lon1: user.location.longitude,
+                lat1: user.location.latitude.toString(),
+                lon1: user.location.longitude.toString(),
             }
             const d = async () => await calculateDistance({ ...args });
             d().then(res => { setHowFar(res) });

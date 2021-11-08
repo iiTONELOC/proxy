@@ -4,7 +4,7 @@ import UserItem from '../userItem/UserItem';
 import { GiRadarDish } from "react-icons/gi";
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
-import { calculateDistance } from '../../utilities/graphql/userAPI';
+import { calculateDistance, getUsersInRange } from '../../utilities/graphql/userAPI';
 import Button from '../Button/Button';
 export default function UsersInRange() {
     const [mounted, setMounted] = useState(false);
@@ -18,8 +18,8 @@ export default function UsersInRange() {
         if (array.length > 0) {
             async function getDistance(user) {
                 const args = {
-                    lat1: user.location.latitude,
-                    lon1: user.location.longitude,
+                    lat1: user.location.latitude.toString(),
+                    lon1: user.location.longitude.toString(),
                 }
                 return await calculateDistance({ ...args });
             }
@@ -45,6 +45,7 @@ export default function UsersInRange() {
     };
     useEffect(() => {
         setMounted(true);
+        getUsersInRange(dispatch)
         return () => { setMounted(false); setUsers(null) };
     }, []);
     useEffect(() => {

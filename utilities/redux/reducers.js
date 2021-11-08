@@ -40,7 +40,7 @@ export const reducers = (state = initialState, action) => {
                 let d = action.usersInRange
                 return {
                     ...state,
-                    usersInRange: [...d]
+                    usersInRange: d.length > 0 ? [...d] : []
                 }
             case _REDUX_SET_CHAT:
                 return {

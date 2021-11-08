@@ -61,8 +61,8 @@ export function reduxSetMyFriends({ data, dispatch }) {
         friends: data
     })
 };
-// export function reduxUpdateUserData({ userData, dispatch }) {
-
-//     reduxSetUsersInRange({ data: userData.usersInRange, dispatch });
-//     reduxUpdateIncomingFriendRequests({ data: userData.incomingRequests, dispatch });
-// };
+export function reduxUpdateUserData({ userData, dispatch }) {
+    reduxSetMe({ me: userData, dispatch })
+    reduxSetMyFriends({ data: userData.friends, dispatch })
+    reduxUpdateIncomingFriendRequests({ data: userData.incomingRequests, dispatch });
+};

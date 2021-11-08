@@ -111,7 +111,6 @@ export default function FriendsListOptionsModal(props) {
                 };
                 if (thisSocket) { thisSocket.emit("removedUser", emitData) };
                 getMyFriendsList(dispatch);
-
                 toggleNotificationList(false, dispatch);
                 dispatch({
                     type: _REDUX_SET_MODAL,

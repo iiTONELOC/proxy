@@ -22,7 +22,6 @@ export default function AlertIcon() {
     const { incomingFriendRequests, notificationList } = state;
     useEffect(() => {
         setMounted(true);
-        getData(dispatch);
         return () => setMounted(null);
     }, [])
     if (mounted !== true) return null;
