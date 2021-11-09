@@ -7,6 +7,8 @@ import { calculateHeight } from '../../utilities/utils';
 import FriendsListOptionsModal from './friendsListOptions';
 import UsersInRangeOptionsModal from './usersInRangeOptions';
 import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
+import ImageUploaderModal from './imageUploader';
+import { useEffect } from 'react';
 
 
 
@@ -32,6 +34,9 @@ export function Modal() {
                 return <InRangeFilter currentRange={modalView.data} />;
             case 'friendsListOptions':
                 return <FriendsListOptionsModal {...modalView.data} />;
+            case 'uploadProfilePicture':
+                console.log('uploadProfilePicture');
+                return <ImageUploaderModal  {...modalView.data} />
             default:
                 break;
         }

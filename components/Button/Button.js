@@ -4,11 +4,16 @@ import { hoverHandler } from "../navigation/NavLink";
 export default function Button({ children, action, ...props }) {
     const [isMounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
+    const [activeColor, setActiveColor] = useState();
     function onHover() {
-        return hoverHandler({ hover, setHover });
+
+        hoverHandler({ hover, setHover });
+        // backwards it wont register the change right away
+        setActiveColor(!hover ? props.color.hover : props.color.color);
     }
     useEffect(() => {
         setMounted(true);
+        setActiveColor(props.color.color);
         return () => setMounted(false)
     }, [])
     if (!isMounted) return null
@@ -17,7 +22,7 @@ export default function Button({ children, action, ...props }) {
     const { onSubmit, onClick } = action ? action : {};
     return (
         <button
-            className={` bg-${color.color ? hover ? `${color.hover}` : `${color.color}` : 'gray-500'} ${radius ? `${radius}` : 'rounded-sm'} ${rest.class ? rest.class : null}`}
+            className={` bg-${activeColor} ${radius ? `${radius}` : 'rounded-sm'} ${rest.class ? rest.class : null}`}
             onMouseEnter={onHover}
             onMouseLeave={onHover}
             onClick={onClick ? onClick : null}

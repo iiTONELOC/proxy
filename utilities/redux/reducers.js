@@ -48,6 +48,7 @@ export const reducers = (state = initialState, action) => {
                     currentChat: action.currentChat,
                 }
             case _REDUX_SET_MODAL:
+                console.log(`SETTING MODAL`, action)
                 return {
                     ...state,
                     modal: action.toggle === 'false' ? true : !state.modal,

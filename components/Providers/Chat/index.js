@@ -25,7 +25,7 @@ export const ChatProvider = ({ ...props }) => {
     const dispatch = useDispatch();
     useEffect(() => {
         setMounted(true);
-        const nS = io(`https://${window.location.hostname}`);
+        const nS = io(`http://${window.location.hostname}:3000`);
         const newSocket = nS;
         setSocket(newSocket);
         return () => { setMounted(false); setLoggedIn(false); setJoined(false) }
@@ -130,8 +130,6 @@ export const useSocketContext = () => {
 export function handleSocketConnection(setThisSocket, thisSocket, socket) {
     if (socket.connected === true && !thisSocket) {
         return setThisSocket(socket);
-    } else if (thisSocket) {
-        return
     }
     else if (socket.connected === false) {
         setTimeout(() => {

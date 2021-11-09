@@ -4,6 +4,7 @@ import { Modal } from '../modal';
 import { NotificationList } from '../notificationList/NotificationList';
 import FriendsList from '../friendsList/friendsList';
 import { useEffect, useState } from 'react';
+import { calculateHeight } from '../../utilities/utils';
 
 export default function DesktopLayout(
     {
@@ -63,8 +64,8 @@ export default function DesktopLayout(
                         </div>
                     </> : /* single displays, ie no columns */
                     <>
-                        <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: '65vh' }}>
-                            {Landing && <Landing />}
+                        <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: calculateHeight() }}>
+                            {Landing && <Landing.Element user={Landing.props} />}
                             {SignUp ? (<SignUp.Element form={SignUp.props} />) : null}
                             {Login ? (<Login.Element form={Login.props} />) : null}
                         </div>

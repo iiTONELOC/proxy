@@ -57,6 +57,19 @@ mutation removeFriend($friendId: ID!) {
   }
 }
 `;
+
+export const ADD_PROFILE_PICTURE = gql`
+mutation Mutation($picture: String!) {
+  uploadProfilePicture(picture: $picture) {
+    _id
+    username
+    bio
+    visible
+    location
+    profilePicture
+  }
+}
+`;
 export const ACCEPT_FRIEND = gql`
 mutation Mutation($friendId: ID!) {
   acceptFriend(friendId: $friendId) {
@@ -72,7 +85,7 @@ mutation Mutation($friendId: ID!) {
       username
       bio
       visible
-      ProfilePicture
+      profilePicture
     }
     status {
       online
@@ -121,7 +134,7 @@ mutation Mutation($friendId: ID!) {
       profile {
         bio
         visible
-        ProfilePicture
+        profilePicture
       }
       status {
         online
@@ -143,7 +156,7 @@ mutation Mutation($friendId: ID!) {
       profile {
         bio
         visible
-        ProfilePicture
+        profilePicture
       }
       status {
         online

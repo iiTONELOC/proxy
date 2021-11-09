@@ -14,25 +14,14 @@ const { typeDefs, resolvers } = require('./lib/db/schemas');
 const { ApolloServer } = require('apollo-server-express');
 const { authMiddleware } = require('./lib/utils/middleware/auth');
 
-
-async function startServer() {
-    DB.once('open', async () => {
-        console.log('Connected to MongoDB\nStarting Servers Please Wait...');
-        app.use(cors());
-        await bootstrapNextApp(app);
-        await bootstrapApolloServer(app);
-        bootstrap_and_start_SystemsServer(app);
-    });
-};
-
-async function bootstrapNextApp(expressApp) {
+async function nextExpress(expressApp) {
     const NextApp = next({ dev })
     await NextApp.prepare();
     expressApp.get('*', NextApp.getRequestHandler())
-    console.log(`[Next.js Ready]`);
+    console.log('\x1b[32m[Next.js Ready]\x1b[0m');
 };
 
-async function bootstrapApolloServer(expressApp) {
+async function nextApolloLaunch(expressApp) {
     const apolloServer = new ApolloServer({
         uri: `http://localhost:${PORT}/graphql`,
         typeDefs,
@@ -41,10 +30,11 @@ async function bootstrapApolloServer(expressApp) {
             authMiddleware,
     });
     await apolloServer.start();
-    apolloServer.applyMiddleware({ app: expressApp });
-    console.log(`[Apollo Server Ready] Access GraphQL @ http://studio.apollographql.com/sandbox/explorer`);
+    apolloServer.applyMiddleware({ app: expressApp, });
+    console.log('\x1b[32m[Apollo Server Is Ready] \x1b[0m');
+    console.log('\x1b[34mAccess GraphQL @ \x1b[4mhttp://studio.apollographql.com/sandbox/explorer\x1b[0m');
 };
-function bootstrap_and_start_SystemsServer(expressApp) {
+function startChat(expressApp) {
     const systemsServer = require('http').createServer(expressApp);
     const io = socketIo(systemsServer, {
         cors: {
@@ -54,12 +44,21 @@ function bootstrap_and_start_SystemsServer(expressApp) {
     });
     return systemsServer.listen(PORT, (err) => {
         if (err) throw err;
-        console.log(`[Server] ready on port ${PORT} Access @ http://localhost:${PORT}`);
+        console.log(`\x1b[32m[Server] ready on port ${PORT}\n\x1b[34mAccess @ \x1b[4mhttp://localhost:${PORT}\x1b[0m`);
         Chat(io);
     });
 };
 
-startServer();
+async function main() {
+    DB.once('open', async () => {
+        console.log('Connected to MongoDB\nStarting Servers Please Wait...');
+        app.use(cors());
+        app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
+        app.use(express.json({ limit: '50mb' }));
+        await nextExpress(app);
+        await nextApolloLaunch(app);
+        startChat(app);
+    });
+};
 
-
-module.exports = PORT
+main();

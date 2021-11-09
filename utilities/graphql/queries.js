@@ -13,7 +13,7 @@ query users {
       state
     }
     profile {
-      ProfilePicture
+      profilePicture
       bio
       visible
       _id
@@ -37,7 +37,7 @@ query users {
         _id
         bio
         visible
-        ProfilePicture
+        profilePicture
       }
       status {
         _id
@@ -73,7 +73,7 @@ query users {
         username
         bio
         visible
-        ProfilePicture
+        profilePicture
       }
     }
   }
@@ -95,7 +95,7 @@ query Query {
     }
     profile {
       _id
-        ProfilePicture
+        profilePicture
         visible
         bio
     }
@@ -146,7 +146,7 @@ query Query($user: ID) {
       }
       profile {
         _id
-        ProfilePicture
+        profilePicture
         visible
         bio
       }
@@ -175,7 +175,7 @@ query Query {
         _id
       }
       profile {
-        ProfilePicture
+        profilePicture
       }
     }
   }
@@ -193,7 +193,7 @@ query Query {
       state
     }
     profile {
-      ProfilePicture
+      profilePicture
       _id
     }
     status {
