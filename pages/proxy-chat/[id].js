@@ -61,7 +61,6 @@ export default function Global_Chat({ user, globalMessages }) {
                     auth.loggedIn() ?
                         <ResponsiveLayout
                             viewData={{
-
                                 Messaging: { Element: Messaging, props: { chatName: 'Global Chat', globalMessages: messages } },
                                 InformationPane: { Element: InformationPane, props: { ProxySearch } }
                             }}
@@ -77,7 +76,7 @@ export default function Global_Chat({ user, globalMessages }) {
 export async function getServerSideProps(req) {
     const { id } = req.params
     const msgData = await messageQueries.globalMessages();
-    const user = await userQueries.serverFindMe({ args: { user: id } });
+    const user = await userQueries.serverFindMe({ args: { user: id } })
     const userData = JSON.stringify(user);
     const data = msgData.map(el => JSON.stringify(el));
     return {

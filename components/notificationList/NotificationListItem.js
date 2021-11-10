@@ -122,6 +122,7 @@ export default function NotificationItem({ user }) {
             };
         };
     };
+    console.log(userInfo);
 
     return (
         incomingFriendRequests?.length > 0 ?
@@ -134,6 +135,7 @@ export default function NotificationItem({ user }) {
                         <ButtonWithToolTip
                             toolTip='view profile'
                             Icon={Avatar}
+                            iconProps={{ profilePicture: userInfo?.profile?.profilePicture }}
                             iconSize='35px'
                             action='view profile'
                             settings={{

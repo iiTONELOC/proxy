@@ -30,7 +30,7 @@ export default function AvatarWithStatus({ user, size }) {
                     <circle cx="5" cy="5" r="4" stroke={`${genTailwindColorEquiv(statusColor)}`} strokeWidth="2" fill={`${genTailwindColorEquiv(statusColor)}`} />
                 </svg>
             </span>
-            <Avatar size={size} color='bg-gray-500' />
+            <Avatar size={size} color='bg-gray-500' profilePicture={user.profile.profilePicture} />
         </span>
     );
 };

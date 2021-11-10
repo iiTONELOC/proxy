@@ -35,7 +35,6 @@ export function Modal() {
             case 'friendsListOptions':
                 return <FriendsListOptionsModal {...modalView.data} />;
             case 'uploadProfilePicture':
-                console.log('uploadProfilePicture');
                 return <ImageUploaderModal  {...modalView.data} />
             default:
                 break;

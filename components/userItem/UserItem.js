@@ -26,7 +26,7 @@ export default function UserItem({ user }) {
         >
             <div className='p-2 flex justify-between items-center bg-gray-900 rounded-lg' style={{ height: '50px ' }}>
                 <div className='flex flex-row justify-between items-center w-4/6 '>
-                    <Avatar size='20px' />
+                    <Avatar size='35px' profilePicture={user.profile.profilePicture} />
                     <p>{user.username}</p>
                     <p className=''>{user.location ? `${user.location.city}, ${user.location.state}` : null}</p>
                 </div>

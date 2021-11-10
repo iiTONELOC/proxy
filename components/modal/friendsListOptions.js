@@ -11,10 +11,11 @@ import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
 import { REMOVE_FRIEND } from '../../utilities/graphql/mutations';
 import { getMyFriendsList } from '../../utilities/graphql/userAPI';
 import { toggleNotificationList } from '../alertIcon/AlertIcon'
+import AvatarWithStatus from '../userAvatar/AvatarWithStatus';
 
 
 export default function FriendsListOptionsModal(props) {
-    const { username, _id, socket, status, location } = props;
+    const { username, _id, socket, status, location, distance, profile } = props;
     const [thisSocket, setThisSocket] = useState(null);
     const [isMounted, setMounted] = useState(false);
     const state = useSelector(state => state);
@@ -129,9 +130,13 @@ export default function FriendsListOptionsModal(props) {
         <section className='w-full flex flex-col justify-between gap-3 items-center text-gray-300 bg-gray-800 rounded-md p-2'>
             <header className='w-full flex flex-col justify-start items center gap-2'>
                 <h1 className='text-center break-normal py-1 text-xl'> {username}</h1>
-                <Avatar profilePicture={props?.profile?.profilePicture} size='40px' />
+                <span className='flex justify-center'>
+                    <AvatarWithStatus user={props} size='65px' />
+                </span>
+
             </header>
             <div>
+
                 {/* BIO AND LOCATION HERE */}
             </div>
             <div className=" w-full my-2 flex flex-row justify-around p-2">

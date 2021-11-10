@@ -28,7 +28,7 @@ const iconColor = 'text-gray-400'
         },
 */
 export default function ButtonWithToolTip({ user, dispatch, parentHoverHandler, ...props }) {
-    const { Icon, toolTip, action, settings, iconSize, name, } = props;
+    const { Icon, toolTip, action, settings, iconSize, name, iconProps } = props;
     const [isMounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
     function onHover() {
@@ -58,7 +58,7 @@ export default function ButtonWithToolTip({ user, dispatch, parentHoverHandler, 
                 radius={'rounded-md'}
                 class={`${!hover ? settings.icon.color : 'text-gray-100'} text-center p-1 ${settings.button.classNames ? settings.button.classNames : ''}`}
             >
-                {Icon ? <Icon size={iconSize} /> : name}
+                {Icon ? <Icon size={iconSize} {...iconProps} /> : name}
             </Button>
             {
                 hover === true ?

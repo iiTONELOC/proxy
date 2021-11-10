@@ -10,7 +10,6 @@ export default function DesktopLayout(
     {
         Messaging,
         InformationPane,
-        UsersInRange,
         Landing,
         display,
         SignUp,
@@ -23,6 +22,9 @@ export default function DesktopLayout(
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     useEffect(() => {
         setMounted(true);
+        if (Landing) {
+            console.log('landing', Landing.Element);
+        }
         return () => setMounted(null)
     }, []);
     useEffect(() => {
@@ -65,7 +67,7 @@ export default function DesktopLayout(
                     </> : /* single displays, ie no columns */
                     <>
                         <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: calculateHeight() }}>
-                            {Landing && <Landing.Element user={Landing.props} />}
+                            {Landing?.Element ? (<Landing.Element user={Landing.props} />) : null}
                             {SignUp ? (<SignUp.Element form={SignUp.props} />) : null}
                             {Login ? (<Login.Element form={Login.props} />) : null}
                         </div>

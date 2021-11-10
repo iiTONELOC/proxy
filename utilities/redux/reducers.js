@@ -25,12 +25,6 @@ const initialState = {
 export const reducers = (state = initialState, action) => {
     if (typeof window === Object || typeof window === 'object') {
         switch (action?.type) {
-            // currently used on login
-            // this is for testing will 
-            // refactor the cases later
-            // currently sets the entire user object in state
-
-
             case _REDUX_SET_USER_DATA:
                 return {
                     ...state,
@@ -48,7 +42,6 @@ export const reducers = (state = initialState, action) => {
                     currentChat: action.currentChat,
                 }
             case _REDUX_SET_MODAL:
-                console.log(`SETTING MODAL`, action)
                 return {
                     ...state,
                     modal: action.toggle === 'false' ? true : !state.modal,
@@ -80,7 +73,6 @@ export const reducers = (state = initialState, action) => {
                     filterRange: action.range
                 }
             default:
-                // console.log(`unknown reducer fired`, { state, action })
                 return state;
         }
     } else {
