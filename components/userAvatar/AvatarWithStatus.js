@@ -5,7 +5,8 @@ import { genTailwindColorEquiv } from '../../clientUtilities/utils'
 
 
 
-export default function AvatarWithStatus({ user, size }) {
+import { GoPrimitiveDot } from 'react-icons/go';
+export default function AvatarWithStatus({ user, size, statusSize, statusStyle, picture }) {
     const dispatch = useDispatch();
     const state = useSelector(state => state);
     const [mounted, setMounted] = useState(null);
@@ -24,13 +25,12 @@ export default function AvatarWithStatus({ user, size }) {
     }, [user])
     if (!mounted) return null;
     return (
-        <span className='relative'>
-            <span className='absolute'>
-                <svg height="25" width="25" >
-                    <circle cx="5" cy="5" r="4" stroke={`${genTailwindColorEquiv(statusColor)}`} strokeWidth="2" fill={`${genTailwindColorEquiv(statusColor)}`} />
-                </svg>
+        <div className='relative flex flex-col justify-start'>
+            <span className='absolute' style={statusStyle}>
+                <GoPrimitiveDot size={statusSize} color={`${genTailwindColorEquiv(statusColor)}`} />
             </span>
-            <Avatar size={size} color='bg-gray-500' profilePicture={user.profile.profilePicture} />
-        </span>
+            <Avatar size={size} color='bg-gray-500' profilePicture={picture ? picture : user?.profile?.profilePicture} />
+        </div>
+
     );
 };

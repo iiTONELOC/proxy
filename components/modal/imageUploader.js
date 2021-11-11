@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { useDropzone } from 'react-dropzone';
 import { ADD_PROFILE_PICTURE } from '../../clientUtilities/graphql/mutations';
-import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
+import { _REDUX_SET_MODAL, _REDUX_SET_PICTURE } from '../../clientUtilities/redux/actions';
 
 
 export default function ImageUploaderModal({ user, setProfile }) {
@@ -29,12 +29,16 @@ export default function ImageUploaderModal({ user, setProfile }) {
                 }));
                 setFile({});
                 dispatch({ type: _REDUX_SET_MODAL, toggle: true });
-
+                if (setProfile) {
+                    dispatch({
+                        type: _REDUX_SET_PICTURE,
+                        picture: pP
+                    })
+                }
             } catch (error) {
                 console.log(error);
-            }
-        }
-        console.log(`upload`)
+            };
+        };
     };
     function createErrorMessage(msg) {
         setErrorMessage(msg);
@@ -67,9 +71,7 @@ export default function ImageUploaderModal({ user, setProfile }) {
                                 base64: didConvert
                             }),
                         );
-                        if (setProfile !== undefined) {
-                            setProfile(didConvert);
-                        }
+
                     } catch (error) {
                         const msg = error.message
                         if (msg === 'FileReader.readAsDataURL: Argument 1 is not an object.') {

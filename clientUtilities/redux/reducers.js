@@ -8,9 +8,11 @@ import {
     _REDUX_SET_MODAL,
     _REDUX_SET_CHAT,
     _REDUX_SET_FR,
+    _REDUX_SET_PICTURE,
 } from './actions';
 const initialState = {
     me: null,
+    picture: null,
     usersInRange: [],
     socket: false,
     currentChat: null,
@@ -71,6 +73,12 @@ export const reducers = (state = initialState, action) => {
                 return {
                     ...state,
                     filterRange: action.range
+                }
+            case _REDUX_SET_PICTURE:
+
+                return {
+                    ...state,
+                    picture: action.picture
                 }
             default:
                 return state;

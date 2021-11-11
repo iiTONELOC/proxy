@@ -5,9 +5,8 @@ import { generateRandomTwBgColor } from "../../clientUtilities/utils";
 // props = size, color
 // size = height, pixels 
 // color = backgroundColor
-export default function Avatar(props) {
+export default function Avatar({ size, color, profilePicture }) {
     const [mounted, setMounted] = useState(null);
-    const { size, color, profilePicture } = props;
     const [randomColor, setRandom] = useState(null);
 
     useEffect(() => {

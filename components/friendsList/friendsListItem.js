@@ -41,7 +41,14 @@ export default function FriendsListItem({ user }) {
         >
             <div className='static p-1 flex flex-row justify-between items-center' style={{ height: '50px ' }}>
                 <div className='flex flex-row justify-between items-center gap-2 overflow-x-hidden' style={{ width: '255px' }}>
-                    <AvatarWithStatus user={user} size={'35px'} />
+                    <AvatarWithStatus
+                        user={user}
+                        size={'35px'}
+                        statusStyle={{
+                            marginLeft: -4,
+                            marginTop: -4,
+                        }}
+                    />
                     <p>{user.username}</p>
                     <p className={`text-${online === true ? statusColor(user.status.status) : 'gray-400'}`}>{online === true ? user.status.status : 'offline'}</p>
                     <p className='text-gray-400 italic text-xs mt-1'>{howFar} miles</p>

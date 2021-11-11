@@ -131,7 +131,15 @@ export default function FriendsListOptionsModal(props) {
             <header className='w-full flex flex-col justify-start items center gap-2'>
                 <h1 className='text-center break-normal py-1 text-xl'> {username}</h1>
                 <span className='flex justify-center'>
-                    <AvatarWithStatus user={props} size='65px' />
+                    <AvatarWithStatus
+                        user={props}
+                        size='65px'
+                        statusSize='18px'
+                        statusStyle={{
+                            marginLeft: -4,
+                            marginTop: -4,
+                        }}
+                    />
                 </span>
 
             </header>
