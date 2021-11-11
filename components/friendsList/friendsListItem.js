@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { hoverHandler } from "../navigation/NavLink";
 import FriendOptions from '../userActions/FriendOptions';
 import AvatarWithStatus from '../userAvatar/AvatarWithStatus';
-import { calculateDistance } from '../../utilities/graphql/userAPI';
-import { statusColor } from "../../utilities/utils";
+import { calculateDistance } from '../../clientUtilities/graphql/userAPI';
+import { statusColor } from "../../clientUtilities/utils";
 
 
 export default function FriendsListItem({ user }) {

@@ -1,10 +1,10 @@
 import { io } from "socket.io-client";
 import { useDispatch } from 'react-redux';
-import auth from "../../../utilities/auth";
-import { actions, reactions } from "../../../lib/chat/actions";
-import { makeToast, reduxUpdateIncomingFriendRequests, } from "../../../utilities/redux/helpers";
-import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../utilities/redux/actions";
-import { getMyFriendsList, getUsersInRange } from "../../../utilities/graphql/userAPI";
+import auth from "../../../clientUtilities/auth";
+import { actions, reactions } from "../../../serverUtils/chat/actions";
+import { makeToast, reduxUpdateIncomingFriendRequests, } from "../../../clientUtilities/redux/helpers";
+import { _REDUX_SET_FR, _REDUX_SET_TOAST } from "../../../clientUtilities/redux/actions";
+import { getMyFriendsList, getUsersInRange } from "../../../clientUtilities/graphql/userAPI";
 import {
     createContext,
     useContext,

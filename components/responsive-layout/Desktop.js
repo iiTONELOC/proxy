@@ -4,12 +4,13 @@ import { Modal } from '../modal';
 import { NotificationList } from '../notificationList/NotificationList';
 import FriendsList from '../friendsList/friendsList';
 import { useEffect, useState } from 'react';
-import { calculateHeight } from '../../utilities/utils';
+import { calculateHeight } from '../../clientUtilities/utils';
 
 export default function DesktopLayout(
     {
         Messaging,
         InformationPane,
+        UserDash,
         Landing,
         display,
         SignUp,
@@ -66,8 +67,9 @@ export default function DesktopLayout(
                         </div>
                     </> : /* single displays, ie no columns */
                     <>
-                        <div className='bg-gray-900 w-2/3 lg:w-1/2  rounded-xl m-auto flex justify-center' style={{ height: calculateHeight() }}>
-                            {Landing?.Element ? (<Landing.Element user={Landing.props} />) : null}
+                        <div className='bg-gray-900 w-full flex justify-center' style={{ height: calculateHeight() }}>
+                            {Landing?.Element ? (<Landing.Element />) : null}
+                            {UserDash?.Element ? (<UserDash.Element me={UserDash.props} />) : null}
                             {SignUp ? (<SignUp.Element form={SignUp.props} />) : null}
                             {Login ? (<Login.Element form={Login.props} />) : null}
                         </div>

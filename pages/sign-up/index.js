@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import { MultiPass } from '../../components/forms/MultiPass';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import auth from '../../utilities/auth';
+import auth from '../../clientUtilities/auth';
 
 
 

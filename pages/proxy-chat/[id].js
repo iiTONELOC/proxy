@@ -1,18 +1,18 @@
 import Head from 'next/head';
-import auth from '../../utilities/auth';
+import auth from '../../clientUtilities/auth';
 import { useEffect, useState } from 'react';
 import Messaging from '../../components/chat';
 import { useSelector, useDispatch } from 'react-redux';
 import InformationPane from '../../components/information';
 import Authorization from '../../components/Providers/Auth';
-import { _REDUX_SET_CHAT, } from '../../utilities/redux/actions';
-import { JOIN_GLOBAL_CHAT } from '../../utilities/socket/actions';
+import { _REDUX_SET_CHAT, } from '../../clientUtilities/redux/actions';
+import { JOIN_GLOBAL_CHAT } from '../../clientUtilities/socket/actions';
 import ProxySearch from '../../components/information/proxySearch';
-import { userQueries } from '../../lib/db/controller/user/queries';
-import messageQueries from '../../lib/db/controller/messages/queries';
+import { userQueries } from '../../serverUtils/db/controller/user/queries';
+import messageQueries from '../../serverUtils/db/controller/messages/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import { reduxUpdateUserData, setChat } from '../../utilities/redux/helpers';
-import { handleSocketConnection, useSocketContext } from '../../components/Providers/Chat';
+import { reduxUpdateUserData, setChat } from '../../clientUtilities/redux/helpers';
+import { handleSocketConnection, useSocketContext } from '../../components/Providers/Socket';
 
 
 export default function Global_Chat({ user, globalMessages }) {

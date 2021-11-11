@@ -3,10 +3,10 @@ import Button from '../Button/Button';
 import InRangeFilter from './inRangeFilter';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
-import { calculateHeight } from '../../utilities/utils';
+import { calculateHeight } from '../../clientUtilities/utils';
 import FriendsListOptionsModal from './friendsListOptions';
 import UsersInRangeOptionsModal from './usersInRangeOptions';
-import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
+import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
 import ImageUploaderModal from './imageUploader';
 import { useEffect } from 'react';
 

@@ -1,7 +1,7 @@
 import Button from "../Button/Button";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { _REDUX_SET_MODAL, _REDUX_SET_RANGE } from "../../utilities/redux/actions";
+import { _REDUX_SET_MODAL, _REDUX_SET_RANGE } from "../../clientUtilities/redux/actions";
 
 function genColor(value) {
     if (value >= 0 && value <= 30) { return 'green-400' }

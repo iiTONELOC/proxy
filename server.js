@@ -6,13 +6,13 @@ const app = express();
 const socketIo = require('socket.io');
 const PORT = process.env.PORT || 3000;
 
-const { Chat } = require('./lib/chat/index');
-const DB = require('./lib/db/config/connection');
+const { Chat } = require('./serverUtils/chat/index');
+const DB = require('./serverUtils/db/config/connection');
 const dev = process.env.NODE_ENV !== 'production';
 
-const { typeDefs, resolvers } = require('./lib/db/schemas');
+const { typeDefs, resolvers } = require('./serverUtils/db/schemas');
 const { ApolloServer } = require('apollo-server-express');
-const { authMiddleware } = require('./lib/utils/middleware/auth');
+const { authMiddleware } = require('./serverUtils/utils/middleware/auth');
 
 async function nextExpress(expressApp) {
     const NextApp = next({ dev })

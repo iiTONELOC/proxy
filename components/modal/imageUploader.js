@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { useDropzone } from 'react-dropzone';
-import { ADD_PROFILE_PICTURE } from '../../utilities/graphql/mutations';
-import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
+import { ADD_PROFILE_PICTURE } from '../../clientUtilities/graphql/mutations';
+import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
 
 
 export default function ImageUploaderModal({ user, setProfile }) {
@@ -86,8 +86,6 @@ export default function ImageUploaderModal({ user, setProfile }) {
         },
     });
 
-    // removes the objectURL from browsers memory,
-    // this happens automatically on reload but best to clean it up when able
     useEffect(
         () => () => {
             URL.revokeObjectURL(file.preview);
@@ -96,7 +94,6 @@ export default function ImageUploaderModal({ user, setProfile }) {
         [file, uploadedImage],
     );
 
-    // preview component
     const AvatarPreview = (
         <section className='p-1 w-full text-center flex flex-col items-center'>
             {file.preview && (
@@ -109,7 +106,6 @@ export default function ImageUploaderModal({ user, setProfile }) {
                             alt={file.length ? file.length : uploadedImage ? uploadedImage.alt && 'img' : null}
                             style={{ width: '100px', height: '100px' }}
                             className='object-cover rounded-xl border-solid border-gray-900 border-3'
-
                         />
                     </span>
                 </>
@@ -152,7 +148,6 @@ export default function ImageUploaderModal({ user, setProfile }) {
                         Cancel
                     </Button>
                 </span>
-
             }
         </div>
     );

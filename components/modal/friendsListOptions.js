@@ -3,13 +3,13 @@ import Avatar from '../userAvatar/Avatar';
 import { useEffect, useState } from 'react';
 import { GoDiffRemoved } from 'react-icons/go';
 import { AiOutlineProfile } from 'react-icons/ai';
-import { useSocketContext } from '../Providers/Chat';
+import { useSocketContext } from '../Providers/Socket';
 import { useSelector, useDispatch } from 'react-redux';
-import client from '../../utilities/apollo/client.config';
+import client from '../../clientUtilities/apollo/client.config';
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
-import { _REDUX_SET_MODAL } from '../../utilities/redux/actions';
-import { REMOVE_FRIEND } from '../../utilities/graphql/mutations';
-import { getMyFriendsList } from '../../utilities/graphql/userAPI';
+import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
+import { REMOVE_FRIEND } from '../../clientUtilities/graphql/mutations';
+import { getMyFriendsList } from '../../clientUtilities/graphql/userAPI';
 import { toggleNotificationList } from '../alertIcon/AlertIcon'
 import AvatarWithStatus from '../userAvatar/AvatarWithStatus';
 

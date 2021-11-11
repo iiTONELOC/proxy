@@ -2,10 +2,10 @@ import { FaHome, FaComments, FaSearch, FaAndroid, FiLogout } from 'react-icons/f
 import { FiLogOut } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 import { logoutUser } from './NavBar';
-import auth from '../../utilities/auth';
+import auth from '../../clientUtilities/auth';
 import NavLink from './NavLink';
-import client from "../../utilities/apollo/client.config";
-import { LOGOUT } from "../../utilities/graphql/mutations";
+import client from "../../clientUtilities/apollo/client.config";
+import { LOGOUT } from "../../clientUtilities/graphql/mutations";
 
 
 

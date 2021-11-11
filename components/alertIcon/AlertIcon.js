@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { MdNotifications } from 'react-icons/md';
 import { useSelector, useDispatch } from 'react-redux';
-import { getFriendRequests } from '../../utilities/graphql/userAPI';
-import { _REDUX_SET_NOTIFICATION_LIST_VISIBILITY } from '../../utilities/redux/actions';
+import { getFriendRequests } from '../../clientUtilities/graphql/userAPI';
+import { _REDUX_SET_NOTIFICATION_LIST_VISIBILITY } from '../../clientUtilities/redux/actions';
 
 
 export function toggleNotificationList(state, dispatch) {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { LOGIN_USER, CREATE_USER } from '../../utilities/graphql/mutations'
+import { LOGIN_USER, CREATE_USER } from '../../clientUtilities/graphql/mutations'
 import Button from '../Button/Button';
-import auth from '../../utilities/auth';
-import client from '../../utilities/apollo/client.config';
+import auth from '../../clientUtilities/auth';
+import client from '../../clientUtilities/apollo/client.config';
 
 function initial(form) {
     if (form === 'signUp') {

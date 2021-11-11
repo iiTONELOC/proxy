@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaUserSecret } from 'react-icons/fa'
-import { generateRandomTwBgColor } from "../../utilities/utils";
+import { generateRandomTwBgColor } from "../../clientUtilities/utils";
 
 // props = size, color
 // size = height, pixels 

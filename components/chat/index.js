@@ -1,7 +1,7 @@
 import MessageForm from "./MessageForm";
 import { useEffect, useState } from "react";
 import MessageContainer from "./MessageContainer";
-import { useSocketContext } from "../Providers/Chat";
+import { useSocketContext } from "../Providers/Socket";
 
 
 

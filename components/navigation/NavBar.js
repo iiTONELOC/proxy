@@ -1,5 +1,5 @@
 import NavLink from "./NavLink";
-import auth from "../../utilities/auth";
+import auth from "../../clientUtilities/auth";
 import { useEffect, useState } from "react";
 import { FaUserSecret } from 'react-icons/fa';
 import AlertIcon from "../alertIcon/AlertIcon";
