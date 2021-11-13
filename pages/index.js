@@ -11,7 +11,7 @@ export default function Home({ memory }) {
     const loggedIn = auth.loggedIn();
     if (loggedIn) {
       const profile = auth.getProfile();
-      setUserID(profile.data._id);
+      setUserID(profile?.data._id);
     } else {
       localStorage.removeItem('proxy_id_token');
     }

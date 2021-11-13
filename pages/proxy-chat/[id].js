@@ -13,7 +13,7 @@ import messageQueries from '../../serverUtils/db/controller/messages/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
 import { reduxUpdateUserData, setChat } from '../../clientUtilities/redux/helpers';
 import { handleSocketConnection, useSocketContext } from '../../components/Providers/Socket';
-
+import { confirmAddProfile } from '../../components/forms/addProfile';
 
 export default function Global_Chat({ user, globalMessages }) {
     const dispatch = useDispatch();
@@ -31,6 +31,15 @@ export default function Global_Chat({ user, globalMessages }) {
             handleSocketConnection(setThisSocket, thisSocket, socket);
             const userData = JSON.parse(user)
             reduxUpdateUserData({ userData, dispatch })
+            if (userData.profile.bio == null || userData.profile.profilePicture == null) {
+                confirmAddProfile({
+                    message: `Would you like to add your profile now?`,
+                    user: {
+                        user_id: user._id,
+                    },
+                    dispatch
+                });
+            }
         }
         return () => { setMounted(false); setJoined(false); setThisSocket(null) }
     }, [mounted]);

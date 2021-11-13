@@ -126,7 +126,7 @@ export default function ImageUploaderModal({ user, setProfile }) {
                     style={{ minWidth: '350px' }}
                     className={`text-gray-300 self-center text-center text-${errorMessage ? 'red-500' : 'gray-00'}`}
                 >
-                    {errorMessage ? `${errorMessage}` : `Drag 'n' drop a file here, or click to select file`}
+                    {errorMessage ? `${errorMessage}` : `Drag 'n' drop, or click here to upload a profile picture`}
                 </label>
             </span>
             {AvatarPreview}

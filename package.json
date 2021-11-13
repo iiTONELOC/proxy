@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "cross-env NODE_ENV=production node server.js",
     "lint": "next lint",
-    "del-db": "cd lib/db/seeders && node seeds.js"
+    "del-db": "cd serverUtils/db/seeders && node seeds.js"
   },
   "repository": {
     "type": "git",

@@ -69,6 +69,7 @@ export async function getServerSideProps(req) {
     // list of servers
     const { id } = req.params
     const user = await userQueries.serverFindMe({ args: { user: id } })
+
     const me = JSON.stringify(user);
     return {
         props: { serverMe: me }

@@ -24,11 +24,6 @@ if (typeof window !== undefined) {
         link: authLink.concat(httpLink),
         cache: cache(),
     };
-} else {
-    clientData = {
-        uri: `/graphql`,
-        cache: cache(),
-    };
 };
 
 const client = new ApolloClient(clientData);

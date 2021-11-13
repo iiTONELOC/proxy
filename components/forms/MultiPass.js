@@ -1,11 +1,13 @@
+import Button from '../Button/Button';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { LOGIN_USER, CREATE_USER } from '../../clientUtilities/graphql/mutations'
-import Button from '../Button/Button';
 import auth from '../../clientUtilities/auth';
 import client from '../../clientUtilities/apollo/client.config';
+import { browserGetLocation } from '../../clientUtilities/utils';
+import { LOGIN_USER, CREATE_USER } from '../../clientUtilities/graphql/mutations';
 
-function initial(form) {
+
+function returnInitial(form) {
     if (form === 'signUp') {
         return { username: null, email: null, password: null }
     } else if (form === 'login') {
@@ -15,7 +17,7 @@ function initial(form) {
 export function MultiPass({ form }) {
     const [isMounted, setMounted] = useState(false);
     const [locationState, setLocation] = useState(false);
-    const initialState = initial(form);
+    const initialState = returnInitial(form);
     const [formState, setFormState] = useState(initialState);
     const [errorMessage, setErrorMessage] = useState(false);
     const [login] = useMutation(LOGIN_USER);
@@ -23,10 +25,7 @@ export function MultiPass({ form }) {
     useEffect(() => {
         setMounted(true);
         return () => setMounted(false)
-    }, [])
-
-
-
+    }, []);
     if (!isMounted) return null
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -39,27 +38,12 @@ export function MultiPass({ form }) {
         return setTimeout(() => {
             setErrorMessage(false);
         }, 3500);
-    }
+    };
     const handleFormSubmit = async event => {
         event.preventDefault();
-        function getLocation() {
-            if (!navigator.geolocation) {
-                return console.log('Geolocation is not supported by your browser');
-            } else {
-                return navigator.geolocation.getCurrentPosition(async (position) => {
-                    const { latitude, longitude } = position.coords;
-                    const locationData = {
-                        latitude: `${latitude}`,
-                        longitude: `${longitude}`
-                    }
-                    return setLocation({ ...locationData })
-                }, (e) => {
-                    return console.log('Unable to retrieve location', e);
-                });
-            };
-        };
         // ask user for location;
-        getLocation();
+        const locationData = browserGetLocation();
+        setLocation({ ...locationData })
         // check args
         const args = { ...formState, ...locationState };
         if (form === 'signUp') {
@@ -68,6 +52,7 @@ export function MultiPass({ form }) {
                     const { data } = await client.mutate({ mutation: CREATE_USER, variables: { ...args } });
                     if (data) {
                         const token = data.addUser.token;
+                        console.log(token)
                         auth.login(token);
                     }
                 } catch (e) {

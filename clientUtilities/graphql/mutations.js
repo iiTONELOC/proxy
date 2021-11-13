@@ -70,6 +70,18 @@ mutation Mutation($picture: String!) {
   }
 }
 `;
+export const EDIT_PROFILE_BIO = gql`
+mutation Mutation($bio: String) {
+  editProfile(bio: $bio) {
+    _id
+    username
+    bio
+    visible
+    location
+    profilePicture
+  }
+}
+`;
 export const ACCEPT_FRIEND = gql`
 mutation Mutation($friendId: ID!) {
   acceptFriend(friendId: $friendId) {

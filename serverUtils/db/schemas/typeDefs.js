@@ -102,7 +102,8 @@ type Mutation{
     acceptFriend(friendId: ID!): User
     rejectFriend(friendId: ID!): User
     removeFriend(friendId: ID!): User
-   uploadProfilePicture(picture: String!): Profile
+    uploadProfilePicture(picture: String!): Profile
+    editProfile(bio: String, visible: Boolean,): Profile
 }
 
 type Auth {

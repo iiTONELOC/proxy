@@ -122,7 +122,6 @@ export default function NotificationItem({ user }) {
             };
         };
     };
-    console.log(userInfo);
 
     return (
         incomingFriendRequests?.length > 0 ?

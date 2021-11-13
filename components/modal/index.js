@@ -8,7 +8,9 @@ import FriendsListOptionsModal from './friendsListOptions';
 import UsersInRangeOptionsModal from './usersInRangeOptions';
 import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
 import ImageUploaderModal from './imageUploader';
-import { useEffect } from 'react';
+import ConfirmModal from './confrim';
+import AddProfileModal from './addProfile';
+
 
 
 
@@ -35,7 +37,11 @@ export function Modal() {
             case 'friendsListOptions':
                 return <FriendsListOptionsModal {...modalView.data} />;
             case 'uploadProfilePicture':
-                return <ImageUploaderModal  {...modalView.data} />
+                return <ImageUploaderModal  {...modalView.data} />;
+            case 'confirm':
+                return <ConfirmModal {...modalView.data} />;
+            case 'addProfile':
+                return <AddProfileModal {...modalView.data} />;
             default:
                 break;
         }

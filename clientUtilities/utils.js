@@ -59,7 +59,7 @@ const iconStyle = (variant) => {
     return { color: genTailwindColorEquiv(variant) }
 }
 export function variantIcon(Type, iconSize) {
-    const variant = Type.type
+    const variant = Type?.type || Type;
     switch (variant) {
         case 'danger':
             return <MdDangerous style={iconStyle(variant)} size={iconSize} />
@@ -89,4 +89,21 @@ export function statusColor(status) {
         default:
             return 'gray-400'
     }
-}
+};
+export function browserGetLocation() {
+    console.log(`GET LOCATION FUNCTION`)
+    if (!navigator.geolocation) {
+        return console.log('Geolocation is not supported by your browser');
+    } else {
+        return navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+            const locationData = {
+                latitude: `${latitude}`,
+                longitude: `${longitude}`
+            }
+            return locationData
+        }, (e) => {
+            return console.log('Unable to retrieve location', e);
+        });
+    };
+};

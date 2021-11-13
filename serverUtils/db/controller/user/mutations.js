@@ -349,6 +349,22 @@ const userMutations = {
             throw new AuthenticationError('You need to be logged in!');
         }
     },
+    editBio: async (parent, { bio }, context) => {
+        if (context.user) {
+            const data = await User.findById(context.user._id);
+            const _id = data.profile._id
+
+            const updatedProfile = await Profile.findByIdAndUpdate(_id, {
+                bio: bio
+            }, { new: true })
+
+            if (updatedProfile !== null) {
+                return updatedProfile
+            }
+        } else {
+            throw new AuthenticationError('You need to be logged in!');
+        }
+    },
 }
 
 module.exports = userMutations

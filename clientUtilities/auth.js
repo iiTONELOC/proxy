@@ -44,9 +44,11 @@ class AuthService {
     async login(idToken) {
         // Saves user token to localStorage
         localStorage.setItem('proxy_id_token', idToken);
-        const uData = await this.getProfile();
-        window.location.assign(`/proxy-chat/${uData.data._id}`);
-        return true
+        setTimeout(async () => {
+            const uData = await this.getProfile();
+            window.location.assign(`/proxy-chat/${uData.data._id}`);
+            return true
+        }, 250)
     }
 
     // clear token from localStorage and force logout with reload

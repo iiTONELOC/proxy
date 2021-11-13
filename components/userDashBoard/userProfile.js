@@ -9,7 +9,7 @@ export default function UserProfile({ userProfile, username, friends, location }
         {
             section: 'Bio',
             data: userProfile == null ?
-                "Add a bio! No one likes a stranger!" : userProfile.bio
+                "Add a bio! No one likes a stranger!" : userProfile
         },
         { section: 'Total Friends', data: friends.length },
     ];
