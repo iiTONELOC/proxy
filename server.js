@@ -49,16 +49,15 @@ function startChat(expressApp) {
     });
 };
 
-async function main() {
-    DB.once('open', async () => {
-        console.log('Connected to MongoDB\nStarting Servers Please Wait...');
-        app.use(cors());
-        app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
-        app.use(express.json({ limit: '50mb' }));
-        await nextExpress(app);
-        await nextApolloLaunch(app);
-        startChat(app);
-    });
-};
 
-main();
+DB.once('open', async () => {
+    console.log('Connected to MongoDB\nStarting Servers Please Wait...');
+    app.use(cors());
+    app.use(express.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
+    app.use(express.json({ limit: '50mb' }));
+    await nextExpress(app);
+    await nextApolloLaunch(app);
+    startChat(app);
+});
+
+

@@ -116,6 +116,7 @@ export default function NotificationItem({ user }) {
                     const mD = mutationResult.data.rejectFriend;
                     thisSocket.emit('rejectRequest', { sendTo: mD, data: me.username })
                     reduxUpdateIncomingFriendRequests({ data: [], dispatch });
+                    toggleNotificationList(false, dispatch)
                 };
             } catch (error) {
                 console.error(error);

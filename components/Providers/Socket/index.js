@@ -67,8 +67,8 @@ export const ChatProvider = ({ ...props }) => {
                     bread: {
                         type: 'info',
                         notification: 'New Friend Request!!',
-                        message: `${data.from.username} sent you a friend request!`,
-                        crumbs: data.from
+                        message: `${data.username} sent you a friend request!`,
+                        crumbs: data
                     },
                     dispatch
                 });
