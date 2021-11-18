@@ -73,12 +73,12 @@ export default function NotificationItem({ user }) {
 
     useEffect(() => {
         setMounted(true);
-        return () => setMounted(null);
+        return () => { setMounted(null); };
     }, []);
 
     useEffect(() => {
-        if (isMounted) {
-            if (socket.connected && !thisSocket) {
+        if (isMounted && thisSocket == null) {
+            if (socket.connected) {
                 setThisSocket(socket);
             }
         }
@@ -92,9 +92,10 @@ export default function NotificationItem({ user }) {
                     mutation: ACCEPT_FRIEND,
                     variables: { friendId: _id }
                 });
+
                 if (mutationResult) {
                     const mD = mutationResult.data.acceptFriend;
-                    thisSocket.emit('acceptedFriendRequest', { sendTo: userInfo, data: mD });
+                    thisSocket.emit('acceptedFriendRequest', { sendTo: userInfo, data: mD })
                     getMyFriendsList(dispatch)
                     reduxSetUsersInRange({ data: mD.usersInRange, dispatch });
                     reduxUpdateIncomingFriendRequests({ data: mD?.incomingFriendRequests?.length > 0 ? [mD.incomingFriendRequests] : [], dispatch });

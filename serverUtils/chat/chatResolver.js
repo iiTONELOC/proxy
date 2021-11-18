@@ -138,11 +138,12 @@ const handleGlobalMessage = async (message, socket, io) => {
 async function addFriend({ data, sendTo }, socket, io) {
     // lookup user by their id send their info to the user
     const user = await findUserByID(data.from.userID)
-    return io.to(sendTo).emit('newFriendRequest', user);
+    const sendToData = await findUserByID(sendTo)
+    return io.to(sendToData.socket).emit('newFriendRequest', user);
 };
 async function acceptFriend({ data, sendTo }, socket, io) {
     // lookup user by their id find their socket
-    const id = sendTo.userID || sendTo._id
+    const id = sendTo._id
     const user = await findUserByID(id)
     const sentToSocket = user?.socket;
 

@@ -23,9 +23,6 @@ export default function DesktopLayout(
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     useEffect(() => {
         setMounted(true);
-        if (Landing) {
-            console.log('landing', Landing.Element);
-        }
         return () => setMounted(null)
     }, []);
     useEffect(() => {

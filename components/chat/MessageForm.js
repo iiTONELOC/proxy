@@ -8,6 +8,7 @@ export default function MessageForm({ socket }) {
     const [value, setText] = useState('');
     const [mounted, setMounted] = useState(false);
     const [characterCount, setCharacterCount] = useState(0);
+    const { me, picture } = _REDUX_S;
     // const [sendMessage] = useMutation(SEND_MESSAGE);
     // change event handler
     useEffect(() => {
@@ -39,6 +40,7 @@ export default function MessageForm({ socket }) {
         const messageData = {
             value: value.trim(),
             username: userName,
+            profilePic: picture ? picture : me?.profile?.profilePicture,
             id: Date.now(),
             chat: 'Global',
         }

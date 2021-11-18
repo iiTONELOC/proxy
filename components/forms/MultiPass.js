@@ -52,7 +52,6 @@ export function MultiPass({ form }) {
                     const { data } = await client.mutate({ mutation: CREATE_USER, variables: { ...args } });
                     if (data) {
                         const token = data.addUser.token;
-                        console.log(token)
                         auth.login(token);
                     }
                 } catch (e) {

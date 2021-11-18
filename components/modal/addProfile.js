@@ -10,7 +10,7 @@ export default function AddProfileModal({ user }) {
     const [addedBio, setBio] = useState(false);
     useEffect(() => {
         setMounted(true);
-        return () => setMounted(false);
+        return () => { setMounted(false); window.location.reload() }
     }, []);
     if (isMounted === false) return null;
 

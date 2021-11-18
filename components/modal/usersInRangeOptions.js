@@ -98,14 +98,16 @@ export default function UsersInRangeOptionsModal(props) {
         setMounted(true);
         return () => {
             setMounted(false);
+
         }
     }, [])
     useEffect(() => {
         if (isMounted) {
-            if (mySocket.connected && !thisSocket) {
+            if (mySocket.connected && thisSocket == null) {
                 setThisSocket(mySocket);
             }
         }
+        return () => { setThisSocket(null) }
     }, [isMounted])
 
 
@@ -124,7 +126,7 @@ export default function UsersInRangeOptionsModal(props) {
                             userID: me._id,
                         }
                     },
-                    sendTo: socket,
+                    sendTo: _id,
                 };
                 if (thisSocket) { thisSocket.emit("sendFriendRequest", emitData) };
                 dispatch({
@@ -139,7 +141,7 @@ export default function UsersInRangeOptionsModal(props) {
             console.log(error);
         };
     };
-
+    if (!isMounted) return null
     return (
         <section className='w-full flex flex-col justify-between gap-3 items-center text-gray-300 bg-gray-800 rounded-md p-2'>
             <header className='w-full flex flex-col justify-start items center gap-2'>
