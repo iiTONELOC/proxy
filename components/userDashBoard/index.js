@@ -5,8 +5,8 @@ import { hoverHandler } from "../navigation/NavLink";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonWithToolTip from "../Button/ButtonWithToolTip";
 import AvatarWithStatus from "../userAvatar/AvatarWithStatus";
-import { calculateHeight } from "../../clientUtilities/utils";
-import { _REDUX_SET_MODAL } from "../../clientUtilities/redux/actions";
+import { calculateHeight } from "../../lib/utils";
+import { _REDUX_SET_MODAL } from "../../lib/redux/actions";
 import UserProfile from "./userProfile";
 import UserStatus from "./userStatus";
 

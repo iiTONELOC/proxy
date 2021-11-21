@@ -1,7 +1,7 @@
 import { useDispatch, } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
+import { _REDUX_SET_MODAL } from '../../lib/redux/actions';
 
 export default function SuccessModal({ timeout }) {
     const [mounted, setMounted] = useState(false);

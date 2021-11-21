@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import UserItem from '../userItem/UserItem';
 import { GiRadarDish } from "react-icons/gi";
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
-import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
-import { calculateDistance, getUsersInRange } from '../../clientUtilities/graphql/userAPI';
+import { _REDUX_SET_MODAL } from '../../lib/redux/actions';
+import { calculateDistance, getUsersInRange } from '../../lib/graphql/userAPI';
 import Button from '../Button/Button';
 export default function UsersInRange() {
     const [mounted, setMounted] = useState(false);

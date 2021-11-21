@@ -1,7 +1,7 @@
 import { CgOptions } from 'react-icons/cg'
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
 import { useDispatch } from 'react-redux';
-import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
+import { _REDUX_SET_MODAL } from '../../lib/redux/actions';
 
 const iconSize = '20px';
 const iconColor = 'text-gray-400';

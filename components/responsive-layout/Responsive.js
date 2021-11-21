@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { calculateHeight } from '../../clientUtilities/utils';
+import { calculateHeight } from '../../lib/utils';
 import OnlyOnClient from '../Providers/Client';
 import DesktopLayout from "./Desktop";
 import MobileLayout from './Mobile';

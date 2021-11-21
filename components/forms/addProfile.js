@@ -2,8 +2,8 @@ import Button from "../Button/Button";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { _REDUX_SET_MODAL } from "../../clientUtilities/redux/actions";
-import { EDIT_PROFILE_BIO } from "../../clientUtilities/graphql/mutations";
+import { _REDUX_SET_MODAL } from "../../lib/redux/actions";
+import { EDIT_PROFILE_BIO } from "../../lib/graphql/mutations";
 
 export function confirmAddProfile({ message, user, dispatch }) {
     // PROMPT USER TO ADD A PROFILE

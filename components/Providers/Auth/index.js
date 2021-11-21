@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import auth from '../../../clientUtilities/auth'
-import { reduxSetMe } from "../../../clientUtilities/redux/helpers";
+import auth from '../../../lib/auth'
+import { reduxSetMe } from "../../../lib/redux/helpers";
 import { Redirect } from "../../Redirect";
 
 function handleExpiredToken(dispatch, setAuth) {

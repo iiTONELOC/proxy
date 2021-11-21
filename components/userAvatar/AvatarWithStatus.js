@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Avatar from './Avatar';
-import { genTailwindColorEquiv } from '../../clientUtilities/utils'
+import { genTailwindColorEquiv } from '../../lib/utils'
 
 
 

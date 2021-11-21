@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import NotificationItem from './NotificationListItem';
 import { useSelector, useDispatch } from 'react-redux';
-import { calculateHeight } from '../../clientUtilities/utils';
+import { calculateHeight } from '../../lib/utils';
 import { toggleNotificationList } from '../alertIcon/AlertIcon';
 
 export function NotificationList(props) {

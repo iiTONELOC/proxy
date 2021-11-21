@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
-import { _REDUX_SET_TOAST } from '../../clientUtilities/redux/actions';
+import { _REDUX_SET_TOAST } from '../../lib/redux/actions';
 import {
     generateRandomTwBgColor,
     genTailwindColorEquiv,
     variantColor,
     variantIcon
-} from '../../clientUtilities/utils';
+} from '../../lib/utils';
 export function closeToast(dispatch) {
     dispatch({
         type: _REDUX_SET_TOAST,

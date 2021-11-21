@@ -4,7 +4,7 @@ import { Modal } from '../modal';
 import { NotificationList } from '../notificationList/NotificationList';
 import FriendsList from '../friendsList/friendsList';
 import { useEffect, useState } from 'react';
-import { calculateHeight } from '../../clientUtilities/utils';
+import { calculateHeight } from '../../lib/utils';
 
 export default function DesktopLayout(
     {

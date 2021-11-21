@@ -5,8 +5,8 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import { useSocketContext } from '../Providers/Socket';
 import { useSelector, useDispatch } from 'react-redux';
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
-import { ADD_FRIEND } from '../../clientUtilities/graphql/mutations';
-import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
+import { ADD_FRIEND } from '../../lib/graphql/mutations';
+import { _REDUX_SET_MODAL } from '../../lib/redux/actions';
 import Avatar from '../userAvatar/Avatar';
 
 

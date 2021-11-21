@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { variantIcon } from "../../clientUtilities/utils"
+import { variantIcon } from "../../lib/utils"
 
 import Button from "../Button/Button"
 export default function ConfirmModal({ message, pageButtons }) {

@@ -4,12 +4,12 @@ import { MdPersonAdd } from 'react-icons/md';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useSocketContext } from '../Providers/Socket'
 import { useDispatch, useSelector } from 'react-redux';
-import client from '../../clientUtilities/apollo/client.config';
+import client from '../../lib/apollo/client.config';
 import ButtonWithToolTip from '../Button/ButtonWithToolTip';
 import { toggleNotificationList } from '../alertIcon/AlertIcon';
-import { getMyFriendsList } from '../../clientUtilities/graphql/userAPI';
-import { ACCEPT_FRIEND, REJECT_FRIEND } from '../../clientUtilities/graphql/mutations';
-import { reduxSetUsersInRange, reduxUpdateIncomingFriendRequests } from '../../clientUtilities/redux/helpers';
+import { getMyFriendsList } from '../../lib/graphql/userAPI';
+import { ACCEPT_FRIEND, REJECT_FRIEND } from '../../lib/graphql/mutations';
+import { reduxSetUsersInRange, reduxUpdateIncomingFriendRequests } from '../../lib/redux/helpers';
 
 
 export default function NotificationItem({ user }) {

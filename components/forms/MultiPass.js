@@ -1,10 +1,10 @@
 import Button from '../Button/Button';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import auth from '../../clientUtilities/auth';
-import client from '../../clientUtilities/apollo/client.config';
-import { browserGetLocation } from '../../clientUtilities/utils';
-import { LOGIN_USER, CREATE_USER } from '../../clientUtilities/graphql/mutations';
+import auth from '../../lib/auth';
+import client from '../../lib/apollo/client.config';
+import { browserGetLocation } from '../../lib/utils';
+import { LOGIN_USER, CREATE_USER } from '../../lib/graphql/mutations';
 
 
 function returnInitial(form) {

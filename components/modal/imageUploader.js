@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { useDropzone } from 'react-dropzone';
-import { ADD_PROFILE_PICTURE } from '../../clientUtilities/graphql/mutations';
-import { _REDUX_SET_MODAL, _REDUX_SET_PICTURE } from '../../clientUtilities/redux/actions';
+import { ADD_PROFILE_PICTURE } from '../../lib/graphql/mutations';
+import { _REDUX_SET_MODAL, _REDUX_SET_PICTURE } from '../../lib/redux/actions';
 
 
 export default function ImageUploaderModal({ user, setProfile }) {

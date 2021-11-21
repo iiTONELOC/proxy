@@ -1,17 +1,17 @@
 import Head from 'next/head';
-import auth from '../../clientUtilities/auth';
+import auth from '../../lib/auth';
 import { useEffect, useState } from 'react';
 import Messaging from '../../components/chat';
 import { useSelector, useDispatch } from 'react-redux';
 import InformationPane from '../../components/information';
 import Authorization from '../../components/Providers/Auth';
-import { _REDUX_SET_CHAT, } from '../../clientUtilities/redux/actions';
-import { JOIN_GLOBAL_CHAT } from '../../clientUtilities/socket/actions';
+import { _REDUX_SET_CHAT, } from '../../lib/redux/actions';
+import { JOIN_GLOBAL_CHAT } from '../../lib/socket/actions';
 import ProxySearch from '../../components/information/proxySearch';
 import { userQueries } from '../../serverUtils/db/controller/user/queries';
 import messageQueries from '../../serverUtils/db/controller/messages/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import { reduxUpdateUserData, setChat } from '../../clientUtilities/redux/helpers';
+import { reduxUpdateUserData, setChat } from '../../lib/redux/helpers';
 import { handleSocketConnection, useSocketContext } from '../../components/Providers/Socket';
 import { confirmAddProfile } from '../../components/forms/addProfile';
 

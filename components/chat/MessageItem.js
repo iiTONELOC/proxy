@@ -1,7 +1,7 @@
 import Avatar from "../userAvatar/Avatar";
 import { useEffect, useState } from "react";
 import { hoverHandler } from "../navigation/NavLink";
-import { formatTime_hh_mm_ss } from "../../clientUtilities/utils";
+import { formatTime_hh_mm_ss } from "../../lib/utils";
 
 export default function MessageItem({ message, user }) {
     const [mounted, setMounted] = useState(false);

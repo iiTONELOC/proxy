@@ -1,13 +1,13 @@
 import Head from 'next/head';
-import auth from '../../clientUtilities/auth';
+import auth from '../../lib/auth';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import UserDashBoard from '../../components/userDashBoard';
 import Authorization from '../../components/Providers/Auth';
-import { _REDUX_SET_MODAL } from '../../clientUtilities/redux/actions';
+import { _REDUX_SET_MODAL } from '../../lib/redux/actions';
 import { userQueries } from '../../serverUtils/db/controller/user/queries';
 import ResponsiveLayout from '../../components/responsive-layout/Responsive';
-import { setChat, reduxUpdateUserData } from '../../clientUtilities/redux/helpers';
+import { setChat, reduxUpdateUserData } from '../../lib/redux/helpers';
 import { handleSocketConnection, useSocketContext } from '../../components/Providers/Socket';
 
 export default function User_Home({ serverMe }) {

@@ -1,9 +1,9 @@
 import '../styles/globals.css';
-import store from '../clientUtilities/redux/store';
+import store from '../lib/redux/store';
 import { ApolloProvider } from '@apollo/client';
 import { Provider as Redux } from 'react-redux';
 import NavBar from '../components/navigation/NavBar';
-import client from '../clientUtilities/apollo/client.config';
+import client from '../lib/apollo/client.config';
 import { ChatProvider } from '../components/Providers/Socket';
 
 function MyApp({ Component, pageProps }) {

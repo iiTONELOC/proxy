@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Landing from '../components/Landing';
 import ResponsiveLayout from '../components/responsive-layout/Responsive';
-import auth from '../clientUtilities/auth';
+import auth from '../lib/auth';
 import { useRouter } from 'next/router';
 export default function Home({ memory }) {
   const router = useRouter();
