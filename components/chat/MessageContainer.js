@@ -2,6 +2,7 @@ import { SCROLL } from ".";
 import MessageItem from "./MessageItem";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { idbPromise } from "../../lib/idb";
 
 
 export function saveMessage(message, setMessage) {
@@ -10,14 +11,30 @@ export function saveMessage(message, setMessage) {
         newMessages[message._id] = message;
         return newMessages
     });
-}
+};
 
 export default function MessageContainer({ socket, chatName, globalMessages }) {
     const [mounted, setMounted] = useState(false);
     const [messages, setMessage] = useState([]);
-
     const state = useSelector(state => state)
-    const { me } = state;
+    const { me, picture } = state;
+
+    async function setImages(data, setMessage) {
+        const images = await idbPromise('friend_images', 'get');
+        const matched = images.filter(image => image._id === data.sender);
+        if (matched.length > 0) data.picture = matched[0].picture;
+        if (data.sender === me.username) data.picture = picture ? picture : me?.profile?.profilePicture;
+        saveMessage(data, setMessage);
+    };
+    async function getMessagesWithImages(data) {
+        if (Array.isArray(data)) {
+            return data.forEach(message => {
+                setImages(message, setMessage);
+            });
+        } else {
+            setImages(data, setMessage);
+        };
+    };
 
     useEffect(() => {
         setMounted(true);
@@ -26,9 +43,7 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
     useEffect(() => {
         if (mounted === true) {
             if (globalMessages.length > 0) {
-                globalMessages.forEach(message => {
-                    saveMessage(message, setMessage);
-                });
+                getMessagesWithImages(globalMessages);
             }
             SCROLL();
         }
@@ -36,7 +51,7 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
     useEffect(() => {
         if (socket) {
             socket.on('incomingChatMessage', (message) => {
-                saveMessage(message, setMessage);
+                getMessagesWithImages(message);
                 SCROLL();
             });
         }
@@ -52,9 +67,13 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
             </div>
             <div className=" h-full mt-3 text-gray-300 p-2 overflow-y-auto">
                 {me && [...Object.values(messages)].map((message,) => (
-                    <MessageItem message={message} key={message._id} user={message.sender === me.username ? true : null} />
+                    <MessageItem
+                        message={message}
+                        key={message._id}
+                        picture={message.picture ? message.picture : null}
+                        user={message.sender === me.username ? true : null}
+                    />
                 ))}
-
                 <div style={{ minHeight: '10px' }} id='messageContainerEnd'></div>
             </div>
         </div>
