@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import auth from '../../lib/auth';
 import client from '../../lib/apollo/client.config';
-import { browserGetLocation } from '../../lib/utils';
+import { browserGetLocation, validateEmail } from '../../lib/utils';
 import { LOGIN_USER, CREATE_USER } from '../../lib/graphql/mutations';
+
 
 
 function returnInitial(form) {
@@ -20,6 +21,7 @@ export function MultiPass({ form }) {
     const initialState = returnInitial(form);
     const [formState, setFormState] = useState(initialState);
     const [errorMessage, setErrorMessage] = useState(false);
+    const [formValidationError, setValidationError] = useState({ username: null, email: null, password: null });
     const [login] = useMutation(LOGIN_USER);
 
     useEffect(() => {
@@ -37,8 +39,35 @@ export function MultiPass({ form }) {
     function clearError() {
         return setTimeout(() => {
             setErrorMessage(false);
-        }, 3500);
+        }, 5500);
     };
+    const validate = (e) => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        if (form === 'signUp') {
+            if (name === 'username') {
+                if (value.length < 3) {
+                    setValidationError({ ...formValidationError, username: 'Usernames must be at least 3 characters long!' });
+
+                } else {
+                    setValidationError({ ...formValidationError, username: null });
+                }
+            } else if (name === 'email') {
+                if (!validateEmail(value)) {
+                    setValidationError({ ...formValidationError, email: 'Please enter a valid email!' });
+                } else {
+                    setValidationError({ ...formValidationError, email: null });
+                }
+            } else if (name === 'password') {
+                if (value.length < 6) {
+                    setValidationError({ ...formValidationError, password: 'Passwords must be at least 6 characters long!' });
+                } else {
+                    setValidationError({ ...formValidationError, password: null });
+                }
+            }
+        }
+
+    }
     const handleFormSubmit = async event => {
         event.preventDefault();
         // ask user for location;
@@ -82,66 +111,96 @@ export function MultiPass({ form }) {
             };
         };
     };
-
+    console.log(`ERROR STATE`, formValidationError)
 
 
     return (
-        <form className='w-auto h-auto bg-gray-400 p-4 self-center'>
-            <div className={`text-center ${errorMessage ? 'bg-red-500' : null} text-white flex flex-row`}>
+        <div className='w-full h-full flex flex-col justify-center items-center'>
+            <div className={`text-center ${errorMessage ? 'bg-red-500' : null} text-white flex flex-row p-5 rounded-md`}>
                 <p>{errorMessage && errorMessage}</p>
             </div>
+            {form === 'signUp' ?
+                <div
+                    className={`
+                        text-white flex flex-col p-2 w-full 
+                        h-auto justify-center items-center gap-2`}>
+                    {
+                        formValidationError.email &&
+                        <p className='p-3 rounded-md bg-red-600 text-xl'>
+                            {formValidationError.email}
+                        </p>
+                    }
+                    {
+                        formValidationError.username &&
+                        <p className='p-3 rounded-md bg-red-600 text-xl'>
+                            {formValidationError.username}
+                        </p>
+                    }
 
-            {form === 'signUp' &&
-                <>
-                    <label className='block  mt-2'>
-                        Enter a Username:
-                    </label>
-                    <input
-                        type='text'
-                        className=' my-1 text-black'
-                        onChange={handleChange}
-                        placeholder='Usernames must be unique'
-                        name='username'
-                        id="username"
-                    />
-                </>
+                    {
+                        formValidationError.password &&
+                        <p className='p-3 rounded-md bg-red-600 text-xl'>
+                            {formValidationError.password}
+                        </p>
+                    }
+                </div> : null
             }
+            <form className='w-auto md:w-2/6 h-auto bg-gray-400 p-4 self-center rounded-lg'>
+                {form === 'signUp' &&
+                    <>
+                        <label className='block  mt-2 text-xl'>
+                            Enter a Username:
+                        </label>
+                        <input
+                            type='text'
+                            className='my-3 text-gray-300 bg-gray-600 w-full p-3 text-lg rounded-md'
+                            onChange={handleChange}
+                            placeholder='Usernames must be unique'
+                            name='username'
+                            id="username"
+                            onBlur={(e) => validate(e)}
+                        />
+                    </>
+                }
 
-            <label className='block  mt-2'>
-                Email:
-            </label>
+                <label className='block  mt-2 text-xl'>
+                    Email:
+                </label>
 
-            <input
-                type='text'
-                className=' my-1 text-black'
-                placeholder="your_email@email.com"
-                name="email"
-                id="email"
-                onChange={handleChange}
-            />
+                <input
+                    type='text'
+                    className='my-3 text-gray-300 bg-gray-600 w-full p-3 text-lg rounded-md'
+                    placeholder="your_email@email.com"
+                    name="email"
+                    id="email"
+                    onChange={handleChange}
+                    onBlur={(e) => validate(e)}
+                />
 
-            <label className='block mt-2'>
-                Password:
-            </label>
-            <input
-                type='password'
-                className=' my-1 text-black'
-                placeholder="********"
-                name="password"
-                id="password"
-                onChange={handleChange}
-            />
+                <label className='block mt-2 text-xl'>
+                    Password:
+                </label>
+                <input
+                    type='password'
+                    className='my-3 text-gray-300 bg-gray-600 w-full p-3 text-lg rounded-md'
+                    placeholder="********"
+                    name="password"
+                    id="password"
+                    onChange={handleChange}
+                    onBlur={(e) => validate(e)}
+                />
 
-            <div className='mt-4 flex justify-center'>
-                <Button
-                    color={{ color: 'green-500', hover: 'green-700' }}
-                    radius={'rounded-md'}
-                    class='text-white text-center p-2'
-                    action={{ onClick: handleFormSubmit }}
-                >
-                    {form === 'signUp' ? 'Create Account' : 'Login'}
-                </Button>
-            </div>
-        </form>
+                <div className='mt-4 flex justify-center'>
+                    <Button
+                        color={{ color: 'green-600', hover: 'green-500' }}
+                        radius={'rounded-md'}
+                        class='text-white text-center text-xl p-2'
+                        action={{ onClick: handleFormSubmit }}
+                    >
+                        {form === 'signUp' ? 'Create Account' : 'Login'}
+                    </Button>
+                </div>
+            </form>
+        </div>
     );
 }

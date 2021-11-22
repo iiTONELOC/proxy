@@ -44,7 +44,6 @@ export default function UserDashBoard() {
 
     useEffect(() => {
         setMounted(true);
-        console.log(`USER DASH:1`, me)
         return () => setMounted(false)
     }, []);
     useEffect(() => {
