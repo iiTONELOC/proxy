@@ -1,18 +1,15 @@
 import NavLink from "./NavLink";
 import auth from "../../lib/auth";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { FaUserSecret } from 'react-icons/fa';
 import AlertIcon from "../alertIcon/AlertIcon";
 import { GiSatelliteCommunication } from 'react-icons/gi';
+import AvatarWithStatus from "../userAvatar/AvatarWithStatus";
 
 
 export function logoutUser() {
     return auth.logout();
-}
-const LoggedInDestinations = [
-    { name: "Notification Icon", icon: <AlertIcon /> },
-    { name: "User Settings", icon: <FaUserSecret size='30px' /> },
-];
+};
 
 const destinations = [
     { name: "Sign In", location: "/sign-in" },
@@ -21,6 +18,12 @@ const destinations = [
 export default function NavBar() {
     const [mounted, setMounted] = useState(false);
     const [userID, setID] = useState(null);
+    const state = useSelector(state => state);
+    const { me } = state;
+    const LoggedInDestinations = [
+        { name: "Notification Icon", icon: <AlertIcon /> },
+        { name: "User Settings", icon: <AvatarWithStatus user={me} size='45px' /> },
+    ];
 
     useEffect(() => {
         setMounted(true);

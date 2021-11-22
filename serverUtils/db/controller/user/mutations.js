@@ -174,21 +174,23 @@ const userMutations = {
         if (!user) {
             throw new AuthenticationError('Incorrect credentials');
         } else {
-            const correctPw = user.isCorrectPassword(password);
+            const correctPw = await user.isCorrectPassword(password);
             if (!correctPw) {
                 throw new AuthenticationError('Incorrect credentials');
-            };
-            try {
-                const locationData = await returnLocation({ args: undefined }, ip);
-                await updateUserStatus(user.status._id, { online: true });
-                await updateUserLocation(user.location._id, locationData);
-            } catch (error) {
-                console.error('Error updating data while logging in', error);
-                return error
-            };
-            // return user and token
-            const token = signToken(user);
-            return { token, user };
+            } else {
+                try {
+                    const locationData = await returnLocation({ args: undefined }, ip);
+                    await updateUserStatus(user.status._id, { online: true });
+                    await updateUserLocation(user.location._id, locationData);
+                } catch (error) {
+                    console.error('Error updating data while logging in', error);
+                    return error
+                };
+                // return user and token
+                const token = signToken(user);
+                return { token, user };
+            }
+
         };
     },
 

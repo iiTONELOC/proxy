@@ -10,11 +10,11 @@ import { LOGIN_USER, CREATE_USER } from '../../lib/graphql/mutations';
 
 function returnInitial(form) {
     if (form === 'signUp') {
-        return { username: null, email: null, password: null }
+        return { username: null, email: null, password: null };
     } else if (form === 'login') {
-        return { email: null, password: null }
-    }
-}
+        return { email: null, password: null };
+    };
+};
 export function MultiPass({ form }) {
     const [isMounted, setMounted] = useState(false);
     const [locationState, setLocation] = useState(false);
@@ -26,7 +26,11 @@ export function MultiPass({ form }) {
 
     useEffect(() => {
         setMounted(true);
-        return () => setMounted(false)
+        return () => {
+            setMounted(false);
+            setFormState(initialState);
+            setValidationError({ username: null, email: null, password: null });
+        };
     }, []);
     if (!isMounted) return null
     const handleChange = (event) => {
@@ -46,33 +50,31 @@ export function MultiPass({ form }) {
         const { name, value } = e.target;
         if (form === 'signUp') {
             if (name === 'username') {
-                if (value.length < 3) {
+                if (value != '' && value.length < 3) {
                     setValidationError({ ...formValidationError, username: 'Usernames must be at least 3 characters long!' });
-
                 } else {
                     setValidationError({ ...formValidationError, username: null });
-                }
+                };
             } else if (name === 'email') {
-                if (!validateEmail(value)) {
+                if (value != '' && !validateEmail(value)) {
                     setValidationError({ ...formValidationError, email: 'Please enter a valid email!' });
                 } else {
                     setValidationError({ ...formValidationError, email: null });
-                }
+                };
             } else if (name === 'password') {
-                if (value.length < 6) {
+                if (value != '' && value.length < 6) {
                     setValidationError({ ...formValidationError, password: 'Passwords must be at least 6 characters long!' });
                 } else {
                     setValidationError({ ...formValidationError, password: null });
-                }
-            }
-        }
-
-    }
+                };
+            };
+        };
+    };
     const handleFormSubmit = async event => {
         event.preventDefault();
         // ask user for location;
         const locationData = browserGetLocation();
-        setLocation({ ...locationData })
+        setLocation({ ...locationData });
         // check args
         const args = { ...formState, ...locationState };
         if (form === 'signUp') {
@@ -111,8 +113,6 @@ export function MultiPass({ form }) {
             };
         };
     };
-    console.log(`ERROR STATE`, formValidationError)
-
 
     return (
         <div className='w-full h-full flex flex-col justify-center items-center'>
@@ -136,7 +136,6 @@ export function MultiPass({ form }) {
                             {formValidationError.username}
                         </p>
                     }
-
                     {
                         formValidationError.password &&
                         <p className='p-3 rounded-md bg-red-600 text-xl'>
@@ -162,11 +161,9 @@ export function MultiPass({ form }) {
                         />
                     </>
                 }
-
                 <label className='block  mt-2 text-xl'>
                     Email:
                 </label>
-
                 <input
                     type='text'
                     className='my-3 text-gray-300 bg-gray-600 w-full p-3 text-lg rounded-md'
@@ -176,7 +173,6 @@ export function MultiPass({ form }) {
                     onChange={handleChange}
                     onBlur={(e) => validate(e)}
                 />
-
                 <label className='block mt-2 text-xl'>
                     Password:
                 </label>
@@ -189,7 +185,6 @@ export function MultiPass({ form }) {
                     onChange={handleChange}
                     onBlur={(e) => validate(e)}
                 />
-
                 <div className='mt-4 flex justify-center'>
                     <Button
                         color={{ color: 'green-600', hover: 'green-500' }}
