@@ -97,8 +97,7 @@ export default function UsersInRangeOptionsModal(props) {
     useEffect(() => {
         setMounted(true);
         return () => {
-            setMounted(false);
-
+            setMounted(false)
         }
     }, [])
     useEffect(() => {
@@ -107,7 +106,7 @@ export default function UsersInRangeOptionsModal(props) {
                 setThisSocket(mySocket);
             }
         }
-        return () => { setThisSocket(null) }
+
     }, [isMounted])
 
 

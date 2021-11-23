@@ -82,6 +82,7 @@ export default function NotificationItem({ user }) {
                 setThisSocket(socket);
             }
         }
+
     }, [isMounted]);
 
     if (!isMounted || !userInfo) return null;
