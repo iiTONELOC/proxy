@@ -3,13 +3,15 @@ import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 const iconSize = '20px';
 const iconColor = 'text-gray-400';
-export default function MessageOptionsUser(message_id) {
+export default function MessageOptionsUser({ message_id, editHandler }) {
     const messageOptions = [
         {
             toolTip: 'Edit',
             Icon: FiEdit,
             iconSize: iconSize,
-            action: 'editMessage',
+            action: () => {
+                editHandler();
+            },
             settings: {
                 button: {
                     color: 'gray-700',

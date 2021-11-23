@@ -13,40 +13,45 @@ import MessageOptionsUser from "./MessageItemUserOptions";
 export default function MessageItem({ message, user, picture }) {
     const [mounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
+    const [edit, setEdit] = useState(false);
     function onHover() {
         return hoverHandler({ hover, setHover });
     };
-
+    function handleEdit(setEdit) {
+        return setEdit(!edit);
+    };
     useEffect(() => {
         setMounted(true);
-        console.log(`MESSAGE ITEM`, message)
         return () => setMounted(false);
     }, []);
-
+    // useEffect(() => {
+    //     console.log(`TOGGLE EDIT`, edit)
+    // }, [edit])
     if (!mounted) return null;
+
     return (
         <article
             onMouseEnter={onHover}
             onMouseLeave={onHover}
-            className={`w-full h-auto mb-2   p-2 flex flex-row items-center ${!user ? 'justify-items-start' : 'justify-items-end'} ${hover ? 'bg-gray bg-gray-600' : ''}`}>
-
-            {!user ? <> <Avatar size={'35px'} profilePicture={picture ? picture : null} />
-
-                <div className='ml-3 flex flex-col w-10/12'>
-                    <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
-                    <p className='text-md ml-1'> {message.text}</p>
-                </div>
-                <div className='flex flex-col  h-full self-start'>
-                    {hover && <MessageOptionsUser message_id={message._id} />}
-                </div>
-            </> : <>
-                <div className='mr-3 flex flex-col w-full text-right'>
-                    <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
-                    <p className='text-md ml-1'> {message.text}</p>
-                </div>
-                <Avatar profilePicture={picture ? picture : null} size={'35px'} />  </>
+            className={`w-full h-auto mb-2 p-2 flex flex-row items-center ${!user ? 'justify-items-start' : 'justify-items-end'} ${hover ? 'bg-gray bg-gray-600' : ''}`}>
+            {!user ?
+                <>
+                    <Avatar size={'35px'} profilePicture={picture ? picture : null} />
+                    <div className='ml-3 flex flex-col w-10/12'>
+                        <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
+                        <p className='text-md ml-1'> {message.text}</p>
+                    </div>
+                    <div className='flex flex-col  h-full self-start'>
+                        {hover && <MessageOptionsUser message_id={message._id} editHandler={() => { handleEdit(setEdit) }} />}
+                    </div>
+                </> :
+                <>
+                    <div className='mr-3 flex flex-col w-full text-right'>
+                        <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
+                        <p className='text-md ml-1'> {message.text}</p>
+                    </div>
+                    <Avatar profilePicture={picture ? picture : null} size={'35px'} />  </>
             }
-
         </article>
     )
 }
