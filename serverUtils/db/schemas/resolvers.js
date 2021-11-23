@@ -1,5 +1,6 @@
 
 const { query } = require('../controller');
+const { editMessage } = require('../controller/messages/mutations');
 const userMutations = require('../controller/user/mutations');
 const { user, message } = query;
 const {
@@ -34,7 +35,8 @@ const resolvers = {
         rejectFriend: rejectFriend,
         removeFriend: removeSelectedFriend,
         uploadProfilePicture: editProfilePicture,
-        editProfile: editBio
+        editProfile: editBio,
+        editMessage: editMessage,
     }
 };
 module.exports = resolvers;

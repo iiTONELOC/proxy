@@ -104,6 +104,8 @@ type Mutation{
     removeFriend(friendId: ID!): User
     uploadProfilePicture(picture: String!): Profile
     editProfile(bio: String, visible: Boolean,): Profile
+    editMessage(messageId: ID!, text: String ):Message
+    deleteMessage(messageId: ID!): Message
 }
 
 type Auth {
