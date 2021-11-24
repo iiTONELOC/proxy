@@ -4,6 +4,7 @@ import { hoverHandler } from "../navigation/NavLink";
 import { formatTime_hh_mm_ss } from "../../lib/utils";
 import MessageOptionsUser from "./MessageItemUserOptions";
 import MessageEditor from "./MessageEditor";
+import { handleSocketConnection, useSocketContext } from "../Providers/Socket";
 /* 
 FIXME: 
 Render Messages from local state
@@ -15,6 +16,10 @@ export default function MessageItem({ message, user, picture }) {
     const [mounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
     const [edit, setEdit] = useState(false);
+    const [thisSocket, setThisSocket] = useState(null);
+    const [messageText, setMessageText] = useState(message.text);
+    const socket = useSocketContext();
+
     function onHover() {
         return hoverHandler({ hover, setHover });
     };
@@ -25,6 +30,18 @@ export default function MessageItem({ message, user, picture }) {
         setMounted(true);
         return () => setMounted(false);
     }, []);
+    useEffect(() => {
+        if (mounted) {
+            handleSocketConnection(setThisSocket, thisSocket, socket);
+        };
+    }, [mounted])
+    useEffect(() => {
+        if (mounted && thisSocket) {
+            thisSocket.on(`updateMessage-${message._id}`, (message) => {
+                setMessageText(message.text);
+            })
+        };
+    }, [thisSocket]);
     if (!mounted) return null;
 
     return (
@@ -37,7 +54,7 @@ export default function MessageItem({ message, user, picture }) {
                     <Avatar size={'35px'} profilePicture={picture ? picture : null} />
                     <div className='ml-3 flex flex-col w-10/12'>
                         <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
-                        <p className='text-md ml-1'> {message.text}</p>
+                        <p className='text-md ml-1'> {messageText}</p>
                     </div>
                 </> :
                 !edit ? <>
@@ -46,13 +63,14 @@ export default function MessageItem({ message, user, picture }) {
                     </div>
                     <div className='mr-3 flex flex-col w-full text-right'>
                         <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
-                        <p className='text-md ml-1'> {message.text}</p>
+                        <p className='text-md ml-1'> {messageText}</p>
                     </div>
                     <Avatar profilePicture={picture ? picture : null} size={'35px'} />  </> :
                     <MessageEditor
                         messageId={message._id}
-                        text={message.text}
+                        text={messageText}
                         closeEditor={() => handleEdit()}
+                        thisSocket={thisSocket}
                     />
             }
         </article>

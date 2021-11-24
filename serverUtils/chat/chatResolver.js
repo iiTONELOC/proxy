@@ -1,8 +1,9 @@
 const sharedMutations = require('../db/controller/shared/sharedMutations');
 const { findUserByID } = require("../db/controller/shared/sharedQueries");
-const { createMessage } = require("../db/controller/messages/mutations");
+const { createMessage, editMessage } = require("../db/controller/messages/mutations");
 const sharedQueries = require('../db/controller/shared/sharedQueries');
 const { actions, reactions } = require("./actions");
+const { Message } = require('../db/models');
 const { updateUserSocket } = sharedMutations;
 const { _socket_user_login } = actions;
 const { _authenticated } = reactions;
@@ -93,19 +94,13 @@ const joinGlobal = async (usersInRange, socket, io) => {
         usersInRange.forEach(user => io.to(user.socket).emit('updateUsersInRange'))
         socket.join('GlobalChat');
     }
-
 };
 const handleGlobalDisconnect = async (socket, io,) => {
     if (socket.USER !== undefined && socket.USER.username !== undefined) {
         const inChat = alreadyJoined(globalChatArray, socket);
         const uData = await sharedQueries.findUserByID(socket.USER._id);
         const online = uData?.status?.online;
-        // if we are in the GlobalChat, we are set to offline status and there are members in the chat
-        // and the users socket is currently set to globalChat we can go ahead and alert everyone in the 
-        // chat to update their users in range
-
         if (online === false && socket.CURRENT === 'Global') {
-
             filterUserFromArray(socket);
             alertFriends(uData.friends, io)
             return io.to(`GlobalChat`).emit('updateUsersInRange')
@@ -135,6 +130,30 @@ const handleGlobalMessage = async (message, socket, io) => {
     }
     return
 };
+const handleEditMessage = async (message, socket, io) => {
+    const username = socket.USER?.username;
+    const msgData = await Message.findById(message.messageId);
+    if (msgData.sender != username) {
+        console.log('UNAUTHORIZED')
+    } else {
+        const data = {
+            text: message.value,
+            messageId: message.messageId,
+        }
+        const context = {
+            user: {
+                _id: socket.USER._id,
+                username,
+            }
+        }
+        const editMsgData = await editMessage(null, data, context)
+        if (editMsgData != null) {
+            io.emit(`updateMessage-${message.messageId}`, editMsgData)
+        } else {
+            console.error('COULD NOT UPDATE MESSAGE!', editMsgData)
+        }
+    }
+};
 async function addFriend({ data, sendTo }, socket, io) {
     // lookup user by their id send their info to the user
     const user = await findUserByID(data.from.userID)
@@ -146,40 +165,36 @@ async function acceptFriend({ data, sendTo }, socket, io) {
     const id = sendTo._id
     const user = await findUserByID(id)
     const sentToSocket = user?.socket;
-
     if (user) {
         io.to(sentToSocket).emit('Request Accepted', data);
     }
-
 };
 async function reject({ data, sendTo }, socket, io) {
     // lookup user by their id find their socket
     const id = sendTo.userID || sendTo._id
     const user = await findUserByID(id)
     const sentToSocket = user?.socket;
-
     if (user) {
         io.to(sentToSocket).emit('Request Rejected', data);
     }
-
-} async function removeUser({ data, sendTo }, socket, io) {
+};
+async function removeUser({ data, sendTo }, socket, io) {
     // lookup user by their id find their socket
     const id = sendTo.userID || sendTo._id
     const user = await findUserByID(id)
     const sentToSocket = user?.socket;
-
     if (user) {
         io.to(sentToSocket).emit('Removed', data);
     }
-
-}
+};
 module.exports = {
     login,
+    reject,
+    addFriend,
     joinGlobal,
+    removeUser,
+    acceptFriend,
+    handleEditMessage,
     handleGlobalMessage,
     handleGlobalDisconnect,
-    acceptFriend,
-    addFriend,
-    removeUser,
-    reject
 }

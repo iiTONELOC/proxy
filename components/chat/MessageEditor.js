@@ -2,7 +2,7 @@ import Button from "../Button/Button";
 import { useEffect, useState } from "react";
 import { characterCountColor, validateMessage } from "../../lib/utils";
 
-export default function MessageEditor({ messageId, text, closeEditor }) {
+export default function MessageEditor({ messageId, text, closeEditor, thisSocket }) {
     const [value, setText] = useState(text);
     const [mounted, setMounted] = useState(false);
     const [characterCount, setCharacterCount] = useState(value.length);
@@ -31,12 +31,7 @@ export default function MessageEditor({ messageId, text, closeEditor }) {
         if (characterCount > 0) {
             const cantSend = validateMessage(value)
             if (!cantSend) {
-                /*
-                FIXME: ADD MUTATION
-                Currently logs and closes the editor
-                Complete the serverSide socket.io implementation
-                 */
-                console.log("Sending message: ", { value, messageId });
+                thisSocket.emit('editMessage', { value, messageId });
                 setText('');
                 setCharacterCount(0);
                 closeEditor()
