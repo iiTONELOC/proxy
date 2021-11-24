@@ -3,7 +3,7 @@ import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 const iconSize = '20px';
 const iconColor = 'text-gray-400';
-export default function MessageOptionsUser({ message_id, editHandler }) {
+export default function MessageOptionsUser({ message_id, editHandler, deleteHandler }) {
     const messageOptions = [
         {
             toolTip: 'Edit',
@@ -29,7 +29,9 @@ export default function MessageOptionsUser({ message_id, editHandler }) {
             toolTip: 'Delete',
             Icon: FiTrash2,
             iconSize: iconSize,
-            action: 'handleRemove',
+            action: () => {
+                deleteHandler();
+            },
             settings: {
                 button: {
                     color: 'gray-700',
@@ -45,7 +47,7 @@ export default function MessageOptionsUser({ message_id, editHandler }) {
         },
     ];
     return (
-        <span className='w-full h-full flex flex-row justify-end gap-2'>
+        <span className='w-full h-full flex flex-row justify-start gap-2'>
             {messageOptions.map(option => (
                 <span key={option.toolTip + `${message_id}`}>
                     <ButtonWithToolTip

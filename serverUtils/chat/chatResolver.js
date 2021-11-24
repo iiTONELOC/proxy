@@ -1,6 +1,6 @@
 const sharedMutations = require('../db/controller/shared/sharedMutations');
 const { findUserByID } = require("../db/controller/shared/sharedQueries");
-const { createMessage, editMessage } = require("../db/controller/messages/mutations");
+const { createMessage, editMessage, deleteMessage } = require("../db/controller/messages/mutations");
 const sharedQueries = require('../db/controller/shared/sharedQueries');
 const { actions, reactions } = require("./actions");
 const { Message } = require('../db/models');
@@ -154,6 +154,29 @@ const handleEditMessage = async (message, socket, io) => {
         }
     }
 };
+const handleDeleteMessage = async (message, socket, io) => {
+    const username = socket.USER?.username;
+    const msgData = await Message.findById(message.messageId);
+    if (msgData?.sender != username) {
+        console.log('UNAUTHORIZED')
+    } else {
+        const data = {
+            messageId: message.messageId,
+        }
+        const context = {
+            user: {
+                _id: socket.USER._id,
+                username,
+            }
+        }
+        const delMsgData = await deleteMessage(null, data, context)
+        if (delMsgData != null) {
+            io.emit(`deleteMessage`, delMsgData)
+        } else {
+            console.error('COULD NOT UPDATE MESSAGE!', delMsgData)
+        }
+    }
+};
 async function addFriend({ data, sendTo }, socket, io) {
     // lookup user by their id send their info to the user
     const user = await findUserByID(data.from.userID)
@@ -195,6 +218,7 @@ module.exports = {
     removeUser,
     acceptFriend,
     handleEditMessage,
+    handleDeleteMessage,
     handleGlobalMessage,
     handleGlobalDisconnect,
 }

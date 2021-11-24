@@ -1,6 +1,6 @@
 import { SCROLL } from ".";
 import MessageItem from "./MessageItem";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { idbPromise } from "../../lib/idb";
 
@@ -28,7 +28,7 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
     };
     async function getMessagesWithImages(data) {
         if (Array.isArray(data)) {
-            return data.forEach(message => {
+            data.forEach(message => {
                 setImages(message, setMessage);
             });
         } else {
@@ -48,14 +48,26 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
             SCROLL();
         }
     }, [mounted]);
+
     useEffect(() => {
         if (socket) {
             socket.on('incomingChatMessage', (message) => {
                 getMessagesWithImages(message);
                 SCROLL();
             });
+            socket.on('deleteMessage', (message) => {
+                setMessage((prevMessages) => {
+                    const newMessages = { ...prevMessages };
+                    delete newMessages[message._id];
+                    return newMessages
+                });
+                SCROLL();
+            })
         }
     }, [socket]);
+
+
+
     if (mounted === false || socket === null) return null
 
     return (

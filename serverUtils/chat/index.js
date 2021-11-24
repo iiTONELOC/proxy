@@ -6,6 +6,7 @@ const {
     removeUser,
     acceptFriend,
     handleEditMessage,
+    handleDeleteMessage,
     handleGlobalMessage,
     handleGlobalDisconnect,
 } = require("./chatResolver")
@@ -21,7 +22,8 @@ class Connection {
             this.socket.on('user requesting login', (data) => { login(data, socket, io) }),
             this.socket.on('editMessage', (data) => { handleEditMessage(data, socket, io) }),
             this.socket.on('acceptedFriendRequest', (data) => { acceptFriend(data, socket, io) }),
-            this.socket.on('globalChatMessage', (message) => { handleGlobalMessage(message, socket, io) })
+            this.socket.on('globalChatMessage', (message) => { handleGlobalMessage(message, socket, io) }),
+            this.socket.on('deleteMe', (message) => { handleDeleteMessage(message, socket, io) })
     }
 };
 

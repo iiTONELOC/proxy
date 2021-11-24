@@ -18,7 +18,7 @@ export default function Messaging({ chatName, globalMessages }) {
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
-        return () => setMounted(false)
+        return () => { setMounted(false); setSocket(null); }
     }, []);
     useEffect(() => {
         if (mounted === true) {

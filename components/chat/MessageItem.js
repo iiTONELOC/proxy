@@ -26,6 +26,9 @@ export default function MessageItem({ message, user, picture }) {
     function handleEdit() {
         return setEdit(!edit);
     };
+    function handleDelete() {
+        return thisSocket.emit('deleteMe', { messageId: message._id, })
+    };
     useEffect(() => {
         setMounted(true);
         return () => setMounted(false);
@@ -48,7 +51,7 @@ export default function MessageItem({ message, user, picture }) {
         <article
             onMouseEnter={onHover}
             onMouseLeave={onHover}
-            className={`w-full h-auto mb-2 p-2 flex flex-row items-center ${!user ? 'justify-items-start' : 'justify-items-end'} ${hover ? 'bg-gray bg-gray-600' : ''}`}>
+            className={`w-full h-auto mb-2 p-2 flex flex-row items-center 'justify-items-start' ${hover ? 'bg-gray bg-gray-600' : ''}`}>
             {!user ?
                 <>
                     <Avatar size={'35px'} profilePicture={picture ? picture : null} />
@@ -59,13 +62,25 @@ export default function MessageItem({ message, user, picture }) {
                 </> :
                 !edit ? <>
                     <div className='flex flex-col  h-full self-start'>
-                        {hover && <MessageOptionsUser message_id={message._id} editHandler={() => { handleEdit(setEdit) }} />}
+                        {hover &&
+                            <MessageOptionsUser
+                                message_id={message._id}
+                                editHandler={() => { handleEdit(setEdit) }}
+                                deleteHandler={handleDelete}
+                            />
+                        }
                     </div>
-                    <div className='mr-3 flex flex-col w-full text-right'>
-                        <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
-                        <p className='text-md ml-1'> {messageText}</p>
-                    </div>
-                    <Avatar profilePicture={picture ? picture : null} size={'35px'} />  </> :
+                    <span className='w-full flex flex-row'>
+                        <div className='mr-3 flex flex-col w-full text-right'>
+                            <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
+                            <p className='text-md ml-1'> {messageText}</p>
+                        </div>
+                        <span className='w-12 '>
+                            <Avatar profilePicture={picture ? picture : null} size={'35px'} />
+                        </span>
+                    </span>
+
+                </> :
                     <MessageEditor
                         messageId={message._id}
                         text={messageText}
