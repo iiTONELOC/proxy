@@ -66,7 +66,7 @@ export default function MessageContainer({ socket, chatName, globalMessages }) {
                 </h1>
             </div>
             <div className=" h-full mt-3 text-gray-300 p-2 overflow-y-auto">
-                {me && [...Object.values(messages)].map((message,) => (
+                {me && [...Object.values(messages)].map((message) => (
                     <MessageItem
                         message={message}
                         key={message._id}

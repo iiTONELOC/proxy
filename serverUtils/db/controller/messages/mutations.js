@@ -12,15 +12,15 @@ const handleName = async (name) => {
 }
 const messageMutation = {
     createMessage: async (parent, args, context) => {
-        // const { value, username, chat } = args;
-        // const { _id } = context;
-        // if (!_id) throw new AuthenticationError('You must be logged in to do that!');
-        // const msgData = {
-        //     text: value,
-        //     channel: await handleName(chat),
-        //     sender: username
-        // };
-        // return Message.create({ ...msgData });
+        const { value, username, chat } = args;
+        const { _id } = context;
+        if (!_id) throw new AuthenticationError('You must be logged in to do that!');
+        const msgData = {
+            text: value,
+            channel: await handleName(chat),
+            sender: username
+        };
+        return Message.create({ ...msgData });
     },
     editMessage: async (parent, { messageId, text }, context) => {
 

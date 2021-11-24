@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { hoverHandler } from "../navigation/NavLink";
 import { formatTime_hh_mm_ss } from "../../lib/utils";
 import MessageOptionsUser from "./MessageItemUserOptions";
-
-// add ability to edit or delete message
-// add ability to leave a reaction (emojis)
-// add ability to leave a comment
-
-// on hover show the edit and delete buttons if user
-// 
+import MessageEditor from "./MessageEditor";
+/* 
+FIXME: 
+Render Messages from local state
+add socket.io listener to update the message if edited
+listener should be editMessage-message_id
+listener is for both user and non-user messages
+*/
 export default function MessageItem({ message, user, picture }) {
     const [mounted, setMounted] = useState(false);
     const [hover, setHover] = useState(false);
@@ -17,16 +18,13 @@ export default function MessageItem({ message, user, picture }) {
     function onHover() {
         return hoverHandler({ hover, setHover });
     };
-    function handleEdit(setEdit) {
+    function handleEdit() {
         return setEdit(!edit);
     };
     useEffect(() => {
         setMounted(true);
         return () => setMounted(false);
     }, []);
-    // useEffect(() => {
-    //     console.log(`TOGGLE EDIT`, edit)
-    // }, [edit])
     if (!mounted) return null;
 
     return (
@@ -41,17 +39,22 @@ export default function MessageItem({ message, user, picture }) {
                         <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
                         <p className='text-md ml-1'> {message.text}</p>
                     </div>
+                </> :
+                !edit ? <>
                     <div className='flex flex-col  h-full self-start'>
                         {hover && <MessageOptionsUser message_id={message._id} editHandler={() => { handleEdit(setEdit) }} />}
                     </div>
-                </> :
-                <>
                     <div className='mr-3 flex flex-col w-full text-right'>
                         <p className='text-sm text-gray-400'> {formatTime_hh_mm_ss(message.time)}</p>
                         <p className='text-md ml-1'> {message.text}</p>
                     </div>
-                    <Avatar profilePicture={picture ? picture : null} size={'35px'} />  </>
+                    <Avatar profilePicture={picture ? picture : null} size={'35px'} />  </> :
+                    <MessageEditor
+                        messageId={message._id}
+                        text={message.text}
+                        closeEditor={() => handleEdit()}
+                    />
             }
         </article>
-    )
-}
+    );
+};
